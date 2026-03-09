@@ -1,0 +1,916 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* kwtsms_sms
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0-20260305\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-03-09 22:36+0000\n"
+"PO-Revision-Date: 2026-03-09 22:36+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "<span class=\"o_form_label\">Balance</span>"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_kwtsms_sms_compose_form
+msgid "<span class=\"o_form_label\">Characters</span>"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "<span class=\"o_form_label\">Last Verified</span>"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_kwtsms_sms_compose_form
+msgid "<span class=\"o_form_label\">SMS Pages</span>"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "<span class=\"o_form_label\">Status</span>"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_kwtsms_sms_compose_form
+msgid "<span class=\"o_form_label\">Unicode</span>"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_kwtsms_sms_template_form
+msgid ""
+"<strong>Available Placeholders:</strong>\n"
+"                        {order_name}, {customer_name}, {amount}, {company_name},\n"
+"                        {picking_name}, {tracking_ref}"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "<strong>Links:</strong>"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "<strong>Setup Guide:</strong>"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_gateway_config__api_error
+#: model:ir.model.fields,field_description:kwtsms_sms.field_res_config_settings__kwtsms_api_error
+msgid "API Error"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,field_description:kwtsms_sms.field_res_config_settings__kwtsms_api_password
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "API Password"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_log__api_response
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_kwtsms_sms_log_form
+msgid "API Response"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_gateway_config__api_status
+#: model:ir.model.fields,field_description:kwtsms_sms.field_res_config_settings__kwtsms_api_status
+msgid "API Status"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,field_description:kwtsms_sms.field_res_config_settings__kwtsms_api_username
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "API Username"
+msgstr ""
+
+#. module: kwtsms_sms
+#. odoo-python
+#: code:addons/kwtsms_sms/controllers/main.py:0
+msgid "Access denied."
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_template__active
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_kwtsms_sms_template_search
+msgid "Active"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields.selection,name:kwtsms_sms.selection__kwtsms_sms_template__lang__ar
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_kwtsms_sms_template_search
+msgid "Arabic"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_kwtsms_sms_template_search
+msgid "Archived"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "Auto-delete SMS logs older than this many days."
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "Automatically send SMS when a sale order is confirmed."
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "Automatically send SMS when an outgoing delivery is validated."
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_gateway_config__balance_available
+#: model:ir.model.fields,field_description:kwtsms_sms.field_res_config_settings__kwtsms_balance_available
+msgid "Available Balance"
+msgstr ""
+
+#. module: kwtsms_sms
+#. odoo-python
+#: code:addons/kwtsms_sms/models/res_config_settings.py:0
+msgid "Available: %s"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_log__balance_after
+msgid "Balance After"
+msgstr ""
+
+#. module: kwtsms_sms
+#. odoo-python
+#: code:addons/kwtsms_sms/models/res_config_settings.py:0
+msgid "Balance Updated"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_kwtsms_sms_compose_form
+msgid "Cancel"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_compose__char_count
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_template__char_count
+msgid "Characters"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "Click \"Login / Verify\" to test the connection"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model,name:kwtsms_sms.model_res_company
+msgid "Companies"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_gateway_config__company_id
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_log__company_id
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_template__company_id
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_kwtsms_sms_log_form
+msgid "Company"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model,name:kwtsms_sms.model_kwtsms_sms_compose
+msgid "Compose SMS via kwtSMS"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model,name:kwtsms_sms.model_res_config_settings
+msgid "Config Settings"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "Configure integration triggers (Sales, Inventory)"
+msgstr ""
+
+#. module: kwtsms_sms
+#. odoo-python
+#: code:addons/kwtsms_sms/models/kwtsms_gateway.py:0
+#: model:ir.model.fields.selection,name:kwtsms_sms.selection__kwtsms_gateway_config__api_status__connected
+#: model:ir.model.fields.selection,name:kwtsms_sms.selection__res_config_settings__kwtsms_api_status__connected
+msgid "Connected"
+msgstr ""
+
+#. module: kwtsms_sms
+#. odoo-python
+#: code:addons/kwtsms_sms/models/kwtsms_gateway.py:0
+msgid "Connection Failed"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "Connection Status"
+msgstr ""
+
+#. module: kwtsms_sms
+#. odoo-python
+#: code:addons/kwtsms_sms/models/res_config_settings.py:0
+msgid "Could not connect to kwtSMS API."
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_gateway_config__coverage_json
+msgid "Coverage Data (JSON)"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_gateway_config__create_uid
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_compose__create_uid
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_log__create_uid
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_template__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_gateway_config__create_date
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_compose__create_date
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_log__create_date
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_template__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields.selection,name:kwtsms_sms.selection__kwtsms_sms_template__event_type__custom
+msgid "Custom"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "Data"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_kwtsms_sms_log_search
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_kwtsms_sms_log_tree
+msgid "Date"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,field_description:kwtsms_sms.field_res_config_settings__kwtsms_default_country_code
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "Default Country Code"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields.selection,name:kwtsms_sms.selection__kwtsms_sms_template__event_type__delivery_done
+msgid "Delivery Completed"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:kwtsms.sms.template,name:kwtsms_sms.template_delivery_done_ar
+msgid "Delivery Completed (Arabic)"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:kwtsms.sms.template,name:kwtsms_sms.template_delivery_done_en
+msgid "Delivery Completed (English)"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,field_description:kwtsms_sms.field_res_config_settings__kwtsms_delivery_template_id
+msgid "Delivery Notification Template"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_gateway_config__display_name
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_compose__display_name
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_log__display_name
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_template__display_name
+#: model:ir.model.fields,field_description:kwtsms_sms.field_res_company__display_name
+#: model:ir.model.fields,field_description:kwtsms_sms.field_res_config_settings__display_name
+#: model:ir.model.fields,field_description:kwtsms_sms.field_sale_order__display_name
+#: model:ir.model.fields,field_description:kwtsms_sms.field_stock_picking__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,field_description:kwtsms_sms.field_res_config_settings__kwtsms_enabled
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "Enable kwtSMS Gateway"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields.selection,name:kwtsms_sms.selection__kwtsms_sms_template__lang__en
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_kwtsms_sms_template_search
+msgid "English"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_kwtsms_sms_template_form
+msgid "Enter SMS message..."
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "Enter your kwtSMS API Username and Password above"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_kwtsms_sms_compose_form
+msgid "Enter your message..."
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields.selection,name:kwtsms_sms.selection__kwtsms_gateway_config__api_status__error
+#: model:ir.model.fields.selection,name:kwtsms_sms.selection__kwtsms_sms_log__status__error
+#: model:ir.model.fields.selection,name:kwtsms_sms.selection__res_config_settings__kwtsms_api_status__error
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_kwtsms_sms_log_search
+msgid "Error"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_log__error_code
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_kwtsms_sms_log_search
+msgid "Error Code"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_log__error_description
+msgid "Error Description"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_kwtsms_sms_log_form
+msgid "Error Details"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_template__event_type
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_kwtsms_sms_template_search
+msgid "Event Type"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:res.groups,comment:kwtsms_sms.group_kwtsms_manager
+msgid "Full access to kwtSMS Gateway settings, templates, and logs."
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "Gateway Credentials"
+msgstr ""
+
+#. module: kwtsms_sms
+#. odoo-python
+#: code:addons/kwtsms_sms/models/kwtsms_gateway.py:0
+msgid "Gateway verified. Balance: %s"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "General Settings"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "Help"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_gateway_config__id
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_compose__id
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_log__id
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_template__id
+#: model:ir.model.fields,field_description:kwtsms_sms.field_res_company__id
+#: model:ir.model.fields,field_description:kwtsms_sms.field_res_config_settings__id
+#: model:ir.model.fields,field_description:kwtsms_sms.field_sale_order__id
+#: model:ir.model.fields,field_description:kwtsms_sms.field_stock_picking__id
+msgid "ID"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "Integrations"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "Inventory: SMS on Delivery Completion"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields.selection,name:kwtsms_sms.selection__kwtsms_sms_template__event_type__invoice_posted
+msgid "Invoice Posted"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "Keep Test Mode ON during development"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_template__lang
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_kwtsms_sms_template_search
+msgid "Language"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_gateway_config__write_uid
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_compose__write_uid
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_log__write_uid
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_template__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_gateway_config__write_date
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_compose__write_date
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_log__write_date
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_template__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_gateway_config__last_verified
+#: model:ir.model.fields,field_description:kwtsms_sms.field_res_config_settings__kwtsms_last_verified
+msgid "Last Verified"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "Log Retention"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,field_description:kwtsms_sms.field_res_config_settings__kwtsms_log_retention_days
+msgid "Log Retention (Days)"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "Login / Verify"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "Manage SMS message templates with placeholders."
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "Manage Templates"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "Master switch. When disabled, no SMS will be sent through kwtSMS."
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_compose__message
+msgid "Message"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_log__message_body
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_template__body
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_kwtsms_sms_template_form
+msgid "Message Body"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_kwtsms_sms_log_form
+msgid "Message Details"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_log__msg_id
+msgid "Message ID"
+msgstr ""
+
+#. module: kwtsms_sms
+#. odoo-python
+#: code:addons/kwtsms_sms/wizard/sms_compose_wizard.py:0
+msgid "Message is required."
+msgstr ""
+
+#. module: kwtsms_sms
+#. odoo-python
+#: code:addons/kwtsms_sms/wizard/sms_compose_wizard.py:0
+msgid "Message sent to %s"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "Messages are queued but not delivered. No credits consumed."
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_log__name
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_template__name
+msgid "Name"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields.selection,name:kwtsms_sms.selection__kwtsms_gateway_config__api_status__not_configured
+#: model:ir.model.fields.selection,name:kwtsms_sms.selection__res_config_settings__kwtsms_api_status__not_configured
+msgid "Not Configured"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_kwtsms_sms_log_form
+msgid "Open Related Record"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields.selection,name:kwtsms_sms.selection__kwtsms_sms_template__event_type__order_confirm
+msgid "Order Confirmation"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:kwtsms.sms.template,name:kwtsms_sms.template_order_confirm_ar
+msgid "Order Confirmation (Arabic)"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:kwtsms.sms.template,name:kwtsms_sms.template_order_confirm_en
+msgid "Order Confirmation (English)"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,field_description:kwtsms_sms.field_res_config_settings__kwtsms_order_template_id
+msgid "Order Confirmation Template"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields.selection,name:kwtsms_sms.selection__kwtsms_sms_template__event_type__payment_received
+msgid "Payment Received"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_compose__phone
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_log__phone_number
+msgid "Phone Number"
+msgstr ""
+
+#. module: kwtsms_sms
+#. odoo-python
+#: code:addons/kwtsms_sms/wizard/sms_compose_wizard.py:0
+msgid "Phone number is required."
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_log__points_charged
+msgid "Points Charged"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_gateway_config__balance_purchased
+#: model:ir.model.fields,field_description:kwtsms_sms.field_res_config_settings__kwtsms_balance_purchased
+msgid "Purchased Balance"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields.selection,name:kwtsms_sms.selection__kwtsms_sms_log__status__queued
+msgid "Queued"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "Refresh Balance"
+msgstr ""
+
+#. module: kwtsms_sms
+#. odoo-python
+#: code:addons/kwtsms_sms/models/res_config_settings.py:0
+msgid "Refresh Failed"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_compose__res_model
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_log__res_model
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_template__model_id
+msgid "Related Model"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_kwtsms_sms_log_form
+msgid "Related Record"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_compose__res_id
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_log__res_id
+msgid "Related Record ID"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "Resources"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_kwtsms_sms_template_form
+msgid "SMS Info"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_kwtsms_sms_log_form
+msgid "SMS Log"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.actions.act_window,name:kwtsms_sms.action_kwtsms_sms_log
+#: model:ir.ui.menu,name:kwtsms_sms.menu_kwtsms_logs
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_kwtsms_sms_log_tree
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "SMS Logs"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_compose__page_count
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_template__page_count
+msgid "SMS Pages"
+msgstr ""
+
+#. module: kwtsms_sms
+#. odoo-python
+#: code:addons/kwtsms_sms/wizard/sms_compose_wizard.py:0
+msgid "SMS Sent"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_kwtsms_sms_template_form
+msgid "SMS Template"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.actions.act_window,name:kwtsms_sms.action_kwtsms_sms_template
+#: model:ir.ui.menu,name:kwtsms_sms.menu_kwtsms_templates
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_kwtsms_sms_template_tree
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "SMS Templates"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,field_description:kwtsms_sms.field_res_config_settings__kwtsms_auto_delivery_done
+msgid "SMS on Delivery Completion"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,field_description:kwtsms_sms.field_res_config_settings__kwtsms_auto_order_confirm
+msgid "SMS on Order Confirmation"
+msgstr ""
+
+#. module: kwtsms_sms
+#. odoo-python
+#: code:addons/kwtsms_sms/wizard/sms_compose_wizard.py:0
+msgid "SMS sending failed: %s"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model,name:kwtsms_sms.model_sale_order
+msgid "Sales Order"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "Sales: SMS on Order Confirmation"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_kwtsms_sms_log_search
+msgid "Search SMS Logs"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_kwtsms_sms_template_search
+msgid "Search Templates"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "Select your Sender ID"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "Select your registered sender ID."
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.actions.act_window,name:kwtsms_sms.action_kwtsms_send_sms
+#: model:ir.actions.act_window,name:kwtsms_sms.action_kwtsms_send_sms_sale
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_kwtsms_sms_compose_form
+msgid "Send SMS"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_log__sender_id
+#: model:ir.model.fields,field_description:kwtsms_sms.field_res_config_settings__kwtsms_sender_id
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "Sender ID"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "Sender ID Help"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_gateway_config__sender_ids_json
+msgid "Sender IDs (JSON)"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_log__status
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_kwtsms_sms_log_form
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_kwtsms_sms_log_search
+msgid "Status"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields.selection,name:kwtsms_sms.selection__kwtsms_sms_log__status__success
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_kwtsms_sms_log_search
+msgid "Success"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "Switch Test Mode OFF when ready for production"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_compose__template_id
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_log__template_id
+msgid "Template"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_kwtsms_sms_template_form
+msgid "Template Name"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields.selection,name:kwtsms_sms.selection__kwtsms_sms_log__status__test
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_kwtsms_sms_log_search
+msgid "Test"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_log__test_mode
+#: model:ir.model.fields,field_description:kwtsms_sms.field_res_config_settings__kwtsms_test_mode
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "Test Mode"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_kwtsms_sms_log_search
+msgid "This Month"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_kwtsms_sms_log_search
+msgid "This Week"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_kwtsms_sms_log_search
+msgid "Today"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model,name:kwtsms_sms.model_stock_picking
+msgid "Transfer"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_compose__is_unicode
+#: model:ir.model.fields,field_description:kwtsms_sms.field_kwtsms_sms_template__is_unicode
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_kwtsms_sms_template_tree
+msgid "Unicode"
+msgstr ""
+
+#. module: kwtsms_sms
+#. odoo-python
+#: code:addons/kwtsms_sms/models/kwtsms_gateway.py:0
+#: code:addons/kwtsms_sms/models/res_config_settings.py:0
+#: code:addons/kwtsms_sms/wizard/sms_compose_wizard.py:0
+msgid "Unknown error"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,help:kwtsms_sms.field_kwtsms_sms_template__body
+msgid ""
+"Use placeholders: {order_name}, {customer_name}, {amount}, {company_name}, "
+"{picking_name}, {tracking_ref}"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "Used for numbers without a country code prefix."
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "Verify Connection"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "View Logs"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "View full SMS audit trail with API responses."
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model.fields,help:kwtsms_sms.field_res_config_settings__kwtsms_test_mode
+msgid "When enabled, SMS messages are queued but not delivered."
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "days"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.ui.menu,name:kwtsms_sms.menu_kwtsms_root
+msgid "kwtSMS"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "kwtSMS FAQ"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "kwtSMS Gateway"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model,name:kwtsms_sms.model_kwtsms_gateway_config
+msgid "kwtSMS Gateway Configuration"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:res.groups,name:kwtsms_sms.group_kwtsms_manager
+msgid "kwtSMS Manager"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model,name:kwtsms_sms.model_kwtsms_sms_log
+msgid "kwtSMS Message Log"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.model,name:kwtsms_sms.model_kwtsms_sms_template
+msgid "kwtSMS Message Template"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model_terms:ir.ui.view,arch_db:kwtsms_sms.view_res_config_settings_form
+msgid "kwtSMS Support"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.actions.server,name:kwtsms_sms.cron_kwtsms_log_cleanup_ir_actions_server
+msgid "kwtSMS: Cleanup Old Logs"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:ir.actions.server,name:kwtsms_sms.cron_kwtsms_balance_refresh_ir_actions_server
+msgid "kwtSMS: Refresh Balance"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:kwtsms.sms.template,body:kwtsms_sms.template_delivery_done_en
+msgid ""
+"{company_name}: Your delivery {picking_name} has been shipped. Tracking: "
+"{tracking_ref}"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:kwtsms.sms.template,body:kwtsms_sms.template_order_confirm_en
+msgid ""
+"{company_name}: Your order {order_name} for {amount} has been confirmed. "
+"Thank you!"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:kwtsms.sms.template,body:kwtsms_sms.template_order_confirm_ar
+msgid "{company_name}: تم تأكيد طلبك {order_name} بمبلغ {amount}. شكرا لك!"
+msgstr ""
+
+#. module: kwtsms_sms
+#: model:kwtsms.sms.template,body:kwtsms_sms.template_delivery_done_ar
+msgid "{company_name}: تم شحن طلبك {picking_name}. رقم التتبع: {tracking_ref}"
+msgstr ""
