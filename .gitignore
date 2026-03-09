@@ -1,0 +1,57 @@
+# === IDE / Editor ===
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# === Claude / AI ===
+.claude/
+CLAUDE.md
+.worktrees/
+
+# === Documentation (dev-only) ===
+docs/
+tests/
+
+# === Environment / Secrets ===
+.env
+.env.*
+*.log
+
+# === Python ===
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+*.whl
+venv/
+.venv/
+env/
+
+# === Docker ===
+docker/
+docker-compose*.yml
+Dockerfile
+
+# === Ruby (if any) ===
+Gemfile.lock
+
+# === Archives ===
+*.zip
+*.tar.gz
+*.rar
+
+# === OS Files ===
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# === Odoo specific ===
+*.pyc
+filestore/
+sessions/
