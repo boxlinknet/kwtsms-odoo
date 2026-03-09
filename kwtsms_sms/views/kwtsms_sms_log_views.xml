@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- SMS Log Tree View -->
+    <record id="view_kwtsms_sms_log_tree" model="ir.ui.view">
+        <field name="name">kwtsms.sms.log.tree</field>
+        <field name="model">kwtsms.sms.log</field>
+        <field name="arch" type="xml">
+            <list string="SMS Logs" default_order="create_date desc"
+                  decoration-success="status == 'success'"
+                  decoration-info="status == 'test'"
+                  decoration-danger="status == 'error'"
+                  decoration-muted="status == 'queued'">
+                <field name="create_date" string="Date"/>
+                <field name="phone_number"/>
+                <field name="sender_id"/>
+                <field name="status"/>
+                <field name="error_code"/>
+                <field name="msg_id"/>
+                <field name="points_charged"/>
+                <field name="balance_after"/>
+                <field name="test_mode"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- SMS Log Form View -->
+    <record id="view_kwtsms_sms_log_form" model="ir.ui.view">
+        <field name="name">kwtsms.sms.log.form</field>
+        <field name="model">kwtsms.sms.log</field>
+        <field name="arch" type="xml">
+            <form string="SMS Log" create="false" edit="false">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Message Details">
+                            <field name="phone_number"/>
+                            <field name="message_body"/>
+                            <field name="template_id"/>
+                            <field name="sender_id"/>
+                        </group>
+                        <group string="Status">
+                            <field name="status"/>
+                            <field name="msg_id"/>
+                            <field name="points_charged"/>
+                            <field name="balance_after"/>
+                            <field name="test_mode"/>
+                            <field name="create_date"/>
+                        </group>
+                    </group>
+                    <group string="Error Details" invisible="status != 'error'">
+                        <field name="error_code"/>
+                        <field name="error_description"/>
+                    </group>
+                    <group string="Related Record" invisible="not res_model">
+                        <field name="res_model"/>
+                        <field name="res_id"/>
+                        <button name="action_view_related_record"
+                                string="Open Related Record"
+                                type="object"
+                                class="btn-link"
+                                icon="fa-external-link"
+                                invisible="not res_model"/>
+                    </group>
+                    <group string="API Response">
+                        <field name="api_response" nolabel="1"/>
+                    </group>
+                    <group string="Company" groups="base.group_multi_company">
+                        <field name="company_id"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- SMS Log Search View -->
+    <record id="view_kwtsms_sms_log_search" model="ir.ui.view">
+        <field name="name">kwtsms.sms.log.search</field>
+        <field name="model">kwtsms.sms.log</field>
+        <field name="arch" type="xml">
+            <search string="Search SMS Logs">
+                <field name="phone_number"/>
+                <field name="msg_id"/>
+                <field name="error_code"/>
+                <field name="message_body"/>
+                <separator/>
+                <filter string="Success" name="filter_success"
+                        domain="[('status', '=', 'success')]"/>
+                <filter string="Error" name="filter_error"
+                        domain="[('status', '=', 'error')]"/>
+                <filter string="Test" name="filter_test"
+                        domain="[('status', '=', 'test')]"/>
+                <separator/>
+                <filter string="Today" name="filter_today"
+                        domain="[('create_date', '>=', context_today().strftime('%%Y-%%m-%%d'))]"/>
+                <filter string="This Week" name="filter_week"
+                        domain="[('create_date', '>=', (context_today() - relativedelta(days=7)).strftime('%%Y-%%m-%%d'))]"/>
+                <filter string="This Month" name="filter_month"
+                        domain="[('create_date', '>=', context_today().strftime('%%Y-%%m-01'))]"/>
+                <separator/>
+                <group>
+                    <filter string="Status" name="group_status"
+                            context="{'group_by': 'status'}"/>
+                    <filter string="Date" name="group_date"
+                            context="{'group_by': 'create_date:day'}"/>
+                    <filter string="Error Code" name="group_error"
+                            context="{'group_by': 'error_code'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- SMS Log Action -->
+    <record id="action_kwtsms_sms_log" model="ir.actions.act_window">
+        <field name="name">SMS Logs</field>
+        <field name="res_model">kwtsms.sms.log</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_filter_today': 1}</field>
+    </record>
+</odoo>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Default SMS Templates -->
+
+        <!-- Order Confirmation - English -->
+        <record id="template_order_confirm_en" model="kwtsms.sms.template">
+            <field name="name">Order Confirmation (English)</field>
+            <field name="event_type">order_confirm</field>
+            <field name="lang">en</field>
+            <field name="body">{company_name}: Your order {order_name} for {amount} has been confirmed. Thank you!</field>
+            <field name="active" eval="True"/>
+        </record>
+
+        <!-- Order Confirmation - Arabic -->
+        <record id="template_order_confirm_ar" model="kwtsms.sms.template">
+            <field name="name">Order Confirmation (Arabic)</field>
+            <field name="event_type">order_confirm</field>
+            <field name="lang">ar</field>
+            <field name="body">{company_name}: تم تأكيد طلبك {order_name} بمبلغ {amount}. شكرا لك!</field>
+            <field name="active" eval="True"/>
+        </record>
+
+        <!-- Delivery Completed - English -->
+        <record id="template_delivery_done_en" model="kwtsms.sms.template">
+            <field name="name">Delivery Completed (English)</field>
+            <field name="event_type">delivery_done</field>
+            <field name="lang">en</field>
+            <field name="body">{company_name}: Your delivery {picking_name} has been shipped. Tracking: {tracking_ref}</field>
+            <field name="active" eval="True"/>
+        </record>
+
+        <!-- Delivery Completed - Arabic -->
+        <record id="template_delivery_done_ar" model="kwtsms.sms.template">
+            <field name="name">Delivery Completed (Arabic)</field>
+            <field name="event_type">delivery_done</field>
+            <field name="lang">ar</field>
+            <field name="body">{company_name}: تم شحن طلبك {picking_name}. رقم التتبع: {tracking_ref}</field>
+            <field name="active" eval="True"/>
+        </record>
+
+        <!-- Default system parameters -->
+        <record id="default_param_enabled" model="ir.config_parameter">
+            <field name="key">kwtsms.enabled</field>
+            <field name="value">True</field>
+        </record>
+        <record id="default_param_test_mode" model="ir.config_parameter">
+            <field name="key">kwtsms.test_mode</field>
+            <field name="value">True</field>
+        </record>
+        <record id="default_param_country_code" model="ir.config_parameter">
+            <field name="key">kwtsms.default_country_code</field>
+            <field name="value">965</field>
+        </record>
+        <record id="default_param_log_retention" model="ir.config_parameter">
+            <field name="key">kwtsms.log_retention_days</field>
+            <field name="value">90</field>
+        </record>
+    </data>
+</odoo>

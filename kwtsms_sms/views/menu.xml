@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Top-level menu under Settings -->
+    <menuitem id="menu_kwtsms_root"
+              name="kwtSMS"
+              parent="base.menu_administration"
+              sequence="90"
+              groups="base.group_system"/>
+
+    <!-- Sub-menus -->
+    <menuitem id="menu_kwtsms_templates"
+              name="SMS Templates"
+              parent="menu_kwtsms_root"
+              action="action_kwtsms_sms_template"
+              sequence="10"/>
+
+    <menuitem id="menu_kwtsms_logs"
+              name="SMS Logs"
+              parent="menu_kwtsms_root"
+              action="action_kwtsms_sms_log"
+              sequence="20"/>
+</odoo>

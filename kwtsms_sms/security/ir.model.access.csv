@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_kwtsms_gateway_config_system,kwtsms.gateway.config.system,model_kwtsms_gateway_config,base.group_system,1,1,1,1
+access_kwtsms_gateway_config_user,kwtsms.gateway.config.user,model_kwtsms_gateway_config,base.group_user,1,0,0,0
+access_kwtsms_sms_log_system,kwtsms.sms.log.system,model_kwtsms_sms_log,base.group_system,1,1,1,1
+access_kwtsms_sms_log_user,kwtsms.sms.log.user,model_kwtsms_sms_log,base.group_user,1,0,0,0
+access_kwtsms_sms_template_system,kwtsms.sms.template.system,model_kwtsms_sms_template,base.group_system,1,1,1,1
+access_kwtsms_sms_template_manager,kwtsms.sms.template.manager,model_kwtsms_sms_template,kwtsms_sms.group_kwtsms_manager,1,1,1,0
+access_kwtsms_sms_template_user,kwtsms.sms.template.user,model_kwtsms_sms_template,base.group_user,1,0,0,0
+access_kwtsms_sms_compose_system,kwtsms.sms.compose.system,model_kwtsms_sms_compose,base.group_system,1,1,1,1
+access_kwtsms_sms_compose_manager,kwtsms.sms.compose.manager,model_kwtsms_sms_compose,kwtsms_sms.group_kwtsms_manager,1,1,1,1

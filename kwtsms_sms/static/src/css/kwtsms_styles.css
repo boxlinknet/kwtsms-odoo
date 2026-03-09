@@ -1,0 +1,26 @@
+/* kwtSMS Gateway - Minimal custom styles */
+
+/* RTL support for Arabic template body editor */
+.kwtsms_rtl_editor textarea {
+    direction: rtl;
+    text-align: right;
+}
+
+/* Balance display in settings */
+.kwtsms_balance_display {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+/* Status badge colors */
+.kwtsms_status_connected {
+    color: #28a745;
+}
+
+.kwtsms_status_error {
+    color: #dc3545;
+}
+
+.kwtsms_status_not_configured {
+    color: #6c757d;
+}

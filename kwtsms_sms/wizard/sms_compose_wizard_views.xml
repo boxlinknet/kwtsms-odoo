@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- SMS Compose Wizard Form View -->
+    <record id="view_kwtsms_sms_compose_form" model="ir.ui.view">
+        <field name="name">kwtsms.sms.compose.form</field>
+        <field name="model">kwtsms.sms.compose</field>
+        <field name="arch" type="xml">
+            <form string="Send SMS">
+                <group>
+                    <field name="phone" widget="phone"/>
+                    <field name="template_id"
+                           domain="[('active', '=', True)]"/>
+                </group>
+                <group>
+                    <field name="message" placeholder="Enter your message..."
+                           nolabel="1"/>
+                </group>
+                <group>
+                    <div class="row">
+                        <div class="col-4">
+                            <span class="o_form_label">Characters</span>
+                            <field name="char_count" readonly="1"/>
+                        </div>
+                        <div class="col-4">
+                            <span class="o_form_label">SMS Pages</span>
+                            <field name="page_count" readonly="1"/>
+                        </div>
+                        <div class="col-4">
+                            <span class="o_form_label">Unicode</span>
+                            <field name="is_unicode" readonly="1"/>
+                        </div>
+                    </div>
+                </group>
+                <footer>
+                    <button name="action_send" string="Send SMS"
+                            type="object" class="btn-primary"
+                            icon="fa-paper-plane"/>
+                    <button string="Cancel" class="btn-secondary"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Server Action to open wizard from Contact/Partner form -->
+    <record id="action_kwtsms_send_sms" model="ir.actions.act_window">
+        <field name="name">Send SMS</field>
+        <field name="res_model">kwtsms.sms.compose</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="base.model_res_partner"/>
+        <field name="binding_view_types">form</field>
+    </record>
+
+    <!-- Bind to Sale Order form -->
+    <record id="action_kwtsms_send_sms_sale" model="ir.actions.act_window">
+        <field name="name">Send SMS</field>
+        <field name="res_model">kwtsms.sms.compose</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="sale.model_sale_order"/>
+        <field name="binding_view_types">form</field>
+    </record>
+</odoo>

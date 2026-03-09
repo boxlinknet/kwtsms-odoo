@@ -16,7 +16,7 @@ If you discover a security vulnerability in this module, please report it respon
 
 ### How to Report
 
-1. Email: mo@boxlink.net
+1. Email: support@kwtsms.com
 2. Include: module version, Odoo version, description of the vulnerability, steps to reproduce
 
 ### What to Expect

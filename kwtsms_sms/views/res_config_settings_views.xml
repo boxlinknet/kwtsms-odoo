@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Settings Page -->
+    <record id="view_res_config_settings_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.kwtsms</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app string="kwtSMS Gateway"
+                     name="kwtsms_sms"
+                     groups="base.group_system">
+                    <!-- General Settings -->
+                    <block title="General Settings" name="kwtsms_general">
+                        <setting id="kwtsms_enabled_setting"
+                                 string="Enable kwtSMS Gateway"
+                                 help="Master switch. When disabled, no SMS will be sent through kwtSMS.">
+                            <field name="kwtsms_enabled"/>
+                        </setting>
+                        <setting id="kwtsms_test_mode_setting"
+                                 string="Test Mode"
+                                 help="Messages are queued but not delivered. No credits consumed.">
+                            <field name="kwtsms_test_mode"/>
+                        </setting>
+                        <setting id="kwtsms_country_code_setting"
+                                 string="Default Country Code"
+                                 help="Used for numbers without a country code prefix.">
+                            <field name="kwtsms_default_country_code"/>
+                        </setting>
+                        <setting id="kwtsms_retention_setting"
+                                 string="Log Retention"
+                                 help="Auto-delete SMS logs older than this many days.">
+                            <field name="kwtsms_log_retention_days"/> days
+                        </setting>
+                    </block>
+
+                    <!-- Gateway Settings -->
+                    <block title="Gateway Credentials" name="kwtsms_gateway">
+                        <setting id="kwtsms_username_setting"
+                                 string="API Username">
+                            <field name="kwtsms_api_username"/>
+                        </setting>
+                        <setting id="kwtsms_password_setting"
+                                 string="API Password">
+                            <field name="kwtsms_api_password" widget="password"/>
+                        </setting>
+                        <setting id="kwtsms_sender_setting"
+                                 string="Sender ID"
+                                 help="Select your registered sender ID.">
+                            <field name="kwtsms_sender_id"/>
+                        </setting>
+                        <setting id="kwtsms_login_setting"
+                                 string="Verify Connection">
+                            <button name="action_kwtsms_login"
+                                    string="Login / Verify"
+                                    type="object"
+                                    class="btn-primary"
+                                    icon="fa-sign-in"/>
+                            <button name="action_kwtsms_refresh_balance"
+                                    string="Refresh Balance"
+                                    type="object"
+                                    class="btn-secondary ms-2"
+                                    icon="fa-refresh"/>
+                        </setting>
+                        <setting id="kwtsms_status_setting"
+                                 string="Connection Status">
+                            <div class="d-flex gap-4 mt8">
+                                <div style="min-width: 90px;">
+                                    <span class="o_form_label">Status</span>
+                                    <div>
+                                        <field name="kwtsms_api_status" readonly="1"/>
+                                    </div>
+                                </div>
+                                <div style="min-width: 70px;">
+                                    <span class="o_form_label">Balance</span>
+                                    <div>
+                                        <field name="kwtsms_balance_available" readonly="1"/>
+                                    </div>
+                                </div>
+                                <div style="flex: 1; min-width: 180px;">
+                                    <span class="o_form_label">Last Verified</span>
+                                    <div style="overflow: visible;">
+                                        <field name="kwtsms_last_verified" readonly="1"
+                                               style="overflow: visible; text-overflow: unset; min-width: 160px; display: inline-block;"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div invisible="not kwtsms_api_error" class="text-danger mt8">
+                                <field name="kwtsms_api_error" readonly="1"/>
+                            </div>
+                        </setting>
+                    </block>
+
+                    <!-- Integrations -->
+                    <block title="Integrations" name="kwtsms_integrations">
+                        <setting id="kwtsms_order_confirm_setting"
+                                 string="Sales: SMS on Order Confirmation"
+                                 help="Automatically send SMS when a sale order is confirmed.">
+                            <field name="kwtsms_auto_order_confirm"/>
+                            <div invisible="not kwtsms_auto_order_confirm" class="mt8">
+                                <label for="kwtsms_order_template_id"/>
+                                <field name="kwtsms_order_template_id"
+                                       domain="[('event_type', '=', 'order_confirm')]"/>
+                            </div>
+                        </setting>
+                        <setting id="kwtsms_delivery_done_setting"
+                                 string="Inventory: SMS on Delivery Completion"
+                                 help="Automatically send SMS when an outgoing delivery is validated.">
+                            <field name="kwtsms_auto_delivery_done"/>
+                            <div invisible="not kwtsms_auto_delivery_done" class="mt8">
+                                <label for="kwtsms_delivery_template_id"/>
+                                <field name="kwtsms_delivery_template_id"
+                                       domain="[('event_type', '=', 'delivery_done')]"/>
+                            </div>
+                        </setting>
+                    </block>
+
+                    <!-- Logs & Templates Links -->
+                    <block title="Data" name="kwtsms_data">
+                        <setting id="kwtsms_templates_link"
+                                 string="SMS Templates"
+                                 help="Manage SMS message templates with placeholders.">
+                            <button name="%(kwtsms_sms.action_kwtsms_sms_template)d"
+                                    string="Manage Templates"
+                                    type="action"
+                                    class="btn-link"
+                                    icon="fa-arrow-right"/>
+                        </setting>
+                        <setting id="kwtsms_logs_link"
+                                 string="SMS Logs"
+                                 help="View full SMS audit trail with API responses.">
+                            <button name="%(kwtsms_sms.action_kwtsms_sms_log)d"
+                                    string="View Logs"
+                                    type="action"
+                                    class="btn-link"
+                                    icon="fa-arrow-right"/>
+                        </setting>
+                    </block>
+
+                    <!-- Help -->
+                    <block title="Help" name="kwtsms_help">
+                        <setting id="kwtsms_help_content" string="Resources">
+                            <div>
+                                <p><strong>Setup Guide:</strong></p>
+                                <ol>
+                                    <li>Enter your kwtSMS API Username and Password above</li>
+                                    <li>Click "Login / Verify" to test the connection</li>
+                                    <li>Select your Sender ID</li>
+                                    <li>Keep Test Mode ON during development</li>
+                                    <li>Configure integration triggers (Sales, Inventory)</li>
+                                    <li>Switch Test Mode OFF when ready for production</li>
+                                </ol>
+                                <p><strong>Links:</strong></p>
+                                <ul>
+                                    <li><a href="https://www.kwtsms.com/faq/" target="_blank">kwtSMS FAQ</a></li>
+                                    <li><a href="https://www.kwtsms.com/support.html" target="_blank">kwtSMS Support</a></li>
+                                    <li><a href="https://www.kwtsms.com/sender-id-help.html" target="_blank">Sender ID Help</a></li>
+                                </ul>
+                            </div>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+</odoo>
