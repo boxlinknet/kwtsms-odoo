@@ -37,62 +37,81 @@
     gap: 12px;
 }
 
-/* Status badges */
-.kwtsms_dash_status {
+/* Status pills (matching reference design) */
+.kwtsms_status_pill {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 6px 16px;
-    border-radius: 24px;
-    font-weight: 600;
-    font-size: 0.88em;
-    letter-spacing: 0.02em;
-}
-
-.kwtsms_dash_status_ok {
-    background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
-    color: #2e7d32;
-}
-
-.kwtsms_dash_status_err {
-    background: linear-gradient(135deg, #fce4ec, #f8bbd0);
-    color: #c62828;
-}
-
-.kwtsms_dash_status_na {
-    background: linear-gradient(135deg, #fff3e0, #ffe0b2);
-    color: #e65100;
-}
-
-/* Status pills */
-.kwtsms_dash_pill {
-    display: inline-block;
-    padding: 4px 12px;
+    gap: 7px;
+    padding: 5px 16px;
     border-radius: 20px;
-    font-size: 0.75em;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 0.85em;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
 }
 
-.kwtsms_pill_green {
-    background: #e8f5e9;
+.kwtsms_pill_dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+.kwtsms_dot_green { background: #2e7d32; }
+.kwtsms_dot_gray { background: #999; }
+.kwtsms_dot_red { background: #c62828; }
+
+/* Gateway Enabled: white bg, green border, green text */
+.kwtsms_pill_enabled {
+    background: #fff;
     color: #2e7d32;
+    border: 1px solid #2e7d32;
 }
 
-.kwtsms_pill_gray {
+/* Gateway Disabled: light gray bg, gray border, gray text */
+.kwtsms_pill_disabled {
     background: #f5f5f5;
-    color: #999;
+    color: #888;
+    border: 1px solid #ccc;
 }
 
-.kwtsms_pill_orange {
-    background: #fff3e0;
-    color: #e65100;
+/* Connected: dark teal bg, white text */
+.kwtsms_pill_connected {
+    background: #00796b;
+    color: #fff;
+    border: 1px solid #00796b;
 }
 
-.kwtsms_pill_blue {
-    background: #e3f2fd;
-    color: #1565c0;
+/* Error: dark red bg, white text */
+.kwtsms_pill_error {
+    background: #c62828;
+    color: #fff;
+    border: 1px solid #c62828;
+}
+
+/* Not Configured: dark gray bg, white text */
+.kwtsms_pill_notconfig {
+    background: #616161;
+    color: #fff;
+    border: 1px solid #616161;
+}
+
+/* Test Mode: coral/red bg, white text, uppercase */
+.kwtsms_pill_testmode {
+    background: #e53935;
+    color: #fff;
+    border: 1px solid #e53935;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+}
+
+/* Live: teal bg, white text, uppercase */
+.kwtsms_pill_live {
+    background: #00897b;
+    color: #fff;
+    border: 1px solid #00897b;
+    font-weight: 700;
+    letter-spacing: 0.04em;
 }
 
 /* Last updated */

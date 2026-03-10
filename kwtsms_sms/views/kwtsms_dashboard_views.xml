@@ -14,31 +14,36 @@
                         <div class="kwtsms_dash_header">
                             <div class="kwtsms_dash_header_left">
                                 <div invisible="not cfg_enabled"
-                                     class="kwtsms_dash_pill kwtsms_pill_green">
-                                    GATEWAY ENABLED
+                                     class="kwtsms_status_pill kwtsms_pill_enabled">
+                                    <span class="kwtsms_pill_dot kwtsms_dot_green"/>
+                                    Gateway Enabled
                                 </div>
                                 <div invisible="cfg_enabled"
-                                     class="kwtsms_dash_pill kwtsms_pill_gray">
-                                    GATEWAY DISABLED
+                                     class="kwtsms_status_pill kwtsms_pill_disabled">
+                                    <span class="kwtsms_pill_dot kwtsms_dot_gray"/>
+                                    Gateway Disabled
                                 </div>
                                 <div invisible="api_status != 'connected'"
-                                     class="kwtsms_dash_status kwtsms_dash_status_ok">
-                                    <i class="fa fa-check-circle" title="Connected"/> Connected
+                                     class="kwtsms_status_pill kwtsms_pill_connected">
+                                    <span class="kwtsms_pill_dot kwtsms_dot_green"/>
+                                    Connected
                                 </div>
                                 <div invisible="api_status != 'error'"
-                                     class="kwtsms_dash_status kwtsms_dash_status_err">
-                                    <i class="fa fa-exclamation-circle" title="Error"/> Error
+                                     class="kwtsms_status_pill kwtsms_pill_error">
+                                    <span class="kwtsms_pill_dot kwtsms_dot_red"/>
+                                    Error
                                 </div>
                                 <div invisible="api_status != 'not_configured'"
-                                     class="kwtsms_dash_status kwtsms_dash_status_na">
-                                    <i class="fa fa-minus-circle" title="Not Configured"/> Not Configured
+                                     class="kwtsms_status_pill kwtsms_pill_notconfig">
+                                    <span class="kwtsms_pill_dot kwtsms_dot_gray"/>
+                                    Not Configured
                                 </div>
                                 <div invisible="not cfg_test_mode"
-                                     class="kwtsms_dash_pill kwtsms_pill_orange">
+                                     class="kwtsms_status_pill kwtsms_pill_testmode">
                                     TEST MODE
                                 </div>
                                 <div invisible="cfg_test_mode"
-                                     class="kwtsms_dash_pill kwtsms_pill_blue">
+                                     class="kwtsms_status_pill kwtsms_pill_live">
                                     LIVE
                                 </div>
                             </div>
