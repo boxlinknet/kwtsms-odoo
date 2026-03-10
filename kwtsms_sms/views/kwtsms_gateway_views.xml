@@ -5,6 +5,7 @@
         <field name="name">kwtsms.gateway.config.gateway</field>
         <field name="model">kwtsms.gateway.config</field>
         <field name="priority">50</field>
+        <!-- Gateway form is secondary; dashboard (priority 10) is the default -->
         <field name="arch" type="xml">
             <form string="Gateway Configuration" create="false" delete="false" duplicate="false">
                 <sheet>

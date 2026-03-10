@@ -4,7 +4,7 @@
     <record id="view_kwtsms_dashboard_form" model="ir.ui.view">
         <field name="name">kwtsms.gateway.config.dashboard</field>
         <field name="model">kwtsms.gateway.config</field>
-        <field name="priority">99</field>
+        <field name="priority">10</field>
         <field name="arch" type="xml">
             <form string="kwtSMS Dashboard" create="false" delete="false" duplicate="false">
                 <sheet>

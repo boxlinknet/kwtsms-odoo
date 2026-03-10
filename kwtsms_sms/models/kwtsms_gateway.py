@@ -600,6 +600,7 @@ class KwtSmsGatewayConfig(models.Model):
             'target': 'current',
             'view_id': self.env.ref('kwtsms_sms.view_kwtsms_dashboard_form').id,
             'context': {'form_view_initial_mode': 'readonly'},
+            'path': 'kwtsms',
         }
 
     @api.model
@@ -614,6 +615,7 @@ class KwtSmsGatewayConfig(models.Model):
             'res_id': config.id,
             'target': 'current',
             'view_id': self.env.ref('kwtsms_sms.view_kwtsms_gateway_form').id,
+            'path': 'kwtsms-gateway',
         }
 
     @api.model
@@ -629,6 +631,7 @@ class KwtSmsGatewayConfig(models.Model):
             'target': 'current',
             'view_id': self.env.ref('kwtsms_sms.view_kwtsms_help_form').id,
             'context': {'form_view_initial_mode': 'readonly'},
+            'path': 'kwtsms-help',
         }
 
     # ═══════════════════════════════════════
