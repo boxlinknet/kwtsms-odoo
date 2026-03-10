@@ -197,6 +197,21 @@
                                  help="Automatically send SMS when an outgoing delivery is validated. Template is auto-selected based on customer language.">
                             <field name="kwtsms_auto_delivery_done"/>
                         </setting>
+                        <setting id="kwtsms_order_cancel_setting"
+                                 string="Sales: SMS on Order Cancellation"
+                                 help="Automatically send SMS when a sale order is cancelled. Template is auto-selected based on customer language.">
+                            <field name="kwtsms_auto_order_cancel"/>
+                        </setting>
+                        <setting id="kwtsms_invoice_posted_setting"
+                                 string="Accounting: SMS on Invoice Posted"
+                                 help="Automatically send SMS when a customer invoice is posted. Template is auto-selected based on customer language.">
+                            <field name="kwtsms_auto_invoice_posted"/>
+                        </setting>
+                        <setting id="kwtsms_payment_received_setting"
+                                 string="Accounting: SMS on Payment Received"
+                                 help="Automatically send SMS when an inbound payment is posted. Template is auto-selected based on customer language.">
+                            <field name="kwtsms_auto_payment_received"/>
+                        </setting>
                     </block>
 
                     <!-- Logs & Templates Links -->

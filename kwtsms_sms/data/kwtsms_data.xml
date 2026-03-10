@@ -39,6 +39,60 @@
             <field name="active" eval="True"/>
         </record>
 
+        <!-- Order Cancelled - English -->
+        <record id="template_order_cancel_en" model="kwtsms.sms.template">
+            <field name="name">Order Cancelled (English)</field>
+            <field name="event_type">order_cancel</field>
+            <field name="lang">en</field>
+            <field name="body">Dear #customer_name#, your order #order_name# has been cancelled. If you have questions, please contact #company_name#.</field>
+            <field name="active" eval="True"/>
+        </record>
+
+        <!-- Order Cancelled - Arabic -->
+        <record id="template_order_cancel_ar" model="kwtsms.sms.template">
+            <field name="name">Order Cancelled (Arabic)</field>
+            <field name="event_type">order_cancel</field>
+            <field name="lang">ar</field>
+            <field name="body">عزيزي #customer_name#, تم الغاء طلبك #order_name#. للاستفسار يرجى التواصل مع #company_name#.</field>
+            <field name="active" eval="True"/>
+        </record>
+
+        <!-- Invoice Posted - English -->
+        <record id="template_invoice_posted_en" model="kwtsms.sms.template">
+            <field name="name">Invoice Posted (English)</field>
+            <field name="event_type">invoice_posted</field>
+            <field name="lang">en</field>
+            <field name="body">Dear #customer_name#, invoice #invoice_name# for #amount# has been issued by #company_name#. Please arrange payment at your earliest convenience.</field>
+            <field name="active" eval="True"/>
+        </record>
+
+        <!-- Invoice Posted - Arabic -->
+        <record id="template_invoice_posted_ar" model="kwtsms.sms.template">
+            <field name="name">Invoice Posted (Arabic)</field>
+            <field name="event_type">invoice_posted</field>
+            <field name="lang">ar</field>
+            <field name="body">عزيزي #customer_name#, تم اصدار الفاتورة #invoice_name# بمبلغ #amount# من #company_name#. يرجى ترتيب الدفع في اقرب وقت.</field>
+            <field name="active" eval="True"/>
+        </record>
+
+        <!-- Payment Received - English -->
+        <record id="template_payment_received_en" model="kwtsms.sms.template">
+            <field name="name">Payment Received (English)</field>
+            <field name="event_type">payment_received</field>
+            <field name="lang">en</field>
+            <field name="body">Dear #customer_name#, we received your payment of #amount_paid# (#payment_ref#). Thank you! - #company_name#</field>
+            <field name="active" eval="True"/>
+        </record>
+
+        <!-- Payment Received - Arabic -->
+        <record id="template_payment_received_ar" model="kwtsms.sms.template">
+            <field name="name">Payment Received (Arabic)</field>
+            <field name="event_type">payment_received</field>
+            <field name="lang">ar</field>
+            <field name="body">عزيزي #customer_name#, تم استلام دفعتك بمبلغ #amount_paid# (#payment_ref#). شكرا لك! - #company_name#</field>
+            <field name="active" eval="True"/>
+        </record>
+
         <!-- Default system parameters -->
         <record id="default_param_enabled" model="ir.config_parameter">
             <field name="key">kwtsms.enabled</field>
@@ -55,6 +109,18 @@
         <record id="default_param_log_retention" model="ir.config_parameter">
             <field name="key">kwtsms.log_retention_days</field>
             <field name="value">90</field>
+        </record>
+        <record id="default_param_auto_order_cancel" model="ir.config_parameter">
+            <field name="key">kwtsms.auto_order_cancel</field>
+            <field name="value">False</field>
+        </record>
+        <record id="default_param_auto_invoice_posted" model="ir.config_parameter">
+            <field name="key">kwtsms.auto_invoice_posted</field>
+            <field name="value">False</field>
+        </record>
+        <record id="default_param_auto_payment_received" model="ir.config_parameter">
+            <field name="key">kwtsms.auto_payment_received</field>
+            <field name="value">False</field>
         </record>
     </data>
 </odoo>

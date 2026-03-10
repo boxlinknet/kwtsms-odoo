@@ -49,7 +49,8 @@
                     <div class="alert alert-info" role="alert">
                         <strong>Available Placeholders:</strong>
                         #order_name#, #customer_name#, #amount#, #company_name#,
-                        #picking_name#, #tracking_ref#
+                        #picking_name#, #tracking_ref#, #invoice_name#,
+                        #payment_ref#, #amount_paid#
                     </div>
                 </sheet>
             </form>

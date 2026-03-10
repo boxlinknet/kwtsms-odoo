@@ -56,6 +56,18 @@ class ResConfigSettings(models.TransientModel):
         string='SMS on Delivery Completion',
         default=False,
     )
+    kwtsms_auto_order_cancel = fields.Boolean(
+        string='SMS on Order Cancellation',
+        default=False,
+    )
+    kwtsms_auto_invoice_posted = fields.Boolean(
+        string='SMS on Invoice Posted',
+        default=False,
+    )
+    kwtsms_auto_payment_received = fields.Boolean(
+        string='SMS on Payment Received',
+        default=False,
+    )
 
     # Gateway status (computed, read-only)
     kwtsms_balance_available = fields.Integer(
@@ -194,6 +206,9 @@ class ResConfigSettings(models.TransientModel):
         res['kwtsms_test_mode'] = ICP.get_param('kwtsms.test_mode', 'True') == 'True'
         res['kwtsms_auto_order_confirm'] = ICP.get_param('kwtsms.auto_order_confirm', 'True') == 'True'
         res['kwtsms_auto_delivery_done'] = ICP.get_param('kwtsms.auto_delivery_done', 'False') == 'True'
+        res['kwtsms_auto_order_cancel'] = ICP.get_param('kwtsms.auto_order_cancel', 'False') == 'True'
+        res['kwtsms_auto_invoice_posted'] = ICP.get_param('kwtsms.auto_invoice_posted', 'False') == 'True'
+        res['kwtsms_auto_payment_received'] = ICP.get_param('kwtsms.auto_payment_received', 'False') == 'True'
 
         # Sender ID
         sender_id = ICP.get_param('kwtsms.sender_id', 'KWT-SMS')
@@ -215,6 +230,9 @@ class ResConfigSettings(models.TransientModel):
         ICP.set_param('kwtsms.test_mode', 'True' if self.kwtsms_test_mode else 'False')
         ICP.set_param('kwtsms.auto_order_confirm', 'True' if self.kwtsms_auto_order_confirm else 'False')
         ICP.set_param('kwtsms.auto_delivery_done', 'True' if self.kwtsms_auto_delivery_done else 'False')
+        ICP.set_param('kwtsms.auto_order_cancel', 'True' if self.kwtsms_auto_order_cancel else 'False')
+        ICP.set_param('kwtsms.auto_invoice_posted', 'True' if self.kwtsms_auto_invoice_posted else 'False')
+        ICP.set_param('kwtsms.auto_payment_received', 'True' if self.kwtsms_auto_payment_received else 'False')
 
         # Sender ID
         ICP.set_param('kwtsms.sender_id', self.kwtsms_sender_id or 'KWT-SMS')

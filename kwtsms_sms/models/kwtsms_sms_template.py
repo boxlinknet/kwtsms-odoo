@@ -23,6 +23,7 @@ class KwtSmsTemplate(models.Model):
     )
     event_type = fields.Selection([
         ('order_confirm', 'Order Confirmation'),
+        ('order_cancel', 'Order Cancelled'),
         ('delivery_done', 'Delivery Completed'),
         ('invoice_posted', 'Invoice Posted'),
         ('payment_received', 'Payment Received'),
@@ -37,7 +38,8 @@ class KwtSmsTemplate(models.Model):
         required=True,
         translate=True,
         help='Use placeholders: #order_name#, #customer_name#, #amount#, '
-             '#company_name#, #picking_name#, #tracking_ref#',
+             '#company_name#, #picking_name#, #tracking_ref#, '
+             '#invoice_name#, #payment_ref#, #amount_paid#',
     )
     active = fields.Boolean(
         string='Active',
@@ -100,11 +102,19 @@ class KwtSmsTemplate(models.Model):
         if hasattr(record, 'name'):
             values['order_name'] = record.name or ''
             values['picking_name'] = record.name or ''
+            values['invoice_name'] = record.name or ''
+            values['payment_ref'] = record.name or ''
         if hasattr(record, 'partner_id') and record.partner_id:
             values['customer_name'] = record.partner_id.name or ''
         if hasattr(record, 'amount_total'):
             currency = record.currency_id.symbol if hasattr(record, 'currency_id') and record.currency_id else ''
             values['amount'] = '%s %s' % (record.amount_total, currency)
+        if hasattr(record, 'amount') and not hasattr(record, 'amount_total'):
+            currency = record.currency_id.symbol if hasattr(record, 'currency_id') and record.currency_id else ''
+            values['amount_paid'] = '%s %s' % (record.amount, currency)
+            values['amount'] = '%s %s' % (record.amount, currency)
+        if hasattr(record, 'ref') and record.ref:
+            values['payment_ref'] = record.ref
         if hasattr(record, 'company_id') and record.company_id:
             values['company_name'] = record.company_id.name or ''
         elif self.env.company:

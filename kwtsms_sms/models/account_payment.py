@@ -1,65 +1,47 @@
-"""SMS notifications on sale order events."""
+"""SMS notification on payment receipt."""
 
 import logging
 
-from odoo import models, _
+from odoo import models
 
 _logger = logging.getLogger(__name__)
 
 
-class SaleOrder(models.Model):
-    """Hook into sale.order for SMS notifications."""
+class AccountPayment(models.Model):
+    """Hook into account.payment.action_post for payment SMS."""
 
-    _inherit = 'sale.order'
+    _inherit = 'account.payment'
 
-    def action_confirm(self):
-        """Send SMS after order confirmation."""
-        result = super().action_confirm()
+    def action_post(self):
+        """Send SMS after inbound payment is posted."""
+        result = super().action_post()
 
-        for order in self:
+        for payment in self:
+            if payment.payment_type != 'inbound':
+                continue
             try:
-                order._kwtsms_send_notification(
-                    'order_confirm', 'kwtsms.auto_order_confirm')
+                payment._kwtsms_send_payment_notification('payment_received')
             except Exception as e:
                 _logger.error(
-                    'kwtSMS: Failed to send order confirmation SMS for %s: %s',
-                    order.name, e,
+                    'kwtSMS: Failed to send payment received SMS for %s: %s',
+                    payment.name, e,
                 )
 
         return result
 
-    def action_cancel(self):
-        """Send SMS after order cancellation."""
-        result = super().action_cancel()
-
-        for order in self:
-            try:
-                order._kwtsms_send_notification(
-                    'order_cancel', 'kwtsms.auto_order_cancel')
-            except Exception as e:
-                _logger.error(
-                    'kwtSMS: Failed to send order cancellation SMS for %s: %s',
-                    order.name, e,
-                )
-
-        return result
-
-    def _kwtsms_send_notification(self, event_type, config_key):
-        """Send SMS notification for a business event.
-
-        Args:
-            event_type: Template event type (e.g. 'order_confirm').
-            config_key: ICP key for the feature toggle.
-        """
+    def _kwtsms_send_payment_notification(self, event_type):
+        """Send SMS notification for a payment event."""
         self.ensure_one()
         ICP = self.env['ir.config_parameter'].sudo()
 
         if ICP.get_param('kwtsms.enabled', 'False') != 'True':
             return
-        if ICP.get_param(config_key, 'False') != 'True':
+        if ICP.get_param('kwtsms.auto_payment_received', 'False') != 'True':
             return
 
         partner = self.partner_id
+        if not partner:
+            return
         phone = partner.phone
         if not phone:
             _logger.info('kwtSMS: No phone for partner %s, skipping SMS', partner.name)
@@ -90,6 +72,6 @@ class SaleOrder(models.Model):
             error_code=response.get('code') if status == 'error' else None,
             error_description=response.get('description') if status == 'error' else None,
             template_id=template.id,
-            res_model='sale.order',
+            res_model='account.payment',
             res_id=self.id,
         )

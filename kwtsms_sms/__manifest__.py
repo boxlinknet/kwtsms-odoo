@@ -1,6 +1,6 @@
 {
     'name': 'kwtSMS Gateway',
-    'version': '19.0.1.0.1',
+    'version': '19.0.1.1.0',
     'summary': 'Send SMS via kwtSMS gateway with business event notifications',
     'description': """
 kwtSMS Gateway for Odoo
@@ -9,7 +9,7 @@ kwtSMS Gateway for Odoo
 Replace Odoo IAP SMS with kwtSMS gateway. Features:
 
 * Direct kwtSMS API integration
-* Auto-SMS on order confirmation and delivery
+* Auto-SMS on order confirmation, cancellation, delivery, invoice, and payment
 * Multilingual templates (English + Arabic)
 * Full SMS audit log
 * Phone normalization for GCC numbers
@@ -27,6 +27,7 @@ Replace Odoo IAP SMS with kwtSMS gateway. Features:
         'sms',
         'sale_management',
         'stock',
+        'account',
         'mail',
     ],
     'data': [
