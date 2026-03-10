@@ -8,7 +8,7 @@ Send SMS messages from Odoo using the [kwtSMS](https://www.kwtsms.com) gateway. 
 - **Replace Odoo IAP**: Use kwtSMS instead of Odoo's expensive IAP credits
 - **Business Event Notifications**: Auto-send SMS on order confirmation, invoice, delivery, payment
 - **SMS Templates**: Multilingual templates with placeholder variables (English + Arabic)
-- **Bulk SMS**: Send to 200+ recipients with automatic batching
+- **Bulk SMS**: Send to 200+ recipients with automatic batching (comma-separated or one per line)
 - **Phone Normalization**: Handles `+965`, `00965`, Arabic digits, spaces, dashes automatically
 - **SMS Logs**: Full audit trail of all sent messages with API responses
 - **Balance Tracking**: Real-time kwtSMS account balance display

@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <!-- SMS Compose Wizard Form View -->
+    <!-- SMS Sender Form View -->
     <record id="view_kwtsms_sms_compose_form" model="ir.ui.view">
         <field name="name">kwtsms.sms.compose.form</field>
         <field name="model">kwtsms.sms.compose</field>
         <field name="arch" type="xml">
-            <form string="Send SMS">
+            <form string="SMS Sender">
                 <group>
-                    <field name="phone" widget="phone"/>
+                    <field name="phone"
+                           placeholder="96598765432, 96512345678&#10;or one per line"
+                           string="Phone Number(s)"/>
                     <field name="template_id"
                            domain="[('active', '=', True)]"/>
                 </group>
@@ -42,7 +44,7 @@
         </field>
     </record>
 
-    <!-- Server Action to open wizard from Contact/Partner form -->
+    <!-- Server Action to open SMS Sender from Contact/Partner form -->
     <record id="action_kwtsms_send_sms" model="ir.actions.act_window">
         <field name="name">Send SMS</field>
         <field name="res_model">kwtsms.sms.compose</field>

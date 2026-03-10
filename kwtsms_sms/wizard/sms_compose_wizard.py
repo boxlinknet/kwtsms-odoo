@@ -1,6 +1,7 @@
-"""SMS Compose Wizard for sending SMS directly from records."""
+"""SMS Sender for sending SMS directly from records."""
 
 import logging
+import re
 
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
@@ -14,11 +15,12 @@ class KwtSmsComposeWizard(models.TransientModel):
     """Compose and send SMS via kwtSMS from any record."""
 
     _name = 'kwtsms.sms.compose'
-    _description = 'Compose SMS via kwtSMS'
+    _description = 'SMS Sender'
 
-    phone = fields.Char(
-        string='Phone Number',
+    phone = fields.Text(
+        string='Phone Number(s)',
         required=True,
+        help='Enter one or more phone numbers, separated by commas or one per line.',
     )
     message = fields.Text(
         string='Message',
@@ -92,7 +94,7 @@ class KwtSmsComposeWizard(models.TransientModel):
         return defaults
 
     def action_send(self):
-        """Send the SMS message."""
+        """Send the SMS message to one or more phone numbers."""
         self.ensure_one()
 
         if not self.phone:
@@ -102,12 +104,22 @@ class KwtSmsComposeWizard(models.TransientModel):
 
         from odoo.addons.kwtsms_sms.tools.kwtsms_api import KwtSmsApi
         api = KwtSmsApi(self.env)
-        response = api.send_single(self.phone, self.message)
+
+        # Split by commas or newlines, strip whitespace
+        phones = [p.strip() for p in re.split(r'[,\n\r]+', self.phone) if p.strip()]
+
+        if len(phones) == 1:
+            return self._send_single(api, phones[0])
+        return self._send_bulk(api, phones)
+
+    def _send_single(self, api, phone):
+        """Send SMS to a single phone number."""
+        response = api.send_single(phone, self.message)
 
         if response.get('result') == 'OK':
             status = 'test' if api._test_mode else 'success'
             api._log_send(
-                numbers=self.phone,
+                numbers=phone,
                 message=self.message,
                 response=response,
                 status=status,
@@ -120,7 +132,7 @@ class KwtSmsComposeWizard(models.TransientModel):
                 'tag': 'display_notification',
                 'params': {
                     'title': _('SMS Sent'),
-                    'message': _('Message sent to %s') % self.phone,
+                    'message': _('Message sent to %s') % phone,
                     'type': 'success',
                     'sticky': False,
                 },
@@ -128,7 +140,61 @@ class KwtSmsComposeWizard(models.TransientModel):
         else:
             error_msg = response.get('description', _('Unknown error'))
             api._log_send(
-                numbers=self.phone,
+                numbers=phone,
+                message=self.message,
+                response=response,
+                status='error',
+                error_code=response.get('code'),
+                error_description=error_msg,
+                template_id=self.template_id.id if self.template_id else None,
+                res_model=self.res_model,
+                res_id=self.res_id,
+            )
+            raise UserError(_('SMS sending failed: %s') % error_msg)
+
+    def _send_bulk(self, api, phones):
+        """Send SMS to multiple phone numbers."""
+        response = api.send_multi(phones, self.message)
+
+        valid_count = response.get('valid_count', 0)
+        invalid_count = response.get('invalid_count', 0)
+        numbers_sent = response.get('numbers_sent', ','.join(phones))
+
+        if response.get('result') in ('OK', 'PARTIAL'):
+            status = 'test' if api._test_mode else 'success'
+            api._log_send(
+                numbers=numbers_sent,
+                message=self.message,
+                response=response,
+                status=status,
+                template_id=self.template_id.id if self.template_id else None,
+                res_model=self.res_model,
+                res_id=self.res_id,
+            )
+            msg_parts = [_('Message sent to %d number(s).') % valid_count]
+            if invalid_count:
+                invalid_list = response.get('invalid', [])
+                bad_nums = ', '.join(
+                    '%s (%s)' % (i['input'], i['reason'])
+                    for i in invalid_list
+                )
+                msg_parts.append(
+                    _('%d number(s) skipped: %s') % (invalid_count, bad_nums)
+                )
+            return {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'title': _('SMS Sent'),
+                    'message': ' '.join(msg_parts),
+                    'type': 'success' if not invalid_count else 'warning',
+                    'sticky': bool(invalid_count),
+                },
+            }
+        else:
+            error_msg = response.get('description', _('Unknown error'))
+            api._log_send(
+                numbers=numbers_sent,
                 message=self.message,
                 response=response,
                 status='error',

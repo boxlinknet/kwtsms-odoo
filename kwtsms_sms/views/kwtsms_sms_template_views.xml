@@ -43,9 +43,9 @@
                             <field name="company_id" groups="base.group_multi_company"/>
                         </group>
                     </group>
-                    <group string="Message Body">
-                        <field name="body" nolabel="1" placeholder="Enter SMS message..."/>
-                    </group>
+                    <separator string="Message Body"/>
+                    <field name="body" nolabel="1" placeholder="Enter SMS message..."
+                           class="kwtsms_template_body"/>
                     <group string="SMS Info">
                         <group>
                             <field name="char_count"/>

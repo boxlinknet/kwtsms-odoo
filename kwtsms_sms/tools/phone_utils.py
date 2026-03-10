@@ -163,8 +163,8 @@ def validate_phone_list(phones):
 def clean_message(message):
     """Clean an SMS message for sending.
 
-    Strips emojis, hidden control characters, and converts Arabic/Hindi digits.
-    Preserves Arabic letters.
+    Strips HTML tags, emojis, hidden control characters, and converts
+    Arabic/Hindi digits. Preserves Arabic letters.
 
     Args:
         message (str): Raw message text.
@@ -174,6 +174,17 @@ def clean_message(message):
     """
     if not message:
         return ''
+    # Strip HTML tags (convert <br> variants to newline first)
+    message = re.sub(r'<br\s*/?>', '\n', message, flags=re.IGNORECASE)
+    message = re.sub(r'<[^>]+>', '', message)
+    # Decode common HTML entities
+    message = (message
+               .replace('&amp;', '&')
+               .replace('&lt;', '<')
+               .replace('&gt;', '>')
+               .replace('&nbsp;', ' ')
+               .replace('&quot;', '"')
+               .replace('&#39;', "'"))
     # Strip emojis
     message = _EMOJI_PATTERN.sub('', message)
     # Strip hidden control characters

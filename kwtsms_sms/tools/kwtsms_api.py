@@ -357,6 +357,97 @@ class KwtSmsApi(SmsApiBase):
             self._update_balance_from_response(response)
         return response
 
+    def send_multi(self, phones, message, sender_id=None):
+        """Send SMS to multiple phone numbers.
+
+        Validates each number, batches into groups of 200, and sends.
+
+        Args:
+            phones: List of phone number strings.
+            message: Message text.
+            sender_id: Optional sender ID override.
+
+        Returns:
+            dict: Combined result with valid/invalid counts and API response.
+        """
+        cleaned = clean_message(message)
+        if not cleaned:
+            return {
+                'result': 'ERROR',
+                'code': 'ERR_VALIDATION',
+                'description': 'Message is empty after cleaning.',
+            }
+
+        valid = []
+        invalid = []
+        for phone in phones:
+            normalized, error = prepare_phone(phone, self._default_country_code)
+            if error:
+                invalid.append({'input': phone, 'reason': error})
+            else:
+                valid.append(normalized)
+
+        if not valid:
+            return {
+                'result': 'ERROR',
+                'code': 'ERR_VALIDATION',
+                'description': 'No valid phone numbers found.',
+                'invalid': invalid,
+            }
+
+        # Send in batches of 200
+        all_responses = []
+        total_charged = 0
+        last_balance = 0
+        final_result = 'OK'
+
+        for i in range(0, len(valid), BATCH_SIZE):
+            batch = valid[i:i + BATCH_SIZE]
+            mobile_str = ','.join(batch)
+
+            payload = {
+                'username': self._username,
+                'password': self._password,
+                'sender': sender_id or self._sender_id,
+                'mobile': mobile_str,
+                'message': cleaned,
+                'test': '1' if self._test_mode else '0',
+            }
+
+            response = self._api_call('send', payload)
+            all_responses.append(response)
+
+            if response.get('result') == 'OK':
+                total_charged += response.get('points-charged', 0)
+                last_balance = response.get('balance-after', 0)
+                self._update_balance_from_response(response)
+            else:
+                final_result = 'PARTIAL' if all_responses[0].get('result') == 'OK' else 'ERROR'
+
+            # Rate limit between batches
+            if i + BATCH_SIZE < len(valid):
+                time.sleep(BATCH_DELAY)
+
+        result = {
+            'result': final_result,
+            'valid_count': len(valid),
+            'invalid_count': len(invalid),
+            'numbers_sent': ','.join(valid),
+            'points-charged': total_charged,
+            'balance-after': last_balance,
+        }
+        if invalid:
+            result['invalid'] = invalid
+        if all_responses:
+            result['msg-id'] = all_responses[0].get('msg-id', '')
+            if final_result != 'OK':
+                for resp in all_responses:
+                    if resp.get('result') != 'OK':
+                        result['code'] = resp.get('code', 'UNKNOWN')
+                        result['description'] = resp.get('description', '')
+                        break
+        return result
+
     def _log_send(self, numbers, message, response, status,
                   error_code=None, error_description=None,
                   template_id=None, res_model=None, res_id=None):

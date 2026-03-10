@@ -61,9 +61,9 @@
 .kwtsms_dot_gray { background: #999; }
 .kwtsms_dot_red { background: #c62828; }
 
-/* Gateway Enabled: white bg, green border, green text */
+/* Gateway Enabled: light green transparent bg, green text (consistent with Connected) */
 .kwtsms_pill_enabled {
-    background: #fff;
+    background: rgba(46, 125, 50, 0.1);
     color: #2e7d32;
     border: 1px solid #2e7d32;
 }
@@ -75,11 +75,11 @@
     border: 1px solid #ccc;
 }
 
-/* Connected: dark teal bg, white text */
+/* Connected: light green transparent bg, green text */
 .kwtsms_pill_connected {
-    background: #00796b;
-    color: #fff;
-    border: 1px solid #00796b;
+    background: rgba(46, 125, 50, 0.1);
+    color: #2e7d32;
+    border: 1px solid #2e7d32;
 }
 
 /* Error: dark red bg, white text */
@@ -800,4 +800,15 @@
 .kwtsms_last_updated_pill .o_field_widget {
     display: inline !important;
     white-space: nowrap !important;
+}
+
+/* ═══════════════════════════════════════
+   SMS TEMPLATE FORM
+   ═══════════════════════════════════════ */
+
+/* Make the template body textarea full width and readable */
+.kwtsms_template_body textarea,
+.kwtsms_template_body .o_field_widget {
+    width: 100% !important;
+    min-height: 120px;
 }

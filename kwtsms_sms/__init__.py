@@ -8,12 +8,25 @@ from . import wizard
 
 
 def _post_init_hook(env):
-    """Mark all event-linked templates as system templates.
+    """Fix system templates on install.
 
-    Runs on install and upgrade to ensure noupdate records get is_system=True.
+    Marks event-linked templates as system and migrates #..# notation to {..}.
     """
     env.cr.execute("""
         UPDATE kwtsms_sms_template
         SET is_system = TRUE
         WHERE event_type != 'custom' AND (is_system IS NULL OR is_system = FALSE)
+    """)
+    # Migrate old #placeholder# notation to {placeholder}
+    env.cr.execute("""
+        UPDATE kwtsms_sms_template
+        SET body = jsonb_set(body, '{en_US}',
+            to_jsonb(
+                regexp_replace(
+                    regexp_replace(body->>'en_US', '#(\\w+)#', '{\\1}', 'g'),
+                    '#(\\w+)#', '{\\1}', 'g'
+                )
+            )
+        )
+        WHERE body->>'en_US' LIKE '%#%#%'
     """)
