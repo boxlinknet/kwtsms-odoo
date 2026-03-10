@@ -71,7 +71,7 @@ class StockPicking(models.Model):
         # Send via API
         from odoo.addons.kwtsms_sms.tools.kwtsms_api import KwtSmsApi
         api = KwtSmsApi(self.env)
-        response = api.send_single(phone, message)
+        response = api.send(phone, message)
 
         # Log result
         status = 'success' if response.get('result') == 'OK' else 'error'

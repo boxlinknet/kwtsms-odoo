@@ -33,12 +33,15 @@
                         </div>
                     </div>
                 </group>
+                <field name="test_mode" invisible="1"/>
                 <footer>
                     <button name="action_send" string="Send SMS"
                             type="object" class="btn-primary"
                             icon="fa-paper-plane"/>
                     <button string="Cancel" class="btn-secondary"
                             special="cancel"/>
+                    <span invisible="not test_mode"
+                          class="badge rounded-pill text-bg-danger ms-2">TEST MODE</span>
                 </footer>
             </form>
         </field>

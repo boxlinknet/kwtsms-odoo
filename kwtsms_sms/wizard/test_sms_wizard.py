@@ -45,7 +45,7 @@ class KwtSmsTestWizard(models.TransientModel):
         system_test_mode = api_client._test_mode
         api_client._test_mode = True
 
-        response = api_client.send_single(self.phone, self.message)
+        response = api_client.send(self.phone, self.message)
 
         if response.get('result') == 'OK':
             api_client._log_send(

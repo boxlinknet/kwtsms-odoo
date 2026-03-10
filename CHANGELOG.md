@@ -8,11 +8,17 @@ with Odoo version prefix (e.g., 19.0.1.0.0).
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-03-11
+
+### Changed
+- **Unified `send()` API**: Merged `send_single()` and `send_multi()` into one `send()` method that accepts a single phone string or a list, with automatic dedup and batching
+- All SMS sending (business hooks, SMS Sender, test wizard) now goes through `send()`
+- Duplicate phone numbers are removed in all send paths, including Odoo framework `_send_sms_batch()`
+
 ## [0.2.0] - 2026-03-10
 
 ### Added
 - **Bulk SMS sending**: SMS Sender now supports multiple phone numbers, comma-separated or one per line
-- `send_multi()` API method for sending to multiple recipients with automatic batching (200/request)
 - Partial success handling: valid numbers are sent even when some are invalid, with detailed feedback
 - Full browser-based test suite with 15 tests and 26 before/after screenshots
 

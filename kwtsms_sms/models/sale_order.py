@@ -76,7 +76,7 @@ class SaleOrder(models.Model):
 
         from odoo.addons.kwtsms_sms.tools.kwtsms_api import KwtSmsApi
         api = KwtSmsApi(self.env)
-        response = api.send_single(phone, message)
+        response = api.send(phone, message)
 
         status = 'success' if response.get('result') == 'OK' else 'error'
         if api._test_mode and status == 'success':

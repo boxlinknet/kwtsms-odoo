@@ -88,8 +88,9 @@ class KwtSmsApi(SmsApiBase):
                     })
                 continue
 
-            # Normalize, validate, and prepend country code
+            # Normalize, validate, deduplicate, and prepend country code
             valid_sends = []
+            seen = set()
             for num_info in numbers:
                 raw = num_info.get('number', '')
                 normalized, error = prepare_phone(raw, self._default_country_code)
@@ -100,7 +101,15 @@ class KwtSmsApi(SmsApiBase):
                         'credit': 0,
                         'failure_type': 'sms_number_format',
                     })
+                elif normalized in seen:
+                    # Duplicate: mark as success (first occurrence will be sent)
+                    results.append({
+                        'uuid': num_info.get('uuid'),
+                        'state': 'success',
+                        'credit': 0,
+                    })
                 else:
+                    seen.add(normalized)
                     valid_sends.append({
                         'uuid': num_info.get('uuid'),
                         'number': normalized,
@@ -315,61 +324,27 @@ class KwtSmsApi(SmsApiBase):
             except Exception as e:
                 _logger.warning('kwtSMS: Could not update balance: %s', e)
 
-    def send_single(self, phone, message, sender_id=None):
-        """Send a single SMS directly (not through Odoo framework).
+    def send(self, phones, message, sender_id=None):
+        """Send SMS to one or more phone numbers.
 
-        Used by business event hooks for full control over logging.
+        Single entry point for all SMS sending. Validates, deduplicates,
+        and batches automatically (max 200 per API request).
 
         Args:
-            phone: Phone number string.
+            phones: Single phone string or list of phone strings.
             message: Message text.
             sender_id: Optional sender ID override.
 
         Returns:
-            dict: API response.
+            dict: Result with 'result' ('OK'/'ERROR'/'PARTIAL'),
+                  valid_count, invalid_count, duplicates_removed,
+                  numbers_sent, points-charged, balance-after, msg-id.
         """
-        normalized, error = prepare_phone(phone, self._default_country_code)
-        if error:
-            return {
-                'result': 'ERROR',
-                'code': 'ERR_VALIDATION',
-                'description': f'Invalid phone number: {error}',
-            }
+        if phones is None:
+            phones = ['']
+        elif isinstance(phones, str):
+            phones = [phones]
 
-        cleaned = clean_message(message)
-        if not cleaned:
-            return {
-                'result': 'ERROR',
-                'code': 'ERR_VALIDATION',
-                'description': 'Message is empty after cleaning.',
-            }
-
-        payload = {
-            'username': self._username,
-            'password': self._password,
-            'sender': sender_id or self._sender_id,
-            'mobile': normalized,
-            'message': cleaned,
-            'test': '1' if self._test_mode else '0',
-        }
-        response = self._api_call('send', payload)
-        if response.get('result') == 'OK':
-            self._update_balance_from_response(response)
-        return response
-
-    def send_multi(self, phones, message, sender_id=None):
-        """Send SMS to multiple phone numbers.
-
-        Validates each number, batches into groups of 200, and sends.
-
-        Args:
-            phones: List of phone number strings.
-            message: Message text.
-            sender_id: Optional sender ID override.
-
-        Returns:
-            dict: Combined result with valid/invalid counts and API response.
-        """
         cleaned = clean_message(message)
         if not cleaned:
             return {
@@ -379,19 +354,27 @@ class KwtSmsApi(SmsApiBase):
             }
 
         valid = []
+        seen = set()
         invalid = []
+        duplicates = 0
         for phone in phones:
             normalized, error = prepare_phone(phone, self._default_country_code)
             if error:
                 invalid.append({'input': phone, 'reason': error})
+            elif normalized in seen:
+                duplicates += 1
             else:
+                seen.add(normalized)
                 valid.append(normalized)
 
         if not valid:
+            desc = 'No valid phone numbers found.'
+            if len(phones) == 1 and invalid:
+                desc = 'Invalid phone number: %s' % invalid[0]['reason']
             return {
                 'result': 'ERROR',
                 'code': 'ERR_VALIDATION',
-                'description': 'No valid phone numbers found.',
+                'description': desc,
                 'invalid': invalid,
             }
 
@@ -432,6 +415,7 @@ class KwtSmsApi(SmsApiBase):
             'result': final_result,
             'valid_count': len(valid),
             'invalid_count': len(invalid),
+            'duplicates_removed': duplicates,
             'numbers_sent': ','.join(valid),
             'points-charged': total_charged,
             'balance-after': last_balance,
