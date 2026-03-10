@@ -13,6 +13,14 @@
                         <!-- Header row: status + last updated + refresh -->
                         <div class="kwtsms_dash_header">
                             <div class="kwtsms_dash_header_left">
+                                <div invisible="not cfg_enabled"
+                                     class="kwtsms_dash_pill kwtsms_pill_green">
+                                    GATEWAY ENABLED
+                                </div>
+                                <div invisible="cfg_enabled"
+                                     class="kwtsms_dash_pill kwtsms_pill_gray">
+                                    GATEWAY DISABLED
+                                </div>
                                 <div invisible="api_status != 'connected'"
                                      class="kwtsms_dash_status kwtsms_dash_status_ok">
                                     <i class="fa fa-check-circle" title="Connected"/> Connected
@@ -24,14 +32,6 @@
                                 <div invisible="api_status != 'not_configured'"
                                      class="kwtsms_dash_status kwtsms_dash_status_na">
                                     <i class="fa fa-minus-circle" title="Not Configured"/> Not Configured
-                                </div>
-                                <div invisible="not cfg_enabled"
-                                     class="kwtsms_dash_pill kwtsms_pill_green">
-                                    ENABLED
-                                </div>
-                                <div invisible="cfg_enabled"
-                                     class="kwtsms_dash_pill kwtsms_pill_gray">
-                                    DISABLED
                                 </div>
                                 <div invisible="not cfg_test_mode"
                                      class="kwtsms_dash_pill kwtsms_pill_orange">
