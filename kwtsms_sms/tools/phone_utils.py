@@ -112,6 +112,33 @@ def validate_phone(phone):
     return (normalized, None)
 
 
+def prepare_phone(phone, default_country_code=None):
+    """Normalize, validate, and prepend default country code if needed.
+
+    If the normalized number is 9 digits or fewer and a default country code
+    is provided, the code is prepended (e.g. '98765432' with code '965'
+    becomes '96598765432').
+
+    Args:
+        phone (str): Raw phone number string.
+        default_country_code (str): Country code to prepend for local numbers.
+
+    Returns:
+        tuple: (prepared_number, None) on success,
+               (None, error_reason) on failure.
+    """
+    normalized, error = validate_phone(phone)
+    if error:
+        return (None, error)
+
+    if (default_country_code
+            and not normalized.startswith(default_country_code)
+            and len(normalized) <= 9):
+        normalized = default_country_code + normalized
+
+    return (normalized, None)
+
+
 def validate_phone_list(phones):
     """Validate a list of phone numbers.
 

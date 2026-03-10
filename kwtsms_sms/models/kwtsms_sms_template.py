@@ -36,8 +36,8 @@ class KwtSmsTemplate(models.Model):
         string='Message Body',
         required=True,
         translate=True,
-        help='Use placeholders: {order_name}, {customer_name}, {amount}, '
-             '{company_name}, {picking_name}, {tracking_ref}',
+        help='Use placeholders: #order_name#, #customer_name#, #amount#, '
+             '#company_name#, #picking_name#, #tracking_ref#',
     )
     active = fields.Boolean(
         string='Active',
@@ -82,9 +82,9 @@ class KwtSmsTemplate(models.Model):
                 record.is_unicode = False
 
     def render_template(self, record):
-        """Render template with record field values.
+        """Render template by replacing placeholders with record values.
 
-        Replaces {placeholders} with actual values from the record.
+        Supports both #placeholder# and {placeholder} syntax.
 
         Args:
             record: Odoo recordset to get values from.
@@ -112,11 +112,21 @@ class KwtSmsTemplate(models.Model):
         if hasattr(record, 'carrier_tracking_ref'):
             values['tracking_ref'] = record.carrier_tracking_ref or ''
 
-        try:
-            return self.body.format(**values)
-        except (KeyError, IndexError) as e:
-            _logger.warning('Template render failed for %s: %s', self.name, e)
-            return self.body
+        result = self.body
+        for key, val in values.items():
+            result = result.replace('#%s#' % key, str(val))
+            result = result.replace('{%s}' % key, str(val))
+
+        # Clean up fragments left by empty placeholders
+        import re
+        # Remove unreplaced placeholders (both syntaxes)
+        result = re.sub(r'#\w+#', '', result)
+        result = re.sub(r'\{\w+\}', '', result)
+        # Remove label patterns like "Tracking: " when value was empty
+        result = re.sub(r'\S+:\s*$', '', result, flags=re.MULTILINE)
+        # Collapse multiple spaces
+        result = re.sub(r'  +', ' ', result)
+        return result.strip()
 
     @api.model
     def get_template_for_event(self, event_type, lang='en'):

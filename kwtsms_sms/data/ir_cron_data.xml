@@ -12,12 +12,12 @@
             <field name="interval_type">days</field>
         </record>
 
-        <!-- Balance Refresh: every 6 hours -->
+        <!-- Refresh All: every 6 hours (balance, sender IDs, coverage) -->
         <record id="cron_kwtsms_balance_refresh" model="ir.cron">
-            <field name="name">kwtSMS: Refresh Balance</field>
+            <field name="name">kwtSMS: Refresh All</field>
             <field name="model_id" ref="model_kwtsms_gateway_config"/>
             <field name="state">code</field>
-            <field name="code">model._cron_refresh_balance()</field>
+            <field name="code">model._cron_refresh_all()</field>
             <field name="user_id" ref="base.user_root"/>
             <field name="interval_number">6</field>
             <field name="interval_type">hours</field>

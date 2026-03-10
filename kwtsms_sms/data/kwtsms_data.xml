@@ -8,7 +8,7 @@
             <field name="name">Order Confirmation (English)</field>
             <field name="event_type">order_confirm</field>
             <field name="lang">en</field>
-            <field name="body">{company_name}: Your order {order_name} for {amount} has been confirmed. Thank you!</field>
+            <field name="body">Dear #customer_name#, your order #order_name# (#amount#) has been confirmed. Thank you for shopping with #company_name#!</field>
             <field name="active" eval="True"/>
         </record>
 
@@ -17,7 +17,7 @@
             <field name="name">Order Confirmation (Arabic)</field>
             <field name="event_type">order_confirm</field>
             <field name="lang">ar</field>
-            <field name="body">{company_name}: تم تأكيد طلبك {order_name} بمبلغ {amount}. شكرا لك!</field>
+            <field name="body">عزيزي #customer_name#, تم تأكيد طلبك #order_name# بمبلغ #amount#. شكرا لتسوقك مع #company_name#!</field>
             <field name="active" eval="True"/>
         </record>
 
@@ -26,7 +26,7 @@
             <field name="name">Delivery Completed (English)</field>
             <field name="event_type">delivery_done</field>
             <field name="lang">en</field>
-            <field name="body">{company_name}: Your delivery {picking_name} has been shipped. Tracking: {tracking_ref}</field>
+            <field name="body">Dear #customer_name#, your order #picking_name# from #company_name# has been shipped. Tracking: #tracking_ref#</field>
             <field name="active" eval="True"/>
         </record>
 
@@ -35,7 +35,7 @@
             <field name="name">Delivery Completed (Arabic)</field>
             <field name="event_type">delivery_done</field>
             <field name="lang">ar</field>
-            <field name="body">{company_name}: تم شحن طلبك {picking_name}. رقم التتبع: {tracking_ref}</field>
+            <field name="body">عزيزي #customer_name#, تم شحن طلبك #picking_name# من #company_name#. رقم التتبع: #tracking_ref#</field>
             <field name="active" eval="True"/>
         </record>
 

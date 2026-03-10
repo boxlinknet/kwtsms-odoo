@@ -8,7 +8,7 @@ import urllib.error
 
 from odoo.addons.sms.tools.sms_api import SmsApiBase
 
-from .phone_utils import clean_message, normalize_phone, validate_phone
+from .phone_utils import clean_message, normalize_phone, prepare_phone, validate_phone
 
 _logger = logging.getLogger(__name__)
 
@@ -58,6 +58,7 @@ class KwtSmsApi(SmsApiBase):
         self._password = ICP.get_param('kwtsms.api_password', '')
         self._sender_id = ICP.get_param('kwtsms.sender_id', 'KWT-SMS')
         self._test_mode = ICP.get_param('kwtsms.test_mode', 'True') == 'True'
+        self._default_country_code = ICP.get_param('kwtsms.default_country_code', '965')
 
     def _send_sms_batch(self, messages, delivery_reports_url=False):
         """Send SMS batch through kwtSMS API.
@@ -87,11 +88,11 @@ class KwtSmsApi(SmsApiBase):
                     })
                 continue
 
-            # Normalize and validate numbers
+            # Normalize, validate, and prepend country code
             valid_sends = []
             for num_info in numbers:
                 raw = num_info.get('number', '')
-                normalized, error = validate_phone(raw)
+                normalized, error = prepare_phone(raw, self._default_country_code)
                 if error:
                     results.append({
                         'uuid': num_info.get('uuid'),
@@ -137,6 +138,7 @@ class KwtSmsApi(SmsApiBase):
                             'credit': credit_per_number,
                         })
 
+                    self._update_balance_from_response(response)
                     self._log_send(
                         numbers=mobile_str,
                         message=content,
@@ -201,10 +203,24 @@ class KwtSmsApi(SmsApiBase):
                 return json.loads(body)
         except urllib.error.HTTPError as e:
             _logger.error('kwtSMS API HTTP error %s for /%s/', e.code, endpoint)
+            # Always try to read and return the gateway's own error message
+            try:
+                body_text = e.read().decode('utf-8', errors='replace')
+                body_json = json.loads(body_text)
+                # Return the gateway response as-is if it has any description
+                if isinstance(body_json, dict):
+                    if not body_json.get('result'):
+                        body_json['result'] = 'ERROR'
+                    if not body_json.get('code'):
+                        body_json['code'] = 'HTTP_%s' % e.code
+                    return body_json
+            except Exception:
+                _logger.debug('kwtSMS: Could not parse HTTP %s body: %s',
+                              e.code, body_text[:200] if body_text else '(empty)')
             return {
                 'result': 'ERROR',
-                'code': f'HTTP_{e.code}',
-                'description': f'HTTP error {e.code}',
+                'code': 'HTTP_%s' % e.code,
+                'description': 'Gateway returned HTTP %s. Please try again.' % e.code,
             }
         except urllib.error.URLError as e:
             _logger.error('kwtSMS API connection error for /%s/: %s', endpoint, e.reason)
@@ -289,6 +305,16 @@ class KwtSmsApi(SmsApiBase):
         }
         return self._api_call('validate', payload)
 
+    def _update_balance_from_response(self, response):
+        """Update gateway config balance from a successful send response."""
+        balance_after = response.get('balance-after')
+        if balance_after is not None:
+            try:
+                config = self.env['kwtsms.gateway.config'].sudo()._get_or_create()
+                config.write({'balance_available': int(balance_after)})
+            except Exception as e:
+                _logger.warning('kwtSMS: Could not update balance: %s', e)
+
     def send_single(self, phone, message, sender_id=None):
         """Send a single SMS directly (not through Odoo framework).
 
@@ -302,7 +328,7 @@ class KwtSmsApi(SmsApiBase):
         Returns:
             dict: API response.
         """
-        normalized, error = validate_phone(phone)
+        normalized, error = prepare_phone(phone, self._default_country_code)
         if error:
             return {
                 'result': 'ERROR',
@@ -326,7 +352,10 @@ class KwtSmsApi(SmsApiBase):
             'message': cleaned,
             'test': '1' if self._test_mode else '0',
         }
-        return self._api_call('send', payload)
+        response = self._api_call('send', payload)
+        if response.get('result') == 'OK':
+            self._update_balance_from_response(response)
+        return response
 
     def _log_send(self, numbers, message, response, status,
                   error_code=None, error_description=None,

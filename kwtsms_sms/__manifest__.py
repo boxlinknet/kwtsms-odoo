@@ -38,11 +38,14 @@ Replace Odoo IAP SMS with kwtSMS gateway. Features:
         'views/kwtsms_sms_template_views.xml',
         'views/res_config_settings_views.xml',
         'wizard/sms_compose_wizard_views.xml',
+        'wizard/test_sms_wizard_views.xml',
         'views/menu.xml',
     ],
     'assets': {
         'web.assets_backend': [
             'kwtsms_sms/static/src/css/kwtsms_styles.css',
+            'kwtsms_sms/static/src/js/test_sms_widget.js',
+            'kwtsms_sms/static/src/xml/test_sms_widget.xml',
         ],
     },
     'external_dependencies': {},

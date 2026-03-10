@@ -1,6 +1,7 @@
 """kwtSMS settings page integrated into Odoo Settings."""
 
 import logging
+from datetime import timedelta
 
 from odoo import models, fields, api, _
 
@@ -22,10 +23,9 @@ class ResConfigSettings(models.TransientModel):
         default=True,
         help='When enabled, SMS messages are queued but not delivered.',
     )
-    kwtsms_default_country_code = fields.Char(
+    kwtsms_default_country_code = fields.Selection(
+        selection='_get_country_code_selection',
         string='Default Country Code',
-        config_parameter='kwtsms.default_country_code',
-        default='965',
     )
     kwtsms_log_retention_days = fields.Integer(
         string='Log Retention (Days)',
@@ -57,16 +57,6 @@ class ResConfigSettings(models.TransientModel):
         default=False,
     )
 
-    # Template selections (stored manually, Many2one can't use config_parameter)
-    kwtsms_order_template_id = fields.Many2one(
-        'kwtsms.sms.template',
-        string='Order Confirmation Template',
-    )
-    kwtsms_delivery_template_id = fields.Many2one(
-        'kwtsms.sms.template',
-        string='Delivery Notification Template',
-    )
-
     # Gateway status (computed, read-only)
     kwtsms_balance_available = fields.Integer(
         string='Available Balance',
@@ -82,13 +72,57 @@ class ResConfigSettings(models.TransientModel):
         ('error', 'Error'),
     ], string='API Status', compute='_compute_gateway_info')
     kwtsms_last_verified = fields.Datetime(
-        string='Last Verified',
+        string='Last Updated',
         compute='_compute_gateway_info',
     )
     kwtsms_api_error = fields.Char(
         string='API Error',
         compute='_compute_gateway_info',
     )
+    kwtsms_current_sender = fields.Char(
+        string='Current Sender ID',
+        compute='_compute_gateway_info',
+    )
+
+    # Dashboard analytics (computed)
+    kwtsms_sms_today = fields.Integer(
+        string='Sent Today',
+        compute='_compute_dashboard_stats',
+    )
+    kwtsms_sms_this_week = fields.Integer(
+        string='Sent This Week',
+        compute='_compute_dashboard_stats',
+    )
+    kwtsms_sms_this_month = fields.Integer(
+        string='Sent This Month',
+        compute='_compute_dashboard_stats',
+    )
+    kwtsms_sms_failed = fields.Integer(
+        string='Failed (30 days)',
+        compute='_compute_dashboard_stats',
+    )
+
+    @api.model
+    def _get_country_code_selection(self):
+        """Build country code selection from gateway coverage data."""
+        result = [('965', '965 (Kuwait)')]
+        try:
+            config = self.env['kwtsms.gateway.config'].sudo()._get_or_create()
+            prefixes = config.get_coverage_prefixes()
+            seen = {'965'}
+            for prefix in prefixes:
+                prefix = str(prefix)
+                if prefix and prefix not in seen:
+                    result.append((prefix, prefix))
+                    seen.add(prefix)
+        except Exception as e:
+            _logger.warning('kwtSMS: Could not load coverage prefixes: %s', e)
+        # Include the currently saved value so it doesn't get lost
+        ICP = self.env['ir.config_parameter'].sudo()
+        current = ICP.get_param('kwtsms.default_country_code', '965')
+        if current and current not in {r[0] for r in result}:
+            result.append((current, current))
+        return result
 
     @api.model
     def _get_sender_id_selection(self):
@@ -119,6 +153,35 @@ class ResConfigSettings(models.TransientModel):
             record.kwtsms_api_status = config.api_status
             record.kwtsms_last_verified = config.last_verified
             record.kwtsms_api_error = config.api_error
+            ICP = self.env['ir.config_parameter'].sudo()
+            record.kwtsms_current_sender = ICP.get_param('kwtsms.sender_id', 'KWT-SMS')
+
+    def _compute_dashboard_stats(self):
+        """Compute SMS analytics from the log model."""
+        SmsLog = self.env['kwtsms.sms.log'].sudo()
+        now = fields.Datetime.now()
+        today_start = now.replace(hour=0, minute=0, second=0, microsecond=0)
+        week_start = today_start - timedelta(days=today_start.weekday())
+        month_start = today_start.replace(day=1)
+        thirty_days_ago = now - timedelta(days=30)
+
+        for record in self:
+            record.kwtsms_sms_today = SmsLog.search_count([
+                ('create_date', '>=', today_start),
+                ('status', 'in', ['success', 'test']),
+            ])
+            record.kwtsms_sms_this_week = SmsLog.search_count([
+                ('create_date', '>=', week_start),
+                ('status', 'in', ['success', 'test']),
+            ])
+            record.kwtsms_sms_this_month = SmsLog.search_count([
+                ('create_date', '>=', month_start),
+                ('status', 'in', ['success', 'test']),
+            ])
+            record.kwtsms_sms_failed = SmsLog.search_count([
+                ('create_date', '>=', thirty_days_ago),
+                ('status', '=', 'error'),
+            ])
 
     @api.model
     def get_values(self):
@@ -136,20 +199,9 @@ class ResConfigSettings(models.TransientModel):
         sender_id = ICP.get_param('kwtsms.sender_id', 'KWT-SMS')
         res['kwtsms_sender_id'] = sender_id or 'KWT-SMS'
 
-        # Templates
-        try:
-            order_tmpl_id = int(ICP.get_param('kwtsms.order_template_id', '0'))
-        except (ValueError, TypeError):
-            order_tmpl_id = 0
-        try:
-            delivery_tmpl_id = int(ICP.get_param('kwtsms.delivery_template_id', '0'))
-        except (ValueError, TypeError):
-            delivery_tmpl_id = 0
-
-        if order_tmpl_id and self.env['kwtsms.sms.template'].browse(order_tmpl_id).exists():
-            res['kwtsms_order_template_id'] = order_tmpl_id
-        if delivery_tmpl_id and self.env['kwtsms.sms.template'].browse(delivery_tmpl_id).exists():
-            res['kwtsms_delivery_template_id'] = delivery_tmpl_id
+        # Country code
+        country_code = ICP.get_param('kwtsms.default_country_code', '965')
+        res['kwtsms_default_country_code'] = country_code or '965'
 
         return res
 
@@ -167,64 +219,168 @@ class ResConfigSettings(models.TransientModel):
         # Sender ID
         ICP.set_param('kwtsms.sender_id', self.kwtsms_sender_id or 'KWT-SMS')
 
-        # Templates
-        ICP.set_param(
-            'kwtsms.order_template_id',
-            str(self.kwtsms_order_template_id.id) if self.kwtsms_order_template_id else '0',
-        )
-        ICP.set_param(
-            'kwtsms.delivery_template_id',
-            str(self.kwtsms_delivery_template_id.id) if self.kwtsms_delivery_template_id else '0',
-        )
+        # Country code
+        ICP.set_param('kwtsms.default_country_code', self.kwtsms_default_country_code or '965')
 
     def action_kwtsms_login(self):
-        """Delegate to gateway config login verification."""
-        config = self.env['kwtsms.gateway.config'].sudo()._get_or_create()
-        return config.action_login_verify()
+        """Save credentials immediately, then verify and auto-select sender ID."""
+        ICP = self.env['ir.config_parameter'].sudo()
+        # Save credentials before verifying so the API client picks them up
+        ICP.set_param('kwtsms.api_username', self.kwtsms_api_username or '')
+        ICP.set_param('kwtsms.api_password', self.kwtsms_api_password or '')
 
-    def action_kwtsms_refresh_balance(self):
-        """Quick balance refresh only."""
+        config = self.env['kwtsms.gateway.config'].sudo()._get_or_create()
+        result = config.action_login_verify()
+
+        # On success, auto-select first sender ID if not already set
+        if config.api_status == 'connected':
+            sender_list = config.get_sender_id_list()
+            current = ICP.get_param('kwtsms.sender_id', '')
+            if sender_list and (not current or current == 'KWT-SMS'):
+                ICP.set_param('kwtsms.sender_id', sender_list[0])
+
+        return result
+
+    def action_kwtsms_refresh(self):
+        """Refresh all gateway data: balance, sender IDs, coverage."""
+        import json
+        ICP = self.env['ir.config_parameter'].sudo()
+        username = ICP.get_param('kwtsms.api_username', '')
+        password = ICP.get_param('kwtsms.api_password', '')
+        if not username or not password:
+            config = self.env['kwtsms.gateway.config'].sudo()._get_or_create()
+            config.write({
+                'api_status': 'not_configured',
+                'api_error': _('Please enter API credentials and login first.'),
+            })
+            return {
+                'type': 'ir.actions.client',
+                'tag': 'reload',
+            }
+
         from odoo.addons.kwtsms_sms.tools.kwtsms_api import KwtSmsApi
         try:
             api = KwtSmsApi(self.env)
             resp = api.check_balance()
         except Exception as e:
-            _logger.error('kwtSMS: Balance refresh failed: %s', e)
-            return {
-                'type': 'ir.actions.client',
-                'tag': 'display_notification',
-                'params': {
-                    'title': _('Refresh Failed'),
-                    'message': _('Could not connect to kwtSMS API.'),
-                    'type': 'danger',
-                    'sticky': False,
-                },
-            }
-
-        config = self.env['kwtsms.gateway.config'].sudo()._get_or_create()
-        if resp.get('result') == 'OK':
+            _logger.error('kwtSMS: Refresh failed: %s', e)
+            config = self.env['kwtsms.gateway.config'].sudo()._get_or_create()
             config.write({
-                'balance_available': resp.get('available', 0),
-                'balance_purchased': resp.get('purchased', 0),
-                'last_verified': fields.Datetime.now(),
+                'api_status': 'error',
+                'api_error': _('Could not connect to kwtSMS API.'),
             })
             return {
                 'type': 'ir.actions.client',
-                'tag': 'display_notification',
-                'params': {
-                    'title': _('Balance Updated'),
-                    'message': _('Available: %s') % resp.get('available', 0),
-                    'type': 'success',
-                    'sticky': False,
-                },
+                'tag': 'reload',
             }
+
+        config = self.env['kwtsms.gateway.config'].sudo()._get_or_create()
+        if resp.get('result') != 'OK':
+            error_msg = resp.get('description', _('Unknown error'))
+            config.write({
+                'api_status': 'error',
+                'api_error': error_msg,
+            })
+            return {
+                'type': 'ir.actions.client',
+                'tag': 'reload',
+            }
+
+        vals = {
+            'balance_available': resp.get('available', 0),
+            'balance_purchased': resp.get('purchased', 0),
+            'last_verified': fields.Datetime.now(),
+        }
+
+        # Refresh sender IDs
+        try:
+            sender_resp = api.fetch_sender_ids()
+            if sender_resp.get('result') == 'OK':
+                sender_list = sender_resp.get('senderid', [])
+                vals['sender_ids_json'] = json.dumps(sender_list, ensure_ascii=False)
+        except Exception as e:
+            _logger.warning('kwtSMS: Sender ID refresh failed: %s', e)
+
+        # Refresh coverage
+        try:
+            coverage_resp = api.fetch_coverage()
+            if coverage_resp.get('result') == 'OK':
+                prefixes = coverage_resp.get('prefixes', [])
+                vals['coverage_json'] = json.dumps(prefixes, ensure_ascii=False)
+        except Exception as e:
+            _logger.warning('kwtSMS: Coverage refresh failed: %s', e)
+
+        config.write(vals)
         return {
             'type': 'ir.actions.client',
-            'tag': 'display_notification',
-            'params': {
-                'title': _('Refresh Failed'),
-                'message': resp.get('description', _('Unknown error')),
-                'type': 'danger',
-                'sticky': False,
-            },
+            'tag': 'reload',
+        }
+
+    @api.model
+    def action_kwtsms_send_test_rpc(self, phone, message):
+        """RPC endpoint for OWL widget test SMS. Bypasses form save cycle."""
+        if not phone:
+            return {'success': False, 'message': 'Please enter a phone number.'}
+        if not message:
+            return {'success': False, 'message': 'Please enter a message.'}
+
+        ICP = self.env['ir.config_parameter'].sudo()
+        username = ICP.get_param('kwtsms.api_username', '')
+        password = ICP.get_param('kwtsms.api_password', '')
+        if not username or not password:
+            return {'success': False, 'message': 'Please enter API credentials and login first.'}
+
+        from odoo.addons.kwtsms_sms.tools.kwtsms_api import KwtSmsApi
+        api_client = KwtSmsApi(self.env)
+
+        response = api_client.send_single(phone, message)
+
+        if response.get('result') == 'OK':
+            log_status = 'test' if api_client._test_mode else 'success'
+            api_client._log_send(
+                numbers=phone,
+                message=message,
+                response=response,
+                status=log_status,
+            )
+            if api_client._test_mode:
+                msg = 'Test SMS sent to %s (test mode, not delivered).' % phone
+            else:
+                msg = 'SMS sent to %s successfully.' % phone
+            return {
+                'success': True,
+                'message': msg,
+            }
+        else:
+            error_msg = response.get('description', 'Unknown error')
+            api_client._log_send(
+                numbers=phone,
+                message=message,
+                response=response,
+                status='error',
+                error_code=response.get('code'),
+                error_description=error_msg,
+            )
+            return {'success': False, 'message': 'Test SMS failed: %s' % error_msg}
+
+    def action_kwtsms_logout(self):
+        """Log out: clear credentials and reset gateway state."""
+        ICP = self.env['ir.config_parameter'].sudo()
+        ICP.set_param('kwtsms.api_username', '')
+        ICP.set_param('kwtsms.api_password', '')
+        ICP.set_param('kwtsms.sender_id', 'KWT-SMS')
+
+        config = self.env['kwtsms.gateway.config'].sudo()._get_or_create()
+        config.write({
+            'api_status': 'not_configured',
+            'api_error': False,
+            'balance_available': 0,
+            'balance_purchased': 0,
+            'last_verified': False,
+            'sender_ids_json': '[]',
+            'coverage_json': '[]',
+        })
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'reload',
         }

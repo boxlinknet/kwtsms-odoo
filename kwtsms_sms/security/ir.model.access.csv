@@ -8,3 +8,4 @@ access_kwtsms_sms_template_manager,kwtsms.sms.template.manager,model_kwtsms_sms_
 access_kwtsms_sms_template_user,kwtsms.sms.template.user,model_kwtsms_sms_template,base.group_user,1,0,0,0
 access_kwtsms_sms_compose_system,kwtsms.sms.compose.system,model_kwtsms_sms_compose,base.group_system,1,1,1,1
 access_kwtsms_sms_compose_manager,kwtsms.sms.compose.manager,model_kwtsms_sms_compose,kwtsms_sms.group_kwtsms_manager,1,1,1,1
+access_kwtsms_test_sms_wizard_system,kwtsms.test.sms.wizard.system,model_kwtsms_test_sms_wizard,base.group_system,1,1,1,1

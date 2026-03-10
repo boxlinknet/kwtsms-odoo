@@ -12,7 +12,6 @@
                 <field name="char_count"/>
                 <field name="page_count"/>
                 <field name="is_unicode" string="Unicode"/>
-                <field name="active"/>
             </list>
         </field>
     </record>
@@ -31,7 +30,6 @@
                         <group>
                             <field name="event_type"/>
                             <field name="lang"/>
-                            <field name="active"/>
                         </group>
                         <group>
                             <field name="model_id"/>
@@ -50,8 +48,8 @@
                     </group>
                     <div class="alert alert-info" role="alert">
                         <strong>Available Placeholders:</strong>
-                        {order_name}, {customer_name}, {amount}, {company_name},
-                        {picking_name}, {tracking_ref}
+                        #order_name#, #customer_name#, #amount#, #company_name#,
+                        #picking_name#, #tracking_ref#
                     </div>
                 </sheet>
             </form>

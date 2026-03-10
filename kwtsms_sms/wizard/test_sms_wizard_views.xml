@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_kwtsms_test_sms_wizard_form" model="ir.ui.view">
+        <field name="name">kwtsms.test.sms.wizard.form</field>
+        <field name="model">kwtsms.test.sms.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Send Test SMS">
+                <group col="1">
+                    <field name="phone" placeholder="e.g. 96598765432"/>
+                    <field name="message" widget="text" placeholder="Test message"/>
+                </group>
+                <footer>
+                    <button name="action_send"
+                            string="Send Test SMS"
+                            type="object"
+                            class="btn-primary"
+                            icon="fa-paper-plane"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

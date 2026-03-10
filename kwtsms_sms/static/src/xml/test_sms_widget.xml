@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="kwtsms_sms.TestSmsWidget">
+        <div>
+            <div>
+                <input type="text" class="o_input"
+                       t-att-value="state.phone"
+                       t-on-input="onPhoneInput"
+                       placeholder="e.g. 96598765432"
+                       style="max-width: 400px;"/>
+            </div>
+            <div class="mt-2">
+                <textarea class="o_input"
+                          t-on-input="onMessageInput"
+                          placeholder="Test message"
+                          style="max-width: 100%; min-height: 60px;"
+                          t-esc="state.message"/>
+            </div>
+            <div class="mt-2">
+                <button class="btn btn-primary"
+                        t-on-click="onClickSend"
+                        t-att-disabled="state.sending">
+                    <t t-if="state.sending">
+                        <i class="fa fa-spinner fa-spin"/> Sending...
+                    </t>
+                    <t t-else="">
+                        <i class="fa fa-paper-plane"/> Send Test SMS
+                    </t>
+                </button>
+            </div>
+            <div t-if="state.resultMessage"
+                 t-attf-class="alert alert-#{state.resultType} mt-2 mb-0 py-2 px-3"
+                 style="max-width: 500px;"
+                 role="alert">
+                <i t-if="state.resultType === 'success'" class="fa fa-check-circle me-1"/>
+                <i t-if="state.resultType === 'danger'" class="fa fa-exclamation-circle me-1"/>
+                <t t-esc="state.resultMessage"/>
+            </div>
+        </div>
+    </t>
+</templates>

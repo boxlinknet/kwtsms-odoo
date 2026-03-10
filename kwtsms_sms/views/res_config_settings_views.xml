@@ -10,6 +10,118 @@
                 <app string="kwtSMS Gateway"
                      name="kwtsms_sms"
                      groups="base.group_system">
+
+                    <!-- Dashboard -->
+                    <block title="Dashboard" name="kwtsms_dashboard">
+                        <setting id="kwtsms_dashboard_content" string="Gateway Overview">
+                            <!-- Status indicators row -->
+                            <div class="d-flex align-items-center gap-2 mb-3">
+                                <!-- Gateway enabled/disabled -->
+                                <div invisible="not kwtsms_enabled"
+                                     class="kwtsms_status_badge kwtsms_enabled">
+                                    <span class="kwtsms_status_dot"/>
+                                    Gateway Enabled
+                                </div>
+                                <div invisible="kwtsms_enabled"
+                                     class="kwtsms_status_badge kwtsms_disabled">
+                                    <span class="kwtsms_status_dot"/>
+                                    Gateway Disabled
+                                </div>
+                                <!-- Connection status -->
+                                <div invisible="kwtsms_api_status != 'connected'"
+                                     class="kwtsms_status_badge kwtsms_connected">
+                                    <span class="kwtsms_status_dot"/>
+                                    Connected
+                                </div>
+                                <div invisible="kwtsms_api_status != 'error'"
+                                     class="kwtsms_status_badge kwtsms_disconnected">
+                                    <span class="kwtsms_status_dot"/>
+                                    Error
+                                </div>
+                                <div invisible="kwtsms_api_status != 'not_configured'"
+                                     class="kwtsms_status_badge kwtsms_not_configured">
+                                    <span class="kwtsms_status_dot"/>
+                                    Not Configured
+                                </div>
+                                <!-- Red test mode pill, only visible when test mode ON -->
+                                <div invisible="not kwtsms_test_mode"
+                                     class="kwtsms_test_mode_pill">
+                                    TEST MODE
+                                </div>
+                            </div>
+
+                            <!-- Balance + Sender ID row -->
+                            <div class="kwtsms_top_row mb-3">
+                                <div class="kwtsms_balance_box">
+                                    <div>
+                                        <div class="kwtsms_balance_label">Balance</div>
+                                        <div class="kwtsms_balance_value">
+                                            <field name="kwtsms_balance_available" readonly="1"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="kwtsms_sender_card">
+                                    <div class="kwtsms_sender_card_label">SENDER ID</div>
+                                    <div class="kwtsms_sender_card_value">
+                                        <field name="kwtsms_current_sender" readonly="1"
+                                               style="display: inline; white-space: nowrap;"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- SMS analytics cards (all on one row) -->
+                            <div class="kwtsms_stat_row mb-3">
+                                <div class="kwtsms_stat_card">
+                                    <div class="kwtsms_stat_value">
+                                        <field name="kwtsms_sms_today" readonly="1"/>
+                                    </div>
+                                    <div class="kwtsms_stat_label">Sent Today</div>
+                                </div>
+                                <div class="kwtsms_stat_card">
+                                    <div class="kwtsms_stat_value">
+                                        <field name="kwtsms_sms_this_week" readonly="1"/>
+                                    </div>
+                                    <div class="kwtsms_stat_label">This Week</div>
+                                </div>
+                                <div class="kwtsms_stat_card">
+                                    <div class="kwtsms_stat_value">
+                                        <field name="kwtsms_sms_this_month" readonly="1"/>
+                                    </div>
+                                    <div class="kwtsms_stat_label">This Month</div>
+                                </div>
+                                <div class="kwtsms_stat_card kwtsms_stat_failed">
+                                    <div class="kwtsms_stat_value">
+                                        <field name="kwtsms_sms_failed" readonly="1"/>
+                                    </div>
+                                    <div class="kwtsms_stat_label">Failed (30d)</div>
+                                </div>
+                            </div>
+
+                            <!-- Last updated pill -->
+                            <div class="kwtsms_last_updated_pill"
+                                 invisible="not kwtsms_last_verified">
+                                <i class="fa fa-clock-o"/>
+                                <span>Last Updated:</span>
+                                <field name="kwtsms_last_verified" readonly="1"
+                                       style="display: inline; white-space: nowrap;"/>
+                            </div>
+                            <div class="kwtsms_last_updated_pill kwtsms_last_updated_na"
+                                 invisible="kwtsms_last_verified">
+                                <i class="fa fa-clock-o"/>
+                                <span>Last Updated: N/A</span>
+                            </div>
+
+                            <!-- Hidden fields needed for conditional visibility -->
+                            <field name="kwtsms_api_status" invisible="1"/>
+
+                            <!-- Error display (only when status is error, not on initial load) -->
+                            <div invisible="kwtsms_api_status != 'error'" class="text-danger mt-2"
+                                 style="font-size: 0.85em;">
+                                <field name="kwtsms_api_error" readonly="1"/>
+                            </div>
+                        </setting>
+                    </block>
+
                     <!-- General Settings -->
                     <block title="General Settings" name="kwtsms_general">
                         <setting id="kwtsms_enabled_setting"
@@ -24,7 +136,7 @@
                         </setting>
                         <setting id="kwtsms_country_code_setting"
                                  string="Default Country Code"
-                                 help="Used for numbers without a country code prefix.">
+                                 help="Used for numbers without a country code prefix. Available codes come from your kwtSMS coverage.">
                             <field name="kwtsms_default_country_code"/>
                         </setting>
                         <setting id="kwtsms_retention_setting"
@@ -40,78 +152,50 @@
                                  string="API Username">
                             <field name="kwtsms_api_username"/>
                         </setting>
-                        <setting id="kwtsms_password_setting"
-                                 string="API Password">
-                            <field name="kwtsms_api_password" widget="password"/>
-                        </setting>
                         <setting id="kwtsms_sender_setting"
                                  string="Sender ID"
                                  help="Select your registered sender ID.">
                             <field name="kwtsms_sender_id"/>
                         </setting>
+                        <setting id="kwtsms_password_setting"
+                                 string="API Password">
+                            <field name="kwtsms_api_password" password="True"/>
+                        </setting>
                         <setting id="kwtsms_login_setting"
-                                 string="Verify Connection">
+                                 string="Connection">
+                            <!-- Show Login/Verify when NOT connected -->
                             <button name="action_kwtsms_login"
-                                    string="Login / Verify"
+                                    invisible="kwtsms_api_status == 'connected'"
+                                    string="Login"
                                     type="object"
                                     class="btn-primary"
                                     icon="fa-sign-in"/>
-                            <button name="action_kwtsms_refresh_balance"
-                                    string="Refresh Balance"
+                            <!-- Show Disconnect when connected -->
+                            <button name="action_kwtsms_logout"
+                                    invisible="kwtsms_api_status != 'connected'"
+                                    string="Logout"
+                                    type="object"
+                                    class="btn-warning"
+                                    icon="fa-sign-out"/>
+                            <button name="action_kwtsms_refresh"
+                                    string="Refresh"
                                     type="object"
                                     class="btn-secondary ms-2"
                                     icon="fa-refresh"/>
                         </setting>
-                        <setting id="kwtsms_status_setting"
-                                 string="Connection Status">
-                            <div class="d-flex gap-4 mt8">
-                                <div style="min-width: 90px;">
-                                    <span class="o_form_label">Status</span>
-                                    <div>
-                                        <field name="kwtsms_api_status" readonly="1"/>
-                                    </div>
-                                </div>
-                                <div style="min-width: 70px;">
-                                    <span class="o_form_label">Balance</span>
-                                    <div>
-                                        <field name="kwtsms_balance_available" readonly="1"/>
-                                    </div>
-                                </div>
-                                <div style="flex: 1; min-width: 180px;">
-                                    <span class="o_form_label">Last Verified</span>
-                                    <div style="overflow: visible;">
-                                        <field name="kwtsms_last_verified" readonly="1"
-                                               style="overflow: visible; text-overflow: unset; min-width: 160px; display: inline-block;"/>
-                                    </div>
-                                </div>
-                            </div>
-                            <div invisible="not kwtsms_api_error" class="text-danger mt8">
-                                <field name="kwtsms_api_error" readonly="1"/>
-                            </div>
-                        </setting>
                     </block>
 
-                    <!-- Integrations -->
-                    <block title="Integrations" name="kwtsms_integrations">
+                    <!-- SMS Notifications -->
+                    <block title="SMS Notifications" name="kwtsms_notifications">
                         <setting id="kwtsms_order_confirm_setting"
                                  string="Sales: SMS on Order Confirmation"
-                                 help="Automatically send SMS when a sale order is confirmed.">
+                                 help="Automatically send SMS when a sale order is confirmed. Template is auto-selected based on customer language.">
                             <field name="kwtsms_auto_order_confirm"/>
-                            <div invisible="not kwtsms_auto_order_confirm" class="mt8">
-                                <label for="kwtsms_order_template_id"/>
-                                <field name="kwtsms_order_template_id"
-                                       domain="[('event_type', '=', 'order_confirm')]"/>
-                            </div>
                         </setting>
                         <setting id="kwtsms_delivery_done_setting"
                                  string="Inventory: SMS on Delivery Completion"
-                                 help="Automatically send SMS when an outgoing delivery is validated.">
+                                 help="Automatically send SMS when an outgoing delivery is validated. Template is auto-selected based on customer language.">
                             <field name="kwtsms_auto_delivery_done"/>
-                            <div invisible="not kwtsms_auto_delivery_done" class="mt8">
-                                <label for="kwtsms_delivery_template_id"/>
-                                <field name="kwtsms_delivery_template_id"
-                                       domain="[('event_type', '=', 'delivery_done')]"/>
-                            </div>
                         </setting>
                     </block>
 
@@ -137,6 +221,15 @@
                         </setting>
                     </block>
 
+                    <!-- Gateway Test -->
+                    <block title="Gateway Test" name="kwtsms_gateway_test">
+                        <setting id="kwtsms_test_sms_setting"
+                                 string="Send Test SMS"
+                                 help="Send a test SMS to verify your gateway configuration.">
+                            <widget name="kwtsms_test_sms"/>
+                        </setting>
+                    </block>
+
                     <!-- Help -->
                     <block title="Help" name="kwtsms_help">
                         <setting id="kwtsms_help_content" string="Resources">
@@ -144,7 +237,7 @@
                                 <p><strong>Setup Guide:</strong></p>
                                 <ol>
                                     <li>Enter your kwtSMS API Username and Password above</li>
-                                    <li>Click "Login / Verify" to test the connection</li>
+                                    <li>Click "Login" to test the connection</li>
                                     <li>Select your Sender ID</li>
                                     <li>Keep Test Mode ON during development</li>
                                     <li>Configure integration triggers (Sales, Inventory)</li>
@@ -152,9 +245,11 @@
                                 </ol>
                                 <p><strong>Links:</strong></p>
                                 <ul>
-                                    <li><a href="https://www.kwtsms.com/faq/" target="_blank">kwtSMS FAQ</a></li>
-                                    <li><a href="https://www.kwtsms.com/support.html" target="_blank">kwtSMS Support</a></li>
-                                    <li><a href="https://www.kwtsms.com/sender-id-help.html" target="_blank">Sender ID Help</a></li>
+                                    <li><a href="https://www.kwtsms.com/login/" target="_blank">kwtSMS Dashboard</a> - Manage your account, view queue, and check balance</li>
+                                    <li><a href="https://www.kwtsms.com/faq/" target="_blank">FAQ</a> - Common questions about the kwtSMS service</li>
+                                    <li><a href="https://www.kwtsms.com/sender-id-help.html" target="_blank">Sender ID Help</a> - How to register and manage sender IDs</li>
+                                    <li><a href="https://www.kwtsms.com/#contact" target="_blank">Contact Support</a> - Get help from the kwtSMS team</li>
+                                    <li><a href="https://www.kwtsms.com/integrations.html" target="_blank">Other Integrations</a> - kwtSMS plugins for other platforms</li>
                                 </ul>
                             </div>
                         </setting>
