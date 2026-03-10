@@ -3,6 +3,8 @@
 import logging
 from datetime import timedelta
 
+import pytz
+
 from odoo import models, fields, api, _
 
 _logger = logging.getLogger(__name__)
@@ -59,8 +61,8 @@ class KwtSmsLog(models.Model):
     error_code = fields.Char(
         string='Error Code',
     )
-    error_description = fields.Char(
-        string='Error Description',
+    error_description = fields.Text(
+        string='Error',
     )
     test_mode = fields.Boolean(
         string='Test Mode',
@@ -80,8 +82,14 @@ class KwtSmsLog(models.Model):
 
     @api.depends('phone_number', 'create_date')
     def _compute_name(self):
+        user_tz = pytz.timezone(self.env.user.tz or 'UTC')
         for record in self:
-            date_str = record.create_date.strftime('%Y-%m-%d %H:%M') if record.create_date else ''
+            if record.create_date:
+                utc_dt = record.create_date.replace(tzinfo=pytz.utc)
+                local_dt = utc_dt.astimezone(user_tz)
+                date_str = local_dt.strftime('%Y-%m-%d %H:%M')
+            else:
+                date_str = ''
             record.name = 'SMS to %s at %s' % (record.phone_number or '', date_str)
 
     def action_view_related_record(self):

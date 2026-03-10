@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Help Page Form View -->
+    <record id="view_kwtsms_help_form" model="ir.ui.view">
+        <field name="name">kwtsms.gateway.config.help</field>
+        <field name="model">kwtsms.gateway.config</field>
+        <field name="priority">80</field>
+        <field name="arch" type="xml">
+            <form string="kwtSMS Help" create="false" delete="false" duplicate="false">
+                <sheet>
+                    <div class="kwtsms_help_page">
+
+                        <!-- Setup Guide -->
+                        <div class="kwtsms_help_section">
+                            <div class="kwtsms_help_section_title">
+                                <i class="fa fa-rocket"/> Getting Started
+                            </div>
+                            <div class="kwtsms_help_section_body">
+                                <ol class="kwtsms_help_steps">
+                                    <li>Go to <strong>Gateway</strong> and enter your kwtSMS API Username and Password</li>
+                                    <li>Click <strong>Login</strong> to verify credentials and fetch your account data</li>
+                                    <li>Select your <strong>Sender ID</strong> from the dropdown (auto-populated after login)</li>
+                                    <li>Keep <strong>Test Mode ON</strong> during development (SMS queued but not delivered, no credits used)</li>
+                                    <li>Configure <strong>SMS Notifications</strong> toggles (Sales, Inventory, Accounting)</li>
+                                    <li>Use <strong>Send Test SMS</strong> to verify end-to-end</li>
+                                    <li>Switch <strong>Test Mode OFF</strong> when ready for production</li>
+                                </ol>
+                            </div>
+                        </div>
+
+                        <!-- Template Placeholders -->
+                        <div class="kwtsms_help_section">
+                            <div class="kwtsms_help_section_title">
+                                <i class="fa fa-file-text-o"/> Template Placeholders
+                            </div>
+                            <div class="kwtsms_help_section_body">
+                                <p>Use these placeholders in SMS templates. They are replaced with real values when the message is sent:</p>
+                                <table class="kwtsms_help_table">
+                                    <thead>
+                                        <tr>
+                                            <th>Placeholder</th>
+                                            <th>Description</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td><code>{customer_name}</code></td><td>Customer's display name</td></tr>
+                                        <tr><td><code>{order_name}</code></td><td>Sale order reference (e.g. SO001)</td></tr>
+                                        <tr><td><code>{amount}</code></td><td>Order/invoice total with currency</td></tr>
+                                        <tr><td><code>{company_name}</code></td><td>Your company name</td></tr>
+                                        <tr><td><code>{picking_name}</code></td><td>Delivery order reference</td></tr>
+                                        <tr><td><code>{tracking_ref}</code></td><td>Carrier tracking number</td></tr>
+                                        <tr><td><code>{invoice_name}</code></td><td>Invoice reference</td></tr>
+                                        <tr><td><code>{payment_ref}</code></td><td>Payment reference</td></tr>
+                                        <tr><td><code>{amount_paid}</code></td><td>Payment amount with currency</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Resources -->
+                        <div class="kwtsms_help_section">
+                            <div class="kwtsms_help_section_title">
+                                <i class="fa fa-external-link"/> Resources
+                            </div>
+                            <div class="kwtsms_help_section_body">
+                                <div class="kwtsms_help_links">
+                                    <a href="https://www.kwtsms.com/login/" target="_blank"
+                                       class="kwtsms_help_link">
+                                        <i class="fa fa-tachometer"/>
+                                        <div>
+                                            <strong>kwtSMS Dashboard</strong>
+                                            <span>Manage your account, view queue, check balance</span>
+                                        </div>
+                                    </a>
+                                    <a href="https://www.kwtsms.com/faq/" target="_blank"
+                                       class="kwtsms_help_link">
+                                        <i class="fa fa-question-circle"/>
+                                        <div>
+                                            <strong>FAQ</strong>
+                                            <span>Common questions about kwtSMS service</span>
+                                        </div>
+                                    </a>
+                                    <a href="https://www.kwtsms.com/sender-id-help.html" target="_blank"
+                                       class="kwtsms_help_link">
+                                        <i class="fa fa-id-badge"/>
+                                        <div>
+                                            <strong>Sender ID Help</strong>
+                                            <span>How to register and manage sender IDs</span>
+                                        </div>
+                                    </a>
+                                    <a href="https://www.kwtsms.com/#contact" target="_blank"
+                                       class="kwtsms_help_link">
+                                        <i class="fa fa-life-ring"/>
+                                        <div>
+                                            <strong>Contact Support</strong>
+                                            <span>Get help from the kwtSMS team</span>
+                                        </div>
+                                    </a>
+                                    <a href="https://www.kwtsms.com/integrations.html" target="_blank"
+                                       class="kwtsms_help_link">
+                                        <i class="fa fa-plug"/>
+                                        <div>
+                                            <strong>Other Integrations</strong>
+                                            <span>kwtSMS plugins for other platforms</span>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <field name="company_id" invisible="1"/>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Server Action: Open Help -->
+    <record id="action_kwtsms_help" model="ir.actions.server">
+        <field name="name">kwtSMS Help</field>
+        <field name="model_id" ref="model_kwtsms_gateway_config"/>
+        <field name="state">code</field>
+        <field name="code">action = model._action_open_help()</field>
+    </record>
+</odoo>

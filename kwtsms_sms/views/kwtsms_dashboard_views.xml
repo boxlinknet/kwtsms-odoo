@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Dashboard Form View -->
+    <record id="view_kwtsms_dashboard_form" model="ir.ui.view">
+        <field name="name">kwtsms.gateway.config.dashboard</field>
+        <field name="model">kwtsms.gateway.config</field>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <form string="kwtSMS Dashboard" create="false" delete="false" duplicate="false">
+                <sheet>
+                    <div class="kwtsms_dashboard">
+
+                        <!-- Header row: status + last updated + refresh -->
+                        <div class="kwtsms_dash_header">
+                            <div class="kwtsms_dash_header_left">
+                                <div invisible="api_status != 'connected'"
+                                     class="kwtsms_dash_status kwtsms_dash_status_ok">
+                                    <i class="fa fa-check-circle" title="Connected"/> Connected
+                                </div>
+                                <div invisible="api_status != 'error'"
+                                     class="kwtsms_dash_status kwtsms_dash_status_err">
+                                    <i class="fa fa-exclamation-circle" title="Error"/> Error
+                                </div>
+                                <div invisible="api_status != 'not_configured'"
+                                     class="kwtsms_dash_status kwtsms_dash_status_na">
+                                    <i class="fa fa-minus-circle" title="Not Configured"/> Not Configured
+                                </div>
+                                <div invisible="not cfg_enabled"
+                                     class="kwtsms_dash_pill kwtsms_pill_green">
+                                    ENABLED
+                                </div>
+                                <div invisible="cfg_enabled"
+                                     class="kwtsms_dash_pill kwtsms_pill_gray">
+                                    DISABLED
+                                </div>
+                                <div invisible="not cfg_test_mode"
+                                     class="kwtsms_dash_pill kwtsms_pill_orange">
+                                    TEST MODE
+                                </div>
+                                <div invisible="cfg_test_mode"
+                                     class="kwtsms_dash_pill kwtsms_pill_blue">
+                                    LIVE
+                                </div>
+                            </div>
+                            <field name="api_status" invisible="1"/>
+                            <field name="cfg_enabled" invisible="1"/>
+                            <field name="cfg_test_mode" invisible="1"/>
+                            <field name="cfg_auto_order_confirm" invisible="1"/>
+                            <field name="cfg_auto_order_cancel" invisible="1"/>
+                            <field name="cfg_auto_delivery_done" invisible="1"/>
+                            <field name="cfg_auto_invoice_posted" invisible="1"/>
+                            <field name="cfg_auto_payment_received" invisible="1"/>
+                            <div class="kwtsms_dash_header_right">
+                                <span class="kwtsms_dash_updated">
+                                    <i class="fa fa-clock-o" title="Last Updated"/>
+                                    <field name="last_verified" readonly="1"
+                                           style="display: inline; white-space: nowrap;"
+                                           invisible="not last_verified"/>
+                                    <span invisible="last_verified">Never</span>
+                                </span>
+                                <button name="action_refresh_dashboard"
+                                        string="Refresh"
+                                        type="object"
+                                        class="kwtsms_dash_refresh_btn"
+                                        icon="fa-refresh"/>
+                            </div>
+                        </div>
+
+                        <!-- Error banner -->
+                        <div invisible="api_status != 'error'" class="kwtsms_dash_error" role="alert">
+                            <i class="fa fa-warning" title="Error"/> <field name="api_error" readonly="1"/>
+                        </div>
+
+                        <!-- Top cards: Balance, Purchased, Sender -->
+                        <div class="kwtsms_dash_cards_top">
+                            <div class="kwtsms_dash_card kwtsms_dash_card_balance">
+                                <div class="kwtsms_dash_card_icon">
+                                    <i class="fa fa-bolt" title="Balance"/>
+                                </div>
+                                <div class="kwtsms_dash_card_body">
+                                    <div class="kwtsms_dash_card_value">
+                                        <field name="balance_available" readonly="1"/>
+                                    </div>
+                                    <div class="kwtsms_dash_card_label">Available Credits</div>
+                                </div>
+                            </div>
+                            <div class="kwtsms_dash_card kwtsms_dash_card_purchased">
+                                <div class="kwtsms_dash_card_icon">
+                                    <i class="fa fa-shopping-cart" title="Purchased"/>
+                                </div>
+                                <div class="kwtsms_dash_card_body">
+                                    <div class="kwtsms_dash_card_value">
+                                        <field name="balance_purchased" readonly="1"/>
+                                    </div>
+                                    <div class="kwtsms_dash_card_label">Purchased Credits</div>
+                                </div>
+                            </div>
+                            <div class="kwtsms_dash_card kwtsms_dash_card_sender">
+                                <div class="kwtsms_dash_card_icon">
+                                    <i class="fa fa-id-badge" title="Sender ID"/>
+                                </div>
+                                <div class="kwtsms_dash_card_body">
+                                    <div class="kwtsms_dash_card_value kwtsms_dash_card_value_text">
+                                        <field name="current_sender" readonly="1"/>
+                                    </div>
+                                    <div class="kwtsms_dash_card_label">Active Sender ID</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Stats row -->
+                        <div class="kwtsms_dash_stats">
+                            <div class="kwtsms_dash_stat">
+                                <div class="kwtsms_dash_stat_num kwtsms_color_orange">
+                                    <field name="sms_today" readonly="1"/>
+                                </div>
+                                <div class="kwtsms_dash_stat_label">Sent Today</div>
+                                <div class="kwtsms_dash_stat_bar kwtsms_bar_orange"/>
+                            </div>
+                            <div class="kwtsms_dash_stat">
+                                <div class="kwtsms_dash_stat_num kwtsms_color_blue">
+                                    <field name="sms_this_week" readonly="1"/>
+                                </div>
+                                <div class="kwtsms_dash_stat_label">This Week</div>
+                                <div class="kwtsms_dash_stat_bar kwtsms_bar_blue"/>
+                            </div>
+                            <div class="kwtsms_dash_stat">
+                                <div class="kwtsms_dash_stat_num kwtsms_color_orange">
+                                    <field name="sms_this_month" readonly="1"/>
+                                </div>
+                                <div class="kwtsms_dash_stat_label">This Month</div>
+                                <div class="kwtsms_dash_stat_bar kwtsms_bar_orange"/>
+                            </div>
+                            <div class="kwtsms_dash_stat">
+                                <div class="kwtsms_dash_stat_num kwtsms_color_red">
+                                    <field name="sms_failed_30d" readonly="1"/>
+                                </div>
+                                <div class="kwtsms_dash_stat_label">Failed (30d)</div>
+                                <div class="kwtsms_dash_stat_bar kwtsms_bar_red"/>
+                            </div>
+                        </div>
+
+                        <!-- Quick Actions -->
+                        <div class="kwtsms_dash_actions">
+                            <div class="kwtsms_dash_actions_title">Quick Actions</div>
+                            <div class="kwtsms_dash_actions_row">
+                                <button name="%(kwtsms_sms.action_kwtsms_send_sms)d"
+                                        string="Send SMS"
+                                        type="action"
+                                        class="kwtsms_dash_action_btn kwtsms_action_primary"
+                                        icon="fa-paper-plane"/>
+                                <button name="%(kwtsms_sms.action_kwtsms_sms_log)d"
+                                        string="SMS Logs"
+                                        type="action"
+                                        class="kwtsms_dash_action_btn kwtsms_action_secondary"
+                                        icon="fa-list-alt"/>
+                                <button name="%(kwtsms_sms.action_kwtsms_sms_template)d"
+                                        string="Templates"
+                                        type="action"
+                                        class="kwtsms_dash_action_btn kwtsms_action_secondary"
+                                        icon="fa-file-text-o"/>
+                                <button name="%(kwtsms_sms.action_kwtsms_gateway)d"
+                                        string="Gateway"
+                                        type="action"
+                                        class="kwtsms_dash_action_btn kwtsms_action_secondary"
+                                        icon="fa-cog"/>
+                            </div>
+                        </div>
+
+                        <!-- SMS Notifications Status -->
+                        <div class="kwtsms_dash_notif_card">
+                            <div class="kwtsms_dash_actions_title">SMS Notifications</div>
+                            <div class="kwtsms_dash_notif_grid">
+                                <div class="kwtsms_dash_notif_item">
+                                    <i class="fa fa-check-circle kwtsms_notif_on" title="Enabled"
+                                       invisible="not cfg_auto_order_confirm"/>
+                                    <i class="fa fa-times-circle kwtsms_notif_off" title="Disabled"
+                                       invisible="cfg_auto_order_confirm"/>
+                                    <span>Order Confirmation</span>
+                                </div>
+                                <div class="kwtsms_dash_notif_item">
+                                    <i class="fa fa-check-circle kwtsms_notif_on" title="Enabled"
+                                       invisible="not cfg_auto_order_cancel"/>
+                                    <i class="fa fa-times-circle kwtsms_notif_off" title="Disabled"
+                                       invisible="cfg_auto_order_cancel"/>
+                                    <span>Order Cancellation</span>
+                                </div>
+                                <div class="kwtsms_dash_notif_item">
+                                    <i class="fa fa-check-circle kwtsms_notif_on" title="Enabled"
+                                       invisible="not cfg_auto_delivery_done"/>
+                                    <i class="fa fa-times-circle kwtsms_notif_off" title="Disabled"
+                                       invisible="cfg_auto_delivery_done"/>
+                                    <span>Delivery Completed</span>
+                                </div>
+                                <div class="kwtsms_dash_notif_item">
+                                    <i class="fa fa-check-circle kwtsms_notif_on" title="Enabled"
+                                       invisible="not cfg_auto_invoice_posted"/>
+                                    <i class="fa fa-times-circle kwtsms_notif_off" title="Disabled"
+                                       invisible="cfg_auto_invoice_posted"/>
+                                    <span>Invoice Posted</span>
+                                </div>
+                                <div class="kwtsms_dash_notif_item">
+                                    <i class="fa fa-check-circle kwtsms_notif_on" title="Enabled"
+                                       invisible="not cfg_auto_payment_received"/>
+                                    <i class="fa fa-times-circle kwtsms_notif_off" title="Disabled"
+                                       invisible="cfg_auto_payment_received"/>
+                                    <span>Payment Received</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <field name="company_id" invisible="1"/>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Server Action: Open Dashboard -->
+    <record id="action_kwtsms_dashboard" model="ir.actions.server">
+        <field name="name">kwtSMS Dashboard</field>
+        <field name="model_id" ref="model_kwtsms_gateway_config"/>
+        <field name="state">code</field>
+        <field name="code">action = model._action_open_dashboard()</field>
+    </record>
+</odoo>

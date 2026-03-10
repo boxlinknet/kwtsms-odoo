@@ -1,22 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <!-- Top-level menu under Settings -->
+    <!-- Top-level application menu -->
     <menuitem id="menu_kwtsms_root"
               name="kwtSMS"
-              parent="base.menu_administration"
               sequence="90"
-              groups="base.group_system"/>
+              web_icon="kwtsms_sms,static/description/icon.png"
+              groups="kwtsms_sms.group_kwtsms_manager,base.group_system"/>
 
-    <!-- Sub-menus -->
-    <menuitem id="menu_kwtsms_templates"
-              name="SMS Templates"
+    <!-- Dashboard -->
+    <menuitem id="menu_kwtsms_dashboard"
+              name="Dashboard"
               parent="menu_kwtsms_root"
-              action="action_kwtsms_sms_template"
+              action="action_kwtsms_dashboard"
               sequence="10"/>
 
+    <!-- Gateway (system admin only) -->
+    <menuitem id="menu_kwtsms_gateway"
+              name="Gateway"
+              parent="menu_kwtsms_root"
+              action="action_kwtsms_gateway"
+              sequence="20"
+              groups="base.group_system"/>
+
+    <!-- Templates -->
+    <menuitem id="menu_kwtsms_templates"
+              name="Templates"
+              parent="menu_kwtsms_root"
+              action="action_kwtsms_sms_template"
+              sequence="30"/>
+
+    <!-- SMS Logs -->
     <menuitem id="menu_kwtsms_logs"
-              name="SMS Logs"
+              name="Logs"
               parent="menu_kwtsms_root"
               action="action_kwtsms_sms_log"
-              sequence="20"/>
+              sequence="40"/>
+
+    <!-- Help -->
+    <menuitem id="menu_kwtsms_help"
+              name="Help"
+              parent="menu_kwtsms_root"
+              action="action_kwtsms_help"
+              sequence="50"/>
 </odoo>

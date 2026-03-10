@@ -8,8 +8,9 @@
             <field name="name">Order Confirmation (English)</field>
             <field name="event_type">order_confirm</field>
             <field name="lang">en</field>
-            <field name="body">Dear #customer_name#, your order #order_name# (#amount#) has been confirmed. Thank you for shopping with #company_name#!</field>
+            <field name="body">Dear {customer_name}, your order {order_name} ({amount}) has been confirmed. Thank you for shopping with {company_name}!</field>
             <field name="active" eval="True"/>
+            <field name="is_system" eval="True"/>
         </record>
 
         <!-- Order Confirmation - Arabic -->
@@ -17,8 +18,9 @@
             <field name="name">Order Confirmation (Arabic)</field>
             <field name="event_type">order_confirm</field>
             <field name="lang">ar</field>
-            <field name="body">عزيزي #customer_name#, تم تأكيد طلبك #order_name# بمبلغ #amount#. شكرا لتسوقك مع #company_name#!</field>
+            <field name="body">عزيزي {customer_name}, تم تأكيد طلبك {order_name} بمبلغ {amount}. شكرا لتسوقك مع {company_name}!</field>
             <field name="active" eval="True"/>
+            <field name="is_system" eval="True"/>
         </record>
 
         <!-- Delivery Completed - English -->
@@ -26,8 +28,9 @@
             <field name="name">Delivery Completed (English)</field>
             <field name="event_type">delivery_done</field>
             <field name="lang">en</field>
-            <field name="body">Dear #customer_name#, your order #picking_name# from #company_name# has been shipped. Tracking: #tracking_ref#</field>
+            <field name="body">Dear {customer_name}, your order {picking_name} from {company_name} has been shipped. Tracking: {tracking_ref}</field>
             <field name="active" eval="True"/>
+            <field name="is_system" eval="True"/>
         </record>
 
         <!-- Delivery Completed - Arabic -->
@@ -35,8 +38,9 @@
             <field name="name">Delivery Completed (Arabic)</field>
             <field name="event_type">delivery_done</field>
             <field name="lang">ar</field>
-            <field name="body">عزيزي #customer_name#, تم شحن طلبك #picking_name# من #company_name#. رقم التتبع: #tracking_ref#</field>
+            <field name="body">عزيزي {customer_name}, تم شحن طلبك {picking_name} من {company_name}. رقم التتبع: {tracking_ref}</field>
             <field name="active" eval="True"/>
+            <field name="is_system" eval="True"/>
         </record>
 
         <!-- Order Cancelled - English -->
@@ -44,8 +48,9 @@
             <field name="name">Order Cancelled (English)</field>
             <field name="event_type">order_cancel</field>
             <field name="lang">en</field>
-            <field name="body">Dear #customer_name#, your order #order_name# has been cancelled. If you have questions, please contact #company_name#.</field>
+            <field name="body">Dear {customer_name}, your order {order_name} has been cancelled. If you have questions, please contact {company_name}.</field>
             <field name="active" eval="True"/>
+            <field name="is_system" eval="True"/>
         </record>
 
         <!-- Order Cancelled - Arabic -->
@@ -53,8 +58,9 @@
             <field name="name">Order Cancelled (Arabic)</field>
             <field name="event_type">order_cancel</field>
             <field name="lang">ar</field>
-            <field name="body">عزيزي #customer_name#, تم الغاء طلبك #order_name#. للاستفسار يرجى التواصل مع #company_name#.</field>
+            <field name="body">عزيزي {customer_name}, تم الغاء طلبك {order_name}. للاستفسار يرجى التواصل مع {company_name}.</field>
             <field name="active" eval="True"/>
+            <field name="is_system" eval="True"/>
         </record>
 
         <!-- Invoice Posted - English -->
@@ -62,8 +68,9 @@
             <field name="name">Invoice Posted (English)</field>
             <field name="event_type">invoice_posted</field>
             <field name="lang">en</field>
-            <field name="body">Dear #customer_name#, invoice #invoice_name# for #amount# has been issued by #company_name#. Please arrange payment at your earliest convenience.</field>
+            <field name="body">Dear {customer_name}, invoice {invoice_name} for {amount} has been issued by {company_name}. Please arrange payment at your earliest convenience.</field>
             <field name="active" eval="True"/>
+            <field name="is_system" eval="True"/>
         </record>
 
         <!-- Invoice Posted - Arabic -->
@@ -71,8 +78,9 @@
             <field name="name">Invoice Posted (Arabic)</field>
             <field name="event_type">invoice_posted</field>
             <field name="lang">ar</field>
-            <field name="body">عزيزي #customer_name#, تم اصدار الفاتورة #invoice_name# بمبلغ #amount# من #company_name#. يرجى ترتيب الدفع في اقرب وقت.</field>
+            <field name="body">عزيزي {customer_name}, تم اصدار الفاتورة {invoice_name} بمبلغ {amount} من {company_name}. يرجى ترتيب الدفع في اقرب وقت.</field>
             <field name="active" eval="True"/>
+            <field name="is_system" eval="True"/>
         </record>
 
         <!-- Payment Received - English -->
@@ -80,8 +88,9 @@
             <field name="name">Payment Received (English)</field>
             <field name="event_type">payment_received</field>
             <field name="lang">en</field>
-            <field name="body">Dear #customer_name#, we received your payment of #amount_paid# (#payment_ref#). Thank you! - #company_name#</field>
+            <field name="body">Dear {customer_name}, we received your payment of {amount_paid} ({payment_ref}). Thank you! - {company_name}</field>
             <field name="active" eval="True"/>
+            <field name="is_system" eval="True"/>
         </record>
 
         <!-- Payment Received - Arabic -->
@@ -89,8 +98,9 @@
             <field name="name">Payment Received (Arabic)</field>
             <field name="event_type">payment_received</field>
             <field name="lang">ar</field>
-            <field name="body">عزيزي #customer_name#, تم استلام دفعتك بمبلغ #amount_paid# (#payment_ref#). شكرا لك! - #company_name#</field>
+            <field name="body">عزيزي {customer_name}, تم استلام دفعتك بمبلغ {amount_paid} ({payment_ref}). شكرا لك! - {company_name}</field>
             <field name="active" eval="True"/>
+            <field name="is_system" eval="True"/>
         </record>
 
         <!-- Default system parameters -->

@@ -6,14 +6,15 @@
 kwtSMS Gateway for Odoo
 =======================
 
-Replace Odoo IAP SMS with kwtSMS gateway. Features:
+Send SMS via Kuwait's leading SMS gateway directly from Odoo. Features:
 
 * Direct kwtSMS API integration
 * Auto-SMS on order confirmation, cancellation, delivery, invoice, and payment
 * Multilingual templates (English + Arabic)
-* Full SMS audit log
+* Full SMS audit log with analytics
 * Phone normalization for GCC numbers
 * Bulk sending with automatic batching
+* Dashboard with balance, stats, and quick actions
     """,
     'author': 'BoxLink',
     'website': 'https://boxlink.net',
@@ -37,7 +38,9 @@ Replace Odoo IAP SMS with kwtSMS gateway. Features:
         'data/ir_cron_data.xml',
         'views/kwtsms_sms_log_views.xml',
         'views/kwtsms_sms_template_views.xml',
-        'views/res_config_settings_views.xml',
+        'views/kwtsms_gateway_views.xml',
+        'views/kwtsms_help_views.xml',
+        'views/kwtsms_dashboard_views.xml',
         'wizard/sms_compose_wizard_views.xml',
         'wizard/test_sms_wizard_views.xml',
         'views/menu.xml',

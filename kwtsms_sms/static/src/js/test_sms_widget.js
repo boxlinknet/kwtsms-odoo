@@ -49,7 +49,7 @@ export class KwtSmsTestWidget extends Component {
         this.state.sending = true;
         try {
             const result = await this.orm.call(
-                "res.config.settings",
+                "kwtsms.gateway.config",
                 "action_kwtsms_send_test_rpc",
                 [],
                 { phone: this.state.phone, message: this.state.message }

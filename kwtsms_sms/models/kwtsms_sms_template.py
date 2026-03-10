@@ -3,6 +3,7 @@
 import logging
 
 from odoo import models, fields, api, _
+from odoo.exceptions import UserError
 
 from odoo.addons.kwtsms_sms.tools.phone_utils import count_sms_parts
 
@@ -37,9 +38,9 @@ class KwtSmsTemplate(models.Model):
         string='Message Body',
         required=True,
         translate=True,
-        help='Use placeholders: #order_name#, #customer_name#, #amount#, '
-             '#company_name#, #picking_name#, #tracking_ref#, '
-             '#invoice_name#, #payment_ref#, #amount_paid#',
+        help='Use placeholders: {order_name}, {customer_name}, {amount}, '
+             '{company_name}, {picking_name}, {tracking_ref}, '
+             '{invoice_name}, {payment_ref}, {amount_paid}',
     )
     active = fields.Boolean(
         string='Active',
@@ -53,6 +54,11 @@ class KwtSmsTemplate(models.Model):
         'res.company',
         string='Company',
         default=lambda self: self.env.company,
+    )
+    is_system = fields.Boolean(
+        string='System Template',
+        default=False,
+        help='System templates have locked name, event type, language, and model. Only the message body can be edited.',
     )
     char_count = fields.Integer(
         string='Characters',
@@ -70,6 +76,32 @@ class KwtSmsTemplate(models.Model):
         store=True,
     )
 
+    # Fields that are locked on system templates
+    _LOCKED_FIELDS = {'name', 'event_type', 'lang', 'model_id'}
+
+    def write(self, vals):
+        """Prevent changing locked fields on system templates."""
+        locked_changes = self._LOCKED_FIELDS & set(vals.keys())
+        if locked_changes:
+            for record in self:
+                if record.is_system:
+                    raise UserError(
+                        _('Cannot change %s on system templates. '
+                          'Only the message body can be edited.')
+                        % ', '.join(sorted(locked_changes))
+                    )
+        return super().write(vals)
+
+    def unlink(self):
+        """Prevent deleting system templates."""
+        for record in self:
+            if record.is_system:
+                raise UserError(
+                    _('Cannot delete system template "%s". '
+                      'You can archive it instead.') % record.name
+                )
+        return super().unlink()
+
     @api.depends('body')
     def _compute_sms_info(self):
         for record in self:
@@ -86,7 +118,7 @@ class KwtSmsTemplate(models.Model):
     def render_template(self, record):
         """Render template by replacing placeholders with record values.
 
-        Supports both #placeholder# and {placeholder} syntax.
+        Supports both {placeholder} and #placeholder# syntax.
 
         Args:
             record: Odoo recordset to get values from.

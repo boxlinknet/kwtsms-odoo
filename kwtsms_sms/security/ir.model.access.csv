@@ -1,5 +1,6 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_kwtsms_gateway_config_system,kwtsms.gateway.config.system,model_kwtsms_gateway_config,base.group_system,1,1,1,1
+access_kwtsms_gateway_config_manager,kwtsms.gateway.config.manager,model_kwtsms_gateway_config,kwtsms_sms.group_kwtsms_manager,1,1,0,0
 access_kwtsms_gateway_config_user,kwtsms.gateway.config.user,model_kwtsms_gateway_config,base.group_user,1,0,0,0
 access_kwtsms_sms_log_system,kwtsms.sms.log.system,model_kwtsms_sms_log,base.group_system,1,1,1,1
 access_kwtsms_sms_log_user,kwtsms.sms.log.user,model_kwtsms_sms_log,base.group_user,1,0,0,0

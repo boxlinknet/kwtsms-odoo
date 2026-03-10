@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Gateway Configuration Form View -->
+    <record id="view_kwtsms_gateway_form" model="ir.ui.view">
+        <field name="name">kwtsms.gateway.config.gateway</field>
+        <field name="model">kwtsms.gateway.config</field>
+        <field name="priority">50</field>
+        <field name="arch" type="xml">
+            <form string="Gateway Configuration" create="false" delete="false" duplicate="false">
+                <sheet>
+                    <div class="kwtsms_gateway_page">
+
+                        <!-- Status bar -->
+                        <div class="kwtsms_gateway_statusbar">
+                            <div class="kwtsms_gateway_statusbar_left">
+                                <div invisible="api_status != 'connected'"
+                                     class="kwtsms_status_badge kwtsms_connected">
+                                    <span class="kwtsms_status_dot"/>
+                                    Connected
+                                </div>
+                                <div invisible="api_status != 'error'"
+                                     class="kwtsms_status_badge kwtsms_disconnected">
+                                    <span class="kwtsms_status_dot"/>
+                                    Error
+                                </div>
+                                <div invisible="api_status != 'not_configured'"
+                                     class="kwtsms_status_badge kwtsms_not_configured">
+                                    <span class="kwtsms_status_dot"/>
+                                    Not Configured
+                                </div>
+                                <div invisible="not cfg_test_mode"
+                                     class="kwtsms_test_mode_pill">
+                                    TEST MODE
+                                </div>
+                            </div>
+                            <div class="kwtsms_gateway_statusbar_right">
+                                <span class="kwtsms_dash_updated"
+                                      invisible="not last_verified">
+                                    <i class="fa fa-clock-o" title="Last Updated"/>
+                                    <field name="last_verified" readonly="1"
+                                           style="display: inline; white-space: nowrap;"/>
+                                </span>
+                            </div>
+                        </div>
+                        <field name="api_status" invisible="1"/>
+
+                        <!-- Error banner -->
+                        <div invisible="api_status != 'error'"
+                             class="kwtsms_dash_error" role="alert">
+                            <i class="fa fa-warning" title="Error"/>
+                            <field name="api_error" readonly="1"/>
+                        </div>
+
+                        <!-- Section: General Settings -->
+                        <div class="kwtsms_gw_section">
+                            <div class="kwtsms_gw_section_title">
+                                <i class="fa fa-cog"/> General Settings
+                            </div>
+                            <div class="kwtsms_gw_section_body">
+                                <group>
+                                    <group>
+                                        <field name="cfg_enabled"/>
+                                        <field name="cfg_test_mode"/>
+                                    </group>
+                                    <group>
+                                        <field name="cfg_default_country_code"/>
+                                        <label for="cfg_log_retention_days"/>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <field name="cfg_log_retention_days"
+                                                   style="max-width: 80px;"/>
+                                            <span>days</span>
+                                        </div>
+                                    </group>
+                                </group>
+                            </div>
+                        </div>
+
+                        <!-- Section: Gateway Credentials -->
+                        <div class="kwtsms_gw_section">
+                            <div class="kwtsms_gw_section_title">
+                                <i class="fa fa-key"/> Gateway Credentials
+                            </div>
+                            <div class="kwtsms_gw_section_body">
+                                <group>
+                                    <group>
+                                        <field name="cfg_api_username"
+                                               placeholder="Your kwtSMS API username"/>
+                                        <field name="cfg_api_password" password="True"
+                                               placeholder="Your kwtSMS API password"/>
+                                    </group>
+                                    <group>
+                                        <field name="cfg_sender_id"/>
+                                    </group>
+                                </group>
+                                <div class="kwtsms_gw_actions">
+                                    <button name="action_login"
+                                            invisible="api_status == 'connected'"
+                                            string="Login"
+                                            type="object"
+                                            class="btn-primary"
+                                            icon="fa-sign-in"/>
+                                    <button name="action_logout"
+                                            invisible="api_status != 'connected'"
+                                            string="Logout"
+                                            type="object"
+                                            class="btn-warning"
+                                            icon="fa-sign-out"/>
+                                    <button name="action_refresh_dashboard"
+                                            string="Refresh"
+                                            type="object"
+                                            class="btn-secondary"
+                                            icon="fa-refresh"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section: SMS Notifications -->
+                        <div class="kwtsms_gw_section">
+                            <div class="kwtsms_gw_section_title">
+                                <i class="fa fa-bell"/> SMS Notifications
+                            </div>
+                            <div class="kwtsms_gw_section_body">
+                                <group>
+                                    <group string="Sales">
+                                        <field name="cfg_auto_order_confirm"/>
+                                        <field name="cfg_auto_order_cancel"/>
+                                    </group>
+                                    <group string="Inventory">
+                                        <field name="cfg_auto_delivery_done"/>
+                                    </group>
+                                </group>
+                                <group>
+                                    <group string="Accounting">
+                                        <field name="cfg_auto_invoice_posted"/>
+                                        <field name="cfg_auto_payment_received"/>
+                                    </group>
+                                    <group/>
+                                </group>
+                            </div>
+                        </div>
+
+                        <!-- Section: Gateway Test -->
+                        <div class="kwtsms_gw_section">
+                            <div class="kwtsms_gw_section_title">
+                                <i class="fa fa-paper-plane"/> Send Test SMS
+                            </div>
+                            <div class="kwtsms_gw_section_body">
+                                <widget name="kwtsms_test_sms"/>
+                            </div>
+                        </div>
+
+                        <field name="company_id" invisible="1"/>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Server Action: Open Gateway -->
+    <record id="action_kwtsms_gateway" model="ir.actions.server">
+        <field name="name">Gateway Configuration</field>
+        <field name="model_id" ref="model_kwtsms_gateway_config"/>
+        <field name="state">code</field>
+        <field name="code">action = model._action_open_gateway()</field>
+    </record>
+</odoo>

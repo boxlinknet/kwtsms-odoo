@@ -14,7 +14,7 @@
                 <field name="phone_number"/>
                 <field name="sender_id"/>
                 <field name="status"/>
-                <field name="error_code"/>
+                <field name="error_description" string="Error" optional="show"/>
                 <field name="msg_id"/>
                 <field name="points_charged"/>
                 <field name="balance_after"/>
@@ -50,8 +50,8 @@
                         </group>
                     </group>
                     <group string="Error Details" invisible="status != 'error'">
-                        <field name="error_code"/>
-                        <field name="error_description"/>
+                        <field name="error_code" string="Code"/>
+                        <field name="error_description" string="Error"/>
                     </group>
                     <group string="Related Record" invisible="not res_model">
                         <field name="res_model"/>
@@ -82,7 +82,7 @@
             <search string="Search SMS Logs">
                 <field name="phone_number"/>
                 <field name="msg_id"/>
-                <field name="error_code"/>
+                <field name="error_description" string="Error"/>
                 <field name="message_body"/>
                 <separator/>
                 <filter string="Success" name="filter_success"
@@ -111,11 +111,36 @@
         </field>
     </record>
 
+    <!-- SMS Log Graph View -->
+    <record id="view_kwtsms_sms_log_graph" model="ir.ui.view">
+        <field name="name">kwtsms.sms.log.graph</field>
+        <field name="model">kwtsms.sms.log</field>
+        <field name="arch" type="xml">
+            <graph string="SMS Analytics" type="bar" stacked="1">
+                <field name="create_date" interval="day" type="row"/>
+                <field name="status" type="col"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- SMS Log Pivot View -->
+    <record id="view_kwtsms_sms_log_pivot" model="ir.ui.view">
+        <field name="name">kwtsms.sms.log.pivot</field>
+        <field name="model">kwtsms.sms.log</field>
+        <field name="arch" type="xml">
+            <pivot string="SMS Analysis">
+                <field name="create_date" interval="month" type="row"/>
+                <field name="status" type="col"/>
+                <field name="points_charged" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
     <!-- SMS Log Action -->
     <record id="action_kwtsms_sms_log" model="ir.actions.act_window">
         <field name="name">SMS Logs</field>
         <field name="res_model">kwtsms.sms.log</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">list,form,graph,pivot</field>
         <field name="context">{'search_default_filter_today': 1}</field>
     </record>
 </odoo>
