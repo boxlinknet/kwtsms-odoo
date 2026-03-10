@@ -76,8 +76,8 @@ class KwtSmsTemplate(models.Model):
         store=True,
     )
 
-    # Fields that are locked on system templates
-    _LOCKED_FIELDS = {'name', 'event_type', 'lang', 'model_id'}
+    # Fields that are locked on system templates (only body and active can be changed)
+    _LOCKED_FIELDS = {'name', 'event_type', 'lang', 'model_id', 'is_system'}
 
     def write(self, vals):
         """Prevent changing locked fields on system templates."""

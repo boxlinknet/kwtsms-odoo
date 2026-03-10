@@ -56,6 +56,7 @@ Send SMS via Kuwait's leading SMS gateway directly from Odoo. Features:
     'application': True,
     'installable': True,
     'auto_install': False,
+    'post_init_hook': '_post_init_hook',
     'images': [
         'static/description/banner.png',
     ],
