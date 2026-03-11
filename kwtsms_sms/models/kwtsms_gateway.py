@@ -649,15 +649,16 @@ class KwtSmsGatewayConfig(models.Model):
         }
 
     def action_goto_gateway(self):
-        """Navigate to Gateway page using exact menu URL."""
+        """Navigate to Gateway page via its server action."""
+        action = self.env.ref('kwtsms_sms.action_kwtsms_gateway')
         return {
             'type': 'ir.actions.act_url',
-            'url': '/odoo/kwtsms-gateway',
+            'url': '/odoo/action-%d' % action.id,
             'target': 'self',
         }
 
     def action_goto_templates(self):
-        """Navigate to Templates list using exact menu URL."""
+        """Navigate to Templates list using stored path."""
         return {
             'type': 'ir.actions.act_url',
             'url': '/odoo/kwtsms-templates',
@@ -665,7 +666,7 @@ class KwtSmsGatewayConfig(models.Model):
         }
 
     def action_goto_logs(self):
-        """Navigate to Logs list using exact menu URL."""
+        """Navigate to Logs list using stored path."""
         return {
             'type': 'ir.actions.act_url',
             'url': '/odoo/kwtsms-logs',
@@ -673,10 +674,11 @@ class KwtSmsGatewayConfig(models.Model):
         }
 
     def action_goto_help(self):
-        """Navigate to Help page using exact menu URL."""
+        """Navigate to Help page via its server action."""
+        action = self.env.ref('kwtsms_sms.action_kwtsms_help')
         return {
             'type': 'ir.actions.act_url',
-            'url': '/odoo/kwtsms-help',
+            'url': '/odoo/action-%d' % action.id,
             'target': 'self',
         }
 
