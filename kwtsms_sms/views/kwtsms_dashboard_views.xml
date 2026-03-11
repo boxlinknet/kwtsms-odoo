@@ -6,7 +6,7 @@
         <field name="model">kwtsms.gateway.config</field>
         <field name="priority">10</field>
         <field name="arch" type="xml">
-            <form string="kwtSMS Dashboard" create="false" delete="false" duplicate="false">
+            <form string="Dashboard" create="false" delete="false" duplicate="false">
                 <sheet>
                     <div class="kwtsms_dashboard">
 
@@ -223,7 +223,7 @@
 
     <!-- Server Action: Open Dashboard -->
     <record id="action_kwtsms_dashboard" model="ir.actions.server">
-        <field name="name">kwtSMS Dashboard</field>
+        <field name="name">Dashboard</field>
         <field name="model_id" ref="model_kwtsms_gateway_config"/>
         <field name="state">code</field>
         <field name="code">action = model._action_open_dashboard()</field>

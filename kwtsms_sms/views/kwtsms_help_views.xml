@@ -6,7 +6,7 @@
         <field name="model">kwtsms.gateway.config</field>
         <field name="priority">80</field>
         <field name="arch" type="xml">
-            <form string="kwtSMS Help" create="false" delete="false" duplicate="false">
+            <form string="Help" create="false" delete="false" duplicate="false">
                 <sheet>
                     <div class="kwtsms_help_page">
 
@@ -117,7 +117,7 @@
 
     <!-- Server Action: Open Help -->
     <record id="action_kwtsms_help" model="ir.actions.server">
-        <field name="name">kwtSMS Help</field>
+        <field name="name">Help</field>
         <field name="model_id" ref="model_kwtsms_gateway_config"/>
         <field name="state">code</field>
         <field name="code">action = model._action_open_help()</field>

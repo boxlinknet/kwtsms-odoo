@@ -20,8 +20,15 @@ class KwtSmsGatewayConfig(models.Model):
 
     name = fields.Char(
         string='Name',
-        default='kwtSMS Dashboard',
+        default='kwtSMS',
     )
+
+    @api.depends_context('kwtsms_page_title')
+    def _compute_display_name(self):
+        """Show page-specific title in breadcrumb."""
+        title = self.env.context.get('kwtsms_page_title')
+        for record in self:
+            record.display_name = title or record.name
 
     company_id = fields.Many2one(
         'res.company',
@@ -593,13 +600,16 @@ class KwtSmsGatewayConfig(models.Model):
         config = self._get_or_create()
         return {
             'type': 'ir.actions.act_window',
-            'name': _('kwtSMS Dashboard'),
+            'name': _('Dashboard'),
             'res_model': 'kwtsms.gateway.config',
             'view_mode': 'form',
             'res_id': config.id,
             'target': 'current',
             'view_id': self.env.ref('kwtsms_sms.view_kwtsms_dashboard_form').id,
-            'context': {'form_view_initial_mode': 'readonly'},
+            'context': {
+                'form_view_initial_mode': 'readonly',
+                'kwtsms_page_title': _('Dashboard'),
+            },
             'path': 'kwtsms',
         }
 
@@ -609,12 +619,13 @@ class KwtSmsGatewayConfig(models.Model):
         config = self._get_or_create()
         return {
             'type': 'ir.actions.act_window',
-            'name': _('Gateway Configuration'),
+            'name': _('Gateway'),
             'res_model': 'kwtsms.gateway.config',
             'view_mode': 'form',
             'res_id': config.id,
             'target': 'current',
             'view_id': self.env.ref('kwtsms_sms.view_kwtsms_gateway_form').id,
+            'context': {'kwtsms_page_title': _('Gateway')},
             'path': 'kwtsms-gateway',
         }
 
@@ -624,13 +635,16 @@ class KwtSmsGatewayConfig(models.Model):
         config = self._get_or_create()
         return {
             'type': 'ir.actions.act_window',
-            'name': _('kwtSMS Help'),
+            'name': _('Help'),
             'res_model': 'kwtsms.gateway.config',
             'view_mode': 'form',
             'res_id': config.id,
             'target': 'current',
             'view_id': self.env.ref('kwtsms_sms.view_kwtsms_help_form').id,
-            'context': {'form_view_initial_mode': 'readonly'},
+            'context': {
+                'form_view_initial_mode': 'readonly',
+                'kwtsms_page_title': _('Help'),
+            },
             'path': 'kwtsms-help',
         }
 
