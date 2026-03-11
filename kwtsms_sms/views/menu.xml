@@ -1,25 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <!-- Top-level application menu -->
+    <!-- Top-level application menu (clicking app icon opens Dashboard) -->
     <menuitem id="menu_kwtsms_root"
               name="kwtSMS"
               sequence="90"
+              action="action_kwtsms_dashboard"
               web_icon="kwtsms_sms,static/description/icon.png"
               groups="kwtsms_sms.group_kwtsms_manager,base.group_system"/>
-
-    <!-- Dashboard -->
-    <menuitem id="menu_kwtsms_dashboard"
-              name="Dashboard"
-              parent="menu_kwtsms_root"
-              action="action_kwtsms_dashboard"
-              sequence="10"/>
 
     <!-- Gateway (system admin only) -->
     <menuitem id="menu_kwtsms_gateway"
               name="Gateway"
               parent="menu_kwtsms_root"
               action="action_kwtsms_gateway"
-              sequence="20"
+              sequence="10"
               groups="base.group_system"/>
 
     <!-- Templates -->
@@ -27,19 +21,19 @@
               name="Templates"
               parent="menu_kwtsms_root"
               action="action_kwtsms_sms_template"
-              sequence="30"/>
+              sequence="20"/>
 
-    <!-- SMS Logs -->
+    <!-- Logs -->
     <menuitem id="menu_kwtsms_logs"
               name="Logs"
               parent="menu_kwtsms_root"
               action="action_kwtsms_sms_log"
-              sequence="40"/>
+              sequence="30"/>
 
     <!-- Help -->
     <menuitem id="menu_kwtsms_help"
               name="Help"
               parent="menu_kwtsms_root"
               action="action_kwtsms_help"
-              sequence="50"/>
+              sequence="40"/>
 </odoo>
