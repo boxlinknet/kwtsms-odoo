@@ -102,6 +102,10 @@ class KwtSmsComposeWizard(models.TransientModel):
         """Send the SMS message to one or more phone numbers."""
         self.ensure_one()
 
+        ICP = self.env['ir.config_parameter'].sudo()
+        if ICP.get_param('kwtsms.enabled', 'True') != 'True':
+            raise UserError(_('SMS gateway is disabled. Enable it in kwtSMS Gateway settings.'))
+
         if not self.phone:
             raise UserError(_('Phone number is required.'))
         if not self.message:

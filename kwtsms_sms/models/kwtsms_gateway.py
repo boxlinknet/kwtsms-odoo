@@ -546,12 +546,15 @@ class KwtSmsGatewayConfig(models.Model):
     @api.model
     def action_kwtsms_send_test_rpc(self, phone, message):
         """RPC endpoint for OWL widget test SMS. Bypasses form save cycle."""
+        ICP = self.env['ir.config_parameter'].sudo()
+        if ICP.get_param('kwtsms.enabled', 'True') != 'True':
+            return {'success': False, 'message': 'SMS gateway is disabled. Enable it in kwtSMS Gateway settings.'}
+
         if not phone:
             return {'success': False, 'message': 'Please enter a phone number.'}
         if not message:
             return {'success': False, 'message': 'Please enter a message.'}
 
-        ICP = self.env['ir.config_parameter'].sudo()
         username = ICP.get_param('kwtsms.api_username', '')
         password = ICP.get_param('kwtsms.api_password', '')
         if not username or not password:
@@ -698,7 +701,13 @@ class KwtSmsGatewayConfig(models.Model):
         """Cron job: refresh balance, sender IDs, and coverage for connected companies.
 
         On auth failure, marks gateway as error and stops retrying.
+        Skips entirely when the gateway is disabled.
         """
+        ICP = self.env['ir.config_parameter'].sudo()
+        if ICP.get_param('kwtsms.enabled', 'True') != 'True':
+            _logger.debug('kwtSMS cron: gateway disabled, skipping refresh.')
+            return
+
         configs = self.search([('api_status', '=', 'connected')])
         for config in configs:
             try:

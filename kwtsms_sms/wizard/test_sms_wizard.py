@@ -27,12 +27,14 @@ class KwtSmsTestWizard(models.TransientModel):
         """Send test SMS through the kwtSMS gateway."""
         self.ensure_one()
 
+        ICP = self.env['ir.config_parameter'].sudo()
+        if ICP.get_param('kwtsms.enabled', 'True') != 'True':
+            raise UserError(_('SMS gateway is disabled. Enable it in kwtSMS Gateway settings.'))
+
         if not self.phone:
             raise UserError(_('Phone number is required.'))
         if not self.message:
             raise UserError(_('Message is required.'))
-
-        ICP = self.env['ir.config_parameter'].sudo()
         username = ICP.get_param('kwtsms.api_username', '')
         password = ICP.get_param('kwtsms.api_password', '')
         if not username or not password:
