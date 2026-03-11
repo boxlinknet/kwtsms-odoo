@@ -5,7 +5,7 @@
         <field name="name">kwtsms.sms.log.tree</field>
         <field name="model">kwtsms.sms.log</field>
         <field name="arch" type="xml">
-            <list string="SMS Logs" default_order="create_date desc"
+            <list string="Logs" create="false" import="false" default_order="create_date desc"
                   decoration-success="status == 'success'"
                   decoration-info="status == 'test'"
                   decoration-danger="status == 'error'"
@@ -138,9 +138,10 @@
 
     <!-- SMS Log Action -->
     <record id="action_kwtsms_sms_log" model="ir.actions.act_window">
-        <field name="name">SMS Logs</field>
+        <field name="name">Logs</field>
         <field name="res_model">kwtsms.sms.log</field>
         <field name="view_mode">list,form,graph,pivot</field>
         <field name="context">{'search_default_filter_today': 1}</field>
+        <field name="path">kwtsms-logs</field>
     </record>
 </odoo>

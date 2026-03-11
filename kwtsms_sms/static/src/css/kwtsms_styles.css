@@ -15,6 +15,18 @@
     padding: 8px 0;
 }
 
+/* Brand logo at top of dashboard */
+.kwtsms_dash_logo {
+    text-align: center;
+    padding: 12px 0 20px;
+}
+
+.kwtsms_dash_logo_img {
+    height: 48px;
+    width: auto;
+    object-fit: contain;
+}
+
 /* Header row */
 .kwtsms_dash_header {
     display: flex;
@@ -463,6 +475,52 @@
     padding: 8px 0;
 }
 
+/* Bigger Save / Discard buttons with text labels on kwtSMS forms */
+.o_form_view:has(.kwtsms_gateway_page) .o_form_status_indicator_buttons,
+.o_form_view:has(.kwtsms_dashboard) .o_form_status_indicator_buttons {
+    gap: 8px;
+}
+.o_form_view:has(.kwtsms_gateway_page) .o_form_button_save,
+.o_form_view:has(.kwtsms_gateway_page) .o_form_button_cancel,
+.o_form_view:has(.kwtsms_dashboard) .o_form_button_save,
+.o_form_view:has(.kwtsms_dashboard) .o_form_button_cancel {
+    font-size: 14px;
+    padding: 6px 16px !important;
+    border: 1px solid #dee2e6 !important;
+    border-radius: 4px;
+    gap: 6px;
+    display: inline-flex;
+    align-items: center;
+}
+.o_form_view:has(.kwtsms_gateway_page) .o_form_button_save::after,
+.o_form_view:has(.kwtsms_dashboard) .o_form_button_save::after {
+    content: "Save";
+}
+.o_form_view:has(.kwtsms_gateway_page) .o_form_button_cancel::after,
+.o_form_view:has(.kwtsms_dashboard) .o_form_button_cancel::after {
+    content: "Discard";
+}
+.o_form_view:has(.kwtsms_gateway_page) .o_form_button_save,
+.o_form_view:has(.kwtsms_dashboard) .o_form_button_save {
+    background-color: #FFA200 !important;
+    border-color: #FFA200 !important;
+    color: #fff !important;
+}
+.o_form_view:has(.kwtsms_gateway_page) .o_form_button_save:hover,
+.o_form_view:has(.kwtsms_dashboard) .o_form_button_save:hover {
+    background-color: #e69200 !important;
+    border-color: #e69200 !important;
+}
+.o_form_view:has(.kwtsms_gateway_page) .o_form_button_cancel,
+.o_form_view:has(.kwtsms_dashboard) .o_form_button_cancel {
+    background-color: #fff !important;
+    color: #434345 !important;
+}
+.o_form_view:has(.kwtsms_gateway_page) .o_form_button_cancel:hover,
+.o_form_view:has(.kwtsms_dashboard) .o_form_button_cancel:hover {
+    background-color: #f5f5f5 !important;
+}
+
 /* Gateway status bar */
 .kwtsms_gateway_statusbar {
     display: flex;
@@ -514,6 +572,15 @@
 
 .kwtsms_gw_section_body {
     padding: 20px 24px;
+}
+
+/* Give gateway form labels enough room to not wrap */
+.kwtsms_gateway_page .o_inner_group {
+    grid-template-columns: minmax(auto, max-content) 1fr;
+}
+.kwtsms_gateway_page .o_inner_group .o_cell.o_wrap_label {
+    white-space: nowrap;
+    padding-right: 12px;
 }
 
 /* Gateway action buttons row */

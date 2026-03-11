@@ -623,7 +623,7 @@ class KwtSmsGatewayConfig(models.Model):
             'res_model': 'kwtsms.gateway.config',
             'view_mode': 'form',
             'res_id': config.id,
-            'target': 'current',
+            'target': 'main',
             'view_id': self.env.ref('kwtsms_sms.view_kwtsms_gateway_form').id,
             'context': {'kwtsms_page_title': _('Gateway')},
             'path': 'kwtsms-gateway',
@@ -639,13 +639,53 @@ class KwtSmsGatewayConfig(models.Model):
             'res_model': 'kwtsms.gateway.config',
             'view_mode': 'form',
             'res_id': config.id,
-            'target': 'current',
+            'target': 'main',
             'view_id': self.env.ref('kwtsms_sms.view_kwtsms_help_form').id,
             'context': {
                 'form_view_initial_mode': 'readonly',
                 'kwtsms_page_title': _('Help'),
             },
             'path': 'kwtsms-help',
+        }
+
+    def action_goto_gateway(self):
+        """Navigate to Gateway page using exact menu URL."""
+        return {
+            'type': 'ir.actions.act_url',
+            'url': '/odoo/kwtsms-gateway',
+            'target': 'self',
+        }
+
+    def action_goto_templates(self):
+        """Navigate to Templates list using exact menu URL."""
+        return {
+            'type': 'ir.actions.act_url',
+            'url': '/odoo/kwtsms-templates',
+            'target': 'self',
+        }
+
+    def action_goto_logs(self):
+        """Navigate to Logs list using exact menu URL."""
+        return {
+            'type': 'ir.actions.act_url',
+            'url': '/odoo/kwtsms-logs',
+            'target': 'self',
+        }
+
+    def action_goto_help(self):
+        """Navigate to Help page using exact menu URL."""
+        return {
+            'type': 'ir.actions.act_url',
+            'url': '/odoo/kwtsms-help',
+            'target': 'self',
+        }
+
+    def action_open_buy_credits(self):
+        """Open kwtSMS dashboard to buy credits."""
+        return {
+            'type': 'ir.actions.act_url',
+            'url': 'https://www.kwtsms.com/login',
+            'target': 'new',
         }
 
     # ═══════════════════════════════════════

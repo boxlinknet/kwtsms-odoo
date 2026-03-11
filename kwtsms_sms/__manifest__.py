@@ -17,12 +17,10 @@ Send SMS via Kuwait's leading SMS gateway directly from Odoo. Features:
 * Dashboard with balance, stats, and quick actions
     """,
     'author': 'BoxLink',
-    'website': 'https://boxlink.net',
-    'support': 'mo@boxlink.net',
+    'website': 'https://www.kwtsms.com',
+    'support': 'support@kwtsms.com',
     'category': 'Marketing/SMS Marketing',
-    'license': 'OPL-1',
-    'price': 49.00,
-    'currency': 'USD',
+    'license': 'LGPL-3',
     'depends': [
         'base',
         'sms',

@@ -10,6 +10,15 @@
                 <sheet>
                     <div class="kwtsms_dashboard">
 
+                        <!-- Brand logo -->
+                        <div class="kwtsms_dash_logo">
+                            <a href="https://www.kwtsms.com/login" target="_blank">
+                                <img src="/kwtsms_sms/static/src/img/kwtsms_logo.png"
+                                     alt="kwtSMS"
+                                     class="kwtsms_dash_logo_img"/>
+                            </a>
+                        </div>
+
                         <!-- Header row: status + last updated + refresh -->
                         <div class="kwtsms_dash_header">
                             <div class="kwtsms_dash_header_left">
@@ -154,21 +163,31 @@
                                         type="action"
                                         class="kwtsms_dash_action_btn kwtsms_action_primary"
                                         icon="fa-paper-plane"/>
-                                <button name="%(kwtsms_sms.action_kwtsms_sms_log)d"
-                                        string="SMS Logs"
-                                        type="action"
-                                        class="kwtsms_dash_action_btn kwtsms_action_secondary"
-                                        icon="fa-list-alt"/>
-                                <button name="%(kwtsms_sms.action_kwtsms_sms_template)d"
-                                        string="Templates"
-                                        type="action"
-                                        class="kwtsms_dash_action_btn kwtsms_action_secondary"
-                                        icon="fa-file-text-o"/>
-                                <button name="%(kwtsms_sms.action_kwtsms_gateway)d"
+                                <button name="action_goto_gateway"
                                         string="Gateway"
-                                        type="action"
+                                        type="object"
                                         class="kwtsms_dash_action_btn kwtsms_action_secondary"
                                         icon="fa-cog"/>
+                                <button name="action_goto_templates"
+                                        string="Templates"
+                                        type="object"
+                                        class="kwtsms_dash_action_btn kwtsms_action_secondary"
+                                        icon="fa-file-text-o"/>
+                                <button name="action_goto_logs"
+                                        string="Logs"
+                                        type="object"
+                                        class="kwtsms_dash_action_btn kwtsms_action_secondary"
+                                        icon="fa-list-alt"/>
+                                <button name="action_goto_help"
+                                        string="Help"
+                                        type="object"
+                                        class="kwtsms_dash_action_btn kwtsms_action_secondary"
+                                        icon="fa-question-circle"/>
+                                <button name="action_open_buy_credits"
+                                        string="Buy Credits"
+                                        type="object"
+                                        class="kwtsms_dash_action_btn kwtsms_action_secondary"
+                                        icon="fa-shopping-cart"/>
                             </div>
                         </div>
 
