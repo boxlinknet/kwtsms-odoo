@@ -20,7 +20,7 @@ Send SMS via Kuwait's leading SMS gateway directly from Odoo. Features:
     'website': 'https://www.kwtsms.com',
     'support': 'support@kwtsms.com',
     'category': 'Marketing/SMS Marketing',
-    'license': 'LGPL-3',
+    'license': 'OPL-1',
     'depends': [
         'base',
         'sms',

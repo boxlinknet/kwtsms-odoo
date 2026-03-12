@@ -13,7 +13,7 @@
                         <!-- Setup Guide -->
                         <div class="kwtsms_help_section">
                             <div class="kwtsms_help_section_title">
-                                <i class="fa fa-rocket"/> Getting Started
+                                <i class="fa fa-rocket" title="Getting Started"/> Getting Started
                             </div>
                             <div class="kwtsms_help_section_body">
                                 <ol class="kwtsms_help_steps">
@@ -31,7 +31,7 @@
                         <!-- Template Placeholders -->
                         <div class="kwtsms_help_section">
                             <div class="kwtsms_help_section_title">
-                                <i class="fa fa-file-text-o"/> Template Placeholders
+                                <i class="fa fa-file-text-o" title="Templates"/> Template Placeholders
                             </div>
                             <div class="kwtsms_help_section_body">
                                 <p>Use these placeholders in SMS templates. They are replaced with real values when the message is sent:</p>
@@ -60,13 +60,13 @@
                         <!-- Resources -->
                         <div class="kwtsms_help_section">
                             <div class="kwtsms_help_section_title">
-                                <i class="fa fa-external-link"/> Resources
+                                <i class="fa fa-external-link" title="Resources"/> Resources
                             </div>
                             <div class="kwtsms_help_section_body">
                                 <div class="kwtsms_help_links">
                                     <a href="https://www.kwtsms.com/login/" target="_blank"
                                        class="kwtsms_help_link">
-                                        <i class="fa fa-tachometer"/>
+                                        <i class="fa fa-tachometer" title="Dashboard"/>
                                         <div>
                                             <strong>kwtSMS Dashboard</strong>
                                             <span>Manage your account, view queue, check balance</span>
@@ -74,7 +74,7 @@
                                     </a>
                                     <a href="https://www.kwtsms.com/faq/" target="_blank"
                                        class="kwtsms_help_link">
-                                        <i class="fa fa-question-circle"/>
+                                        <i class="fa fa-question-circle" title="FAQ"/>
                                         <div>
                                             <strong>FAQ</strong>
                                             <span>Common questions about kwtSMS service</span>
@@ -82,7 +82,7 @@
                                     </a>
                                     <a href="https://www.kwtsms.com/sender-id-help.html" target="_blank"
                                        class="kwtsms_help_link">
-                                        <i class="fa fa-id-badge"/>
+                                        <i class="fa fa-id-badge" title="Sender ID"/>
                                         <div>
                                             <strong>Sender ID Help</strong>
                                             <span>How to register and manage sender IDs</span>
@@ -90,7 +90,7 @@
                                     </a>
                                     <a href="https://www.kwtsms.com/#contact" target="_blank"
                                        class="kwtsms_help_link">
-                                        <i class="fa fa-life-ring"/>
+                                        <i class="fa fa-life-ring" title="Support"/>
                                         <div>
                                             <strong>Contact Support</strong>
                                             <span>Get help from the kwtSMS team</span>
@@ -98,7 +98,7 @@
                                     </a>
                                     <a href="https://www.kwtsms.com/integrations.html" target="_blank"
                                        class="kwtsms_help_link">
-                                        <i class="fa fa-plug"/>
+                                        <i class="fa fa-plug" title="Integrations"/>
                                         <div>
                                             <strong>Other Integrations</strong>
                                             <span>kwtSMS plugins for other platforms</span>

@@ -55,7 +55,7 @@
                         <!-- Section: General Settings -->
                         <div class="kwtsms_gw_section">
                             <div class="kwtsms_gw_section_title">
-                                <i class="fa fa-cog"/> General Settings
+                                <i class="fa fa-cog" title="Settings"/> General Settings
                             </div>
                             <div class="kwtsms_gw_section_body">
                                 <group>
@@ -79,7 +79,7 @@
                         <!-- Section: Gateway Credentials -->
                         <div class="kwtsms_gw_section">
                             <div class="kwtsms_gw_section_title">
-                                <i class="fa fa-key"/> Gateway Credentials
+                                <i class="fa fa-key" title="Credentials"/> Gateway Credentials
                             </div>
                             <div class="kwtsms_gw_section_body">
                                 <group>
@@ -118,7 +118,7 @@
                         <!-- Section: SMS Notifications -->
                         <div class="kwtsms_gw_section">
                             <div class="kwtsms_gw_section_title">
-                                <i class="fa fa-bell"/> SMS Notifications
+                                <i class="fa fa-bell" title="Notifications"/> SMS Notifications
                             </div>
                             <div class="kwtsms_gw_section_body">
                                 <group>
@@ -143,7 +143,7 @@
                         <!-- Section: Gateway Test -->
                         <div class="kwtsms_gw_section">
                             <div class="kwtsms_gw_section_title">
-                                <i class="fa fa-paper-plane"/> Send Test SMS
+                                <i class="fa fa-paper-plane" title="Test SMS"/> Send Test SMS
                             </div>
                             <div class="kwtsms_gw_section_body">
                                 <widget name="kwtsms_test_sms"/>
