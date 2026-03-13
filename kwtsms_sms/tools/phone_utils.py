@@ -307,6 +307,14 @@ def validate_phone(phone):
     if len(normalized) > 15:
         return (None, 'too long')
 
+    # Strip trunk prefix (domestic 0 after country code)
+    # e.g. 9660559... -> 966559... (Saudi), 9710559... -> 971559... (UAE)
+    cc = find_country_code(normalized)
+    if cc:
+        local = normalized[len(cc):]
+        if local.startswith('0'):
+            normalized = cc + local[1:]
+
     # Country-specific format validation
     valid, error = validate_phone_format(normalized)
     if not valid:
