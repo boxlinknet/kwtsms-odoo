@@ -5,7 +5,7 @@ from datetime import timedelta
 
 import pytz
 
-from odoo import models, fields, api, _
+from odoo import models, fields, api
 
 _logger = logging.getLogger(__name__)
 
@@ -20,7 +20,6 @@ class KwtSmsLog(models.Model):
     name = fields.Char(
         string='Name',
         compute='_compute_name',
-        store=True,
     )
     phone_number = fields.Char(
         string='Phone Number',
@@ -92,10 +91,17 @@ class KwtSmsLog(models.Model):
                 date_str = ''
             record.name = 'SMS to %s at %s' % (record.phone_number or '', date_str)
 
+    _ALLOWED_RELATED_MODELS = {
+        'sale.order', 'stock.picking', 'account.move',
+        'account.payment', 'res.partner',
+    }
+
     def action_view_related_record(self):
         """Open the related record (sale.order, stock.picking, etc.)."""
         self.ensure_one()
         if not self.res_model or not self.res_id:
+            return
+        if self.res_model not in self._ALLOWED_RELATED_MODELS:
             return
         return {
             'type': 'ir.actions.act_window',

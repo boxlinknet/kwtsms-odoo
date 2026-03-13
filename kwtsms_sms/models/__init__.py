@@ -1,3 +1,4 @@
+from . import kwtsms_notification_mixin
 from . import kwtsms_gateway
 from . import kwtsms_sms_log
 from . import kwtsms_sms_template

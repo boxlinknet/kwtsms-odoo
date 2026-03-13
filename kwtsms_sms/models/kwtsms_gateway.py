@@ -7,7 +7,6 @@ from datetime import timedelta
 import pytz
 
 from odoo import models, fields, api, _
-from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
@@ -83,11 +82,13 @@ class KwtSmsGatewayConfig(models.Model):
         string='API Username',
         compute='_compute_cfg_credentials',
         inverse='_inverse_cfg_api_username',
+        groups='base.group_system',
     )
     cfg_api_password = fields.Char(
         string='API Password',
         compute='_compute_cfg_credentials',
         inverse='_inverse_cfg_api_password',
+        groups='base.group_system',
     )
     cfg_sender_id = fields.Selection(
         selection='_get_sender_id_selection',
@@ -371,20 +372,21 @@ class KwtSmsGatewayConfig(models.Model):
         thirty_days_ago = fields.Datetime.now() - timedelta(days=30)
 
         for record in self:
+            company_domain = [('company_id', '=', record.company_id.id)]
             record.current_sender = ICP.get_param('kwtsms.sender_id', 'KWT-SMS')
-            record.sms_today = SmsLog.search_count([
+            record.sms_today = SmsLog.search_count(company_domain + [
                 ('create_date', '>=', today_start),
                 ('status', 'in', ['success', 'test']),
             ])
-            record.sms_this_week = SmsLog.search_count([
+            record.sms_this_week = SmsLog.search_count(company_domain + [
                 ('create_date', '>=', week_start),
                 ('status', 'in', ['success', 'test']),
             ])
-            record.sms_this_month = SmsLog.search_count([
+            record.sms_this_month = SmsLog.search_count(company_domain + [
                 ('create_date', '>=', month_start),
                 ('status', 'in', ['success', 'test']),
             ])
-            record.sms_failed_30d = SmsLog.search_count([
+            record.sms_failed_30d = SmsLog.search_count(company_domain + [
                 ('create_date', '>=', thirty_days_ago),
                 ('status', '=', 'error'),
             ])
@@ -546,19 +548,22 @@ class KwtSmsGatewayConfig(models.Model):
     @api.model
     def action_kwtsms_send_test_rpc(self, phone, message):
         """RPC endpoint for OWL widget test SMS. Bypasses form save cycle."""
+        if not self.env.user.has_group('base.group_system'):
+            return {'success': False, 'message': _('Only administrators can send test SMS.')}
+
         ICP = self.env['ir.config_parameter'].sudo()
         if ICP.get_param('kwtsms.enabled', 'True') != 'True':
-            return {'success': False, 'message': 'SMS gateway is disabled. Enable it in kwtSMS Gateway settings.'}
+            return {'success': False, 'message': _('SMS gateway is disabled. Enable it in kwtSMS Gateway settings.')}
 
         if not phone:
-            return {'success': False, 'message': 'Please enter a phone number.'}
+            return {'success': False, 'message': _('Please enter a phone number.')}
         if not message:
-            return {'success': False, 'message': 'Please enter a message.'}
+            return {'success': False, 'message': _('Please enter a message.')}
 
         username = ICP.get_param('kwtsms.api_username', '')
         password = ICP.get_param('kwtsms.api_password', '')
         if not username or not password:
-            return {'success': False, 'message': 'Please enter API credentials and login first.'}
+            return {'success': False, 'message': _('Please enter API credentials and login first.')}
 
         from odoo.addons.kwtsms_sms.tools.kwtsms_api import KwtSmsApi
         api_client = KwtSmsApi(self.env)
@@ -574,15 +579,15 @@ class KwtSmsGatewayConfig(models.Model):
                 status=log_status,
             )
             if api_client._test_mode:
-                msg = 'Test SMS sent to %s (test mode, not delivered).' % phone
+                msg = _('Test SMS sent to %s (test mode, not delivered).') % phone
             else:
-                msg = 'SMS sent to %s successfully.' % phone
+                msg = _('SMS sent to %s successfully.') % phone
             return {
                 'success': True,
                 'message': msg,
             }
         else:
-            error_msg = response.get('description', 'Unknown error')
+            error_msg = response.get('description', _('Unknown error'))
             api_client._log_send(
                 numbers=phone,
                 message=message,
@@ -591,7 +596,7 @@ class KwtSmsGatewayConfig(models.Model):
                 error_code=response.get('code'),
                 error_description=error_msg,
             )
-            return {'success': False, 'message': 'Test SMS failed: %s' % error_msg}
+            return {'success': False, 'message': _('Test SMS failed: %s') % error_msg}
 
     # ═══════════════════════════════════════
     # Navigation actions (open specific views)

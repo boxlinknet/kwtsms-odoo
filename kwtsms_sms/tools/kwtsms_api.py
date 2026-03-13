@@ -8,7 +8,7 @@ import urllib.error
 
 from odoo.addons.sms.tools.sms_api import SmsApiBase
 
-from .phone_utils import clean_message, normalize_phone, prepare_phone, validate_phone
+from .phone_utils import clean_message, normalize_phone, prepare_phone
 
 _logger = logging.getLogger(__name__)
 
@@ -377,6 +377,48 @@ class KwtSmsApi(SmsApiBase):
                 'description': desc,
                 'invalid': invalid,
             }
+
+        # Balance guard: skip API call if balance is zero
+        # Test mode also holds credits (recoverable by deleting from queue)
+        try:
+            config = self.env['kwtsms.gateway.config'].sudo()._get_or_create()
+            if config.balance_available <= 0:
+                return {
+                    'result': 'ERROR',
+                    'code': 'ERR_NO_BALANCE',
+                    'description': 'Insufficient SMS balance. Please top up your kwtSMS account.',
+                }
+        except Exception as e:
+            _logger.warning('kwtSMS: Balance guard check failed: %s', e)
+
+        # Coverage guard: check destination prefixes against coverage data
+        try:
+            config = self.env['kwtsms.gateway.config'].sudo()._get_or_create()
+            prefixes = config.get_coverage_prefixes()
+            if prefixes:
+                prefix_set = set(str(p) for p in prefixes)
+                uncovered = []
+                for number in valid:
+                    covered = False
+                    # Check longest prefix first (3 digits, then 2, then 1)
+                    for length in (3, 2, 1):
+                        if number[:length] in prefix_set:
+                            covered = True
+                            break
+                    if not covered:
+                        uncovered.append(number)
+                if uncovered and len(uncovered) == len(valid):
+                    return {
+                        'result': 'ERROR',
+                        'code': 'ERR_NO_COVERAGE',
+                        'description': 'Destination country is not covered by your kwtSMS account.',
+                    }
+                elif uncovered:
+                    for num in uncovered:
+                        valid.remove(num)
+                        invalid.append({'input': num, 'reason': 'country not covered'})
+        except Exception as e:
+            _logger.warning('kwtSMS: Coverage guard check failed: %s', e)
 
         # Send in batches of 200
         all_responses = []

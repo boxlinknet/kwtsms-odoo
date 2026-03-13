@@ -1,6 +1,7 @@
 """kwtSMS Message Template model."""
 
 import logging
+import re
 
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
@@ -160,7 +161,6 @@ class KwtSmsTemplate(models.Model):
             result = result.replace('{%s}' % key, str(val))
 
         # Clean up fragments left by empty placeholders
-        import re
         # Remove unreplaced placeholders (both syntaxes)
         result = re.sub(r'#\w+#', '', result)
         result = re.sub(r'\{\w+\}', '', result)

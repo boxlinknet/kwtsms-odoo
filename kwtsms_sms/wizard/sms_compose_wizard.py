@@ -73,12 +73,17 @@ class KwtSmsComposeWizard(models.TransientModel):
     def _onchange_template_id(self):
         """Populate message from selected template."""
         if self.template_id and self.template_id.body:
-            if self.res_model and self.res_id:
+            if self.res_model and self.res_id and self.res_model in self._ALLOWED_SOURCE_MODELS:
                 record = self.env[self.res_model].browse(self.res_id)
                 if record.exists():
                     self.message = self.template_id.render_template(record)
                     return
             self.message = self.template_id.body
+
+    _ALLOWED_SOURCE_MODELS = {
+        'res.partner', 'sale.order', 'stock.picking',
+        'account.move', 'account.payment',
+    }
 
     @api.model
     def default_get(self, fields_list):
@@ -87,7 +92,7 @@ class KwtSmsComposeWizard(models.TransientModel):
         active_model = self.env.context.get('active_model')
         active_id = self.env.context.get('active_id')
 
-        if active_model and active_id:
+        if active_model and active_id and active_model in self._ALLOWED_SOURCE_MODELS:
             record = self.env[active_model].browse(active_id)
             if record.exists():
                 if hasattr(record, 'partner_id') and record.partner_id:
