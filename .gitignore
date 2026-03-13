@@ -12,6 +12,7 @@ CLAUDE.md
 
 # === Documentation (dev-only) ===
 docs/
+tests/
 
 # === Environment / Secrets ===
 .env
