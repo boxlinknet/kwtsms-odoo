@@ -8,6 +8,28 @@ with Odoo version prefix (e.g., 19.0.1.0.0).
 
 ## [Unreleased]
 
+## [0.2.2] - 2026-03-13
+
+### Added
+- **Phase 2 business event hooks**: Order cancellation (sale.order), invoice posted (account.move), payment received (account.payment)
+- Dashboard view (priority 10, default landing page) with balance, stats, quick actions, notification status
+- Help page with setup guide, placeholder reference, external resource links
+- Test SMS OWL widget embedded directly on Gateway page
+- 5 marketplace screenshots (dashboard, gateway, templates, logs, help)
+- Full Arabic translation: 160 entries, 0 untranslated
+- Accessibility: `title` attributes on all Font Awesome `<i>` tags (Odoo 19 requirement)
+
+### Changed
+- License confirmed as OPL-1 in manifest (matches LICENSE file)
+- Gateway page is now the configuration hub: credentials, sender ID, notification toggles, test SMS
+- All hooks check `kwtsms.enabled` setting before attempting SMS
+- Module version bumped to 19.0.2.2.0
+
+### Fixed
+- Dashboard navigation: menu items correctly open dashboard, gateway, and help views
+- Gateway enabled enforcement: all send paths respect the enabled toggle
+- Removed draft HTML banner files from static/description
+
 ## [0.2.1] - 2026-03-11
 
 ### Changed
