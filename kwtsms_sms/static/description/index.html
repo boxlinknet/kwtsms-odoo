@@ -1,7 +1,7 @@
-<section style="max-width: 896px; margin: 0 auto; font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #434345; line-height: 1.7; -webkit-font-smoothing: antialiased;">
+<section style="max-width: 896px; margin: 0 auto; font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #434345; line-height: 1.7;">
 
     <!-- Hero -->
-    <div class="card" style="border-radius: 12px; padding: 48px 48px 40px; margin-bottom: 48px; overflow: hidden;">
+    <div style="border: 2px solid #ddd; border-top: 4px solid #FFA200; border-radius: 12px; padding: 48px 48px 40px; margin-bottom: 48px;">
         <div style="text-align: center;">
             <img src="kwtsms_logo.png" alt="kwtSMS - You Send, We Deliver" style="height: 52px; margin-bottom: 24px;"/>
 
@@ -10,10 +10,10 @@
             </p>
 
             <div style="display: inline-flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
-                <span class="badge" style="color: #fff; padding: 6px 20px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 0.8px; border: 2px solid #FFA200;">ODOO 19</span>
-                <span class="badge" style="color: #fff; padding: 6px 20px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 0.8px; border: 2px solid #79CCF2;">EN + AR</span>
-                <span style="border: 2px solid #ccc; color: #777; padding: 4px 18px; border-radius: 4px; font-size: 11px; font-weight: 600; letter-spacing: 0.8px;">GCC READY</span>
-                <span style="border: 2px solid #ccc; color: #777; padding: 4px 18px; border-radius: 4px; font-size: 11px; font-weight: 600; letter-spacing: 0.8px;">FREE</span>
+                <span style="border: 2px solid #FFA200; color: #FFA200; padding: 6px 20px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 0.8px;">ODOO 19</span>
+                <span style="border: 2px solid #79CCF2; color: #79CCF2; padding: 6px 20px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 0.8px;">EN + AR</span>
+                <span style="border: 2px solid #ccc; color: #777; padding: 6px 20px; border-radius: 4px; font-size: 11px; font-weight: 600; letter-spacing: 0.8px;">GCC READY</span>
+                <span style="border: 2px solid #ccc; color: #777; padding: 6px 20px; border-radius: 4px; font-size: 11px; font-weight: 600; letter-spacing: 0.8px;">FREE</span>
             </div>
         </div>
     </div>
@@ -21,7 +21,7 @@
     <!-- Overview -->
     <div style="margin-bottom: 48px; padding: 0 8px;">
         <p style="font-size: 16px; color: #555; margin: 0; line-height: 1.85;">
-            <strong style="color: #434345;">kwtSMS Gateway</strong> integrates
+            <b style="color: #434345;">kwtSMS Gateway</b> integrates
             <a href="https://www.kwtsms.com" target="_blank" style="color: #79CCF2; text-decoration: none; font-weight: 600;">kwtsms.com</a>
             directly into your Odoo instance. Automatically send SMS when sales orders are confirmed,
             deliveries completed, invoices posted, or payments received. Supports multilingual templates
@@ -32,217 +32,207 @@
 
     <!-- Key Features -->
     <div style="margin-bottom: 48px;">
-        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 28px;">
-            <div style="width: 4px; height: 28px; border-left: 4px solid #FFA200; border-right: 0; border-top: 0; border-bottom: 0;"></div>
-            <h2 style="font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 24px; font-weight: 700; color: #434345; margin: 0;">Key Features</h2>
-        </div>
+        <h2 style="font-size: 24px; font-weight: 700; color: #434345; margin: 0 0 28px 0; border-left: 4px solid #FFA200; padding-left: 12px;">Key Features</h2>
 
-        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
-
-            <div class="card" style="border-radius: 8px; padding: 28px 24px; border-top: 3px solid #FFA200;">
-                <div style="font-size: 28px; margin-bottom: 10px; line-height: 1;">&#9889;</div>
-                <h3 style="font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 15px; font-weight: 700; color: #434345; margin: 0 0 8px 0;">Direct API Integration</h3>
-                <p style="font-size: 13px; color: #777; margin: 0; line-height: 1.65;">Connects directly to the kwtSMS REST API. JSON-based, POST-only, with automatic retry and rate limiting (2 req/sec).</p>
-            </div>
-
-            <div class="card" style="border-radius: 8px; padding: 28px 24px; border-top: 3px solid #79CCF2;">
-                <div style="font-size: 28px; margin-bottom: 10px; line-height: 1;">&#128276;</div>
-                <h3 style="font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 15px; font-weight: 700; color: #434345; margin: 0 0 8px 0;">Business Event SMS</h3>
-                <p style="font-size: 13px; color: #777; margin: 0; line-height: 1.65;">Auto-send on order confirm, cancellation, delivery, invoice, and payment. Each trigger toggleable independently.</p>
-            </div>
-
-            <div class="card" style="border-radius: 8px; padding: 28px 24px; border-top: 3px solid #79CCF2;">
-                <div style="font-size: 28px; margin-bottom: 10px; line-height: 1;">&#127760;</div>
-                <h3 style="font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 15px; font-weight: 700; color: #434345; margin: 0 0 8px 0;">Multilingual Templates</h3>
-                <p style="font-size: 13px; color: #777; margin: 0; line-height: 1.65;">10 pre-built templates in English and Arabic. Dynamic placeholders for customer name, order, amount, tracking.</p>
-            </div>
-
-            <div class="card" style="border-radius: 8px; padding: 28px 24px; border-top: 3px solid #FFA200;">
-                <div style="font-size: 28px; margin-bottom: 10px; line-height: 1;">&#128241;</div>
-                <h3 style="font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 15px; font-weight: 700; color: #434345; margin: 0 0 8px 0;">Phone Normalization</h3>
-                <p style="font-size: 13px; color: #777; margin: 0; line-height: 1.65;">Validates 93 countries. Converts Arabic/Hindi digits, strips prefixes (+965, 00965), normalizes 7-12 digit numbers.</p>
-            </div>
-
-            <div class="card" style="border-radius: 8px; padding: 28px 24px; border-top: 3px solid #FFA200;">
-                <div style="font-size: 28px; margin-bottom: 10px; line-height: 1;">&#128200;</div>
-                <h3 style="font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 15px; font-weight: 700; color: #434345; margin: 0 0 8px 0;">Full Audit Log</h3>
-                <p style="font-size: 13px; color: #777; margin: 0; line-height: 1.65;">Every SMS logged: status, API response, points charged, balance remaining, message ID. Auto-cleanup via cron.</p>
-            </div>
-
-            <div class="card" style="border-radius: 8px; padding: 28px 24px; border-top: 3px solid #79CCF2;">
-                <div style="font-size: 28px; margin-bottom: 10px; line-height: 1;">&#128736;</div>
-                <h3 style="font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 15px; font-weight: 700; color: #434345; margin: 0 0 8px 0;">Test Mode Built-in</h3>
-                <p style="font-size: 13px; color: #777; margin: 0; line-height: 1.65;">Test mode ON by default. Messages queued but not delivered, zero credits consumed. Safe for staging.</p>
-            </div>
-
-        </div>
+        <table style="width: 100%; border-collapse: separate; border-spacing: 12px;">
+            <tr>
+                <td style="border: 2px solid #ddd; border-top: 3px solid #FFA200; border-radius: 8px; padding: 24px; vertical-align: top; width: 50%;">
+                    <div style="font-size: 28px; margin-bottom: 10px;">&#9889;</div>
+                    <b style="font-size: 15px; color: #434345;">Direct API Integration</b>
+                    <p style="font-size: 13px; color: #777; margin: 8px 0 0 0; line-height: 1.65;">Connects directly to the kwtSMS REST API. JSON-based, POST-only, with automatic retry and rate limiting (2 req/sec).</p>
+                </td>
+                <td style="border: 2px solid #ddd; border-top: 3px solid #79CCF2; border-radius: 8px; padding: 24px; vertical-align: top; width: 50%;">
+                    <div style="font-size: 28px; margin-bottom: 10px;">&#128276;</div>
+                    <b style="font-size: 15px; color: #434345;">Business Event SMS</b>
+                    <p style="font-size: 13px; color: #777; margin: 8px 0 0 0; line-height: 1.65;">Auto-send on order confirm, cancellation, delivery, invoice, and payment. Each trigger toggleable independently.</p>
+                </td>
+            </tr>
+            <tr>
+                <td style="border: 2px solid #ddd; border-top: 3px solid #79CCF2; border-radius: 8px; padding: 24px; vertical-align: top;">
+                    <div style="font-size: 28px; margin-bottom: 10px;">&#127760;</div>
+                    <b style="font-size: 15px; color: #434345;">Multilingual Templates</b>
+                    <p style="font-size: 13px; color: #777; margin: 8px 0 0 0; line-height: 1.65;">10 pre-built templates in English and Arabic. Dynamic placeholders for customer name, order, amount, tracking.</p>
+                </td>
+                <td style="border: 2px solid #ddd; border-top: 3px solid #FFA200; border-radius: 8px; padding: 24px; vertical-align: top;">
+                    <div style="font-size: 28px; margin-bottom: 10px;">&#128241;</div>
+                    <b style="font-size: 15px; color: #434345;">Phone Normalization</b>
+                    <p style="font-size: 13px; color: #777; margin: 8px 0 0 0; line-height: 1.65;">Validates 93 countries. Converts Arabic/Hindi digits, strips prefixes (+965, 00965), normalizes 7-12 digit numbers.</p>
+                </td>
+            </tr>
+            <tr>
+                <td style="border: 2px solid #ddd; border-top: 3px solid #FFA200; border-radius: 8px; padding: 24px; vertical-align: top;">
+                    <div style="font-size: 28px; margin-bottom: 10px;">&#128200;</div>
+                    <b style="font-size: 15px; color: #434345;">Full Audit Log</b>
+                    <p style="font-size: 13px; color: #777; margin: 8px 0 0 0; line-height: 1.65;">Every SMS logged: status, API response, points charged, balance remaining, message ID. Auto-cleanup via cron.</p>
+                </td>
+                <td style="border: 2px solid #ddd; border-top: 3px solid #79CCF2; border-radius: 8px; padding: 24px; vertical-align: top;">
+                    <div style="font-size: 28px; margin-bottom: 10px;">&#128736;</div>
+                    <b style="font-size: 15px; color: #434345;">Test Mode Built-in</b>
+                    <p style="font-size: 13px; color: #777; margin: 8px 0 0 0; line-height: 1.65;">Test mode ON by default. Messages queued but not delivered, zero credits consumed. Safe for staging.</p>
+                </td>
+            </tr>
+        </table>
     </div>
 
     <!-- Setup Steps -->
     <div style="margin-bottom: 48px;">
-        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 28px;">
-            <div style="width: 4px; height: 28px; border-left: 4px solid #FFA200; border-right: 0; border-top: 0; border-bottom: 0;"></div>
-            <h2 style="font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 24px; font-weight: 700; color: #434345; margin: 0;">Setup in 4 Steps</h2>
-        </div>
+        <h2 style="font-size: 24px; font-weight: 700; color: #434345; margin: 0 0 28px 0; border-left: 4px solid #FFA200; padding-left: 12px;">Setup in 4 Steps</h2>
 
-        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
-            <div class="card" style="border-radius: 8px; padding: 28px 24px; border-left: 3px solid #FFA200;">
-                <div style="font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 32px; font-weight: 800; color: #FFA200; line-height: 1; margin-bottom: 10px;">01</div>
-                <h4 style="font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 700; color: #434345; margin: 0 0 6px 0;">Configure</h4>
-                <p style="font-size: 13px; color: #777; margin: 0; line-height: 1.6;">Enter your kwtSMS API username and password, then click Login to verify.</p>
-            </div>
-
-            <div class="card" style="border-radius: 8px; padding: 28px 24px; border-left: 3px solid #79CCF2;">
-                <div style="font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 32px; font-weight: 800; color: #79CCF2; line-height: 1; margin-bottom: 10px;">02</div>
-                <h4 style="font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 700; color: #434345; margin: 0 0 6px 0;">Sender ID</h4>
-                <p style="font-size: 13px; color: #777; margin: 0; line-height: 1.6;">Select your registered sender ID from the dropdown (auto-populated after login).</p>
-            </div>
-
-            <div class="card" style="border-radius: 8px; padding: 28px 24px; border-left: 3px solid #FFA200;">
-                <div style="font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 32px; font-weight: 800; color: #FFA200; line-height: 1; margin-bottom: 10px;">03</div>
-                <h4 style="font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 700; color: #434345; margin: 0 0 6px 0;">Enable Triggers</h4>
-                <p style="font-size: 13px; color: #777; margin: 0; line-height: 1.6;">Toggle SMS for orders, deliveries, invoices, and payments. Each event is independent.</p>
-            </div>
-
-            <div class="card" style="border-radius: 8px; padding: 28px 24px; border-left: 3px solid #79CCF2;">
-                <div style="font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 32px; font-weight: 800; color: #79CCF2; line-height: 1; margin-bottom: 10px;">04</div>
-                <h4 style="font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 700; color: #434345; margin: 0 0 6px 0;">Go Live</h4>
-                <p style="font-size: 13px; color: #777; margin: 0; line-height: 1.6;">Turn off Test Mode. SMS will deliver automatically on every business event.</p>
-            </div>
-        </div>
+        <table style="width: 100%; border-collapse: separate; border-spacing: 12px;">
+            <tr>
+                <td style="border: 2px solid #ddd; border-left: 4px solid #FFA200; border-radius: 8px; padding: 24px; vertical-align: top; width: 50%;">
+                    <div style="font-size: 32px; font-weight: 800; color: #FFA200; line-height: 1; margin-bottom: 10px;">01</div>
+                    <b style="font-size: 14px; color: #434345;">Configure</b>
+                    <p style="font-size: 13px; color: #777; margin: 6px 0 0 0; line-height: 1.6;">Enter your kwtSMS API username and password, then click Login to verify.</p>
+                </td>
+                <td style="border: 2px solid #ddd; border-left: 4px solid #79CCF2; border-radius: 8px; padding: 24px; vertical-align: top; width: 50%;">
+                    <div style="font-size: 32px; font-weight: 800; color: #79CCF2; line-height: 1; margin-bottom: 10px;">02</div>
+                    <b style="font-size: 14px; color: #434345;">Sender ID</b>
+                    <p style="font-size: 13px; color: #777; margin: 6px 0 0 0; line-height: 1.6;">Select your registered sender ID from the dropdown (auto-populated after login).</p>
+                </td>
+            </tr>
+            <tr>
+                <td style="border: 2px solid #ddd; border-left: 4px solid #FFA200; border-radius: 8px; padding: 24px; vertical-align: top;">
+                    <div style="font-size: 32px; font-weight: 800; color: #FFA200; line-height: 1; margin-bottom: 10px;">03</div>
+                    <b style="font-size: 14px; color: #434345;">Enable Triggers</b>
+                    <p style="font-size: 13px; color: #777; margin: 6px 0 0 0; line-height: 1.6;">Toggle SMS for orders, deliveries, invoices, and payments. Each event is independent.</p>
+                </td>
+                <td style="border: 2px solid #ddd; border-left: 4px solid #79CCF2; border-radius: 8px; padding: 24px; vertical-align: top;">
+                    <div style="font-size: 32px; font-weight: 800; color: #79CCF2; line-height: 1; margin-bottom: 10px;">04</div>
+                    <b style="font-size: 14px; color: #434345;">Go Live</b>
+                    <p style="font-size: 13px; color: #777; margin: 6px 0 0 0; line-height: 1.6;">Turn off Test Mode. SMS will deliver automatically on every business event.</p>
+                </td>
+            </tr>
+        </table>
     </div>
 
     <!-- SMS Compose -->
-    <div class="oe_dark" style="border-radius: 8px; padding: 36px 40px; margin-bottom: 48px; border: 1px solid #ddd;">
-        <h2 style="font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 20px; font-weight: 700; color: #434345; margin: 0 0 8px 0;">Send SMS from Any Record</h2>
+    <div style="border: 2px solid #f0e0c0; border-radius: 8px; padding: 36px 40px; margin-bottom: 48px;">
+        <h2 style="font-size: 20px; font-weight: 700; color: #434345; margin: 0 0 8px 0;">Send SMS from Any Record</h2>
         <p style="font-size: 14px; color: #666; margin: 0 0 20px 0; max-width: 560px; line-height: 1.7;">
             Use the built-in SMS Compose wizard from any partner, sale order, or delivery. Character count and SMS page calculation in real time.
         </p>
 
-        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-            <div class="card" style="flex: 1; min-width: 160px; border-radius: 8px; padding: 16px 20px; border-left: 3px solid #FFA200;">
-                <p style="font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 10px; font-weight: 700; color: #FFA200; text-transform: uppercase; letter-spacing: 1.5px; margin: 0 0 4px 0;">Partner</p>
-                <p style="font-size: 13px; color: #666; margin: 0;">Auto-filled from contact</p>
-            </div>
-            <div class="card" style="flex: 1; min-width: 160px; border-radius: 8px; padding: 16px 20px; border-left: 3px solid #79CCF2;">
-                <p style="font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 10px; font-weight: 700; color: #79CCF2; text-transform: uppercase; letter-spacing: 1.5px; margin: 0 0 4px 0;">Sale Order</p>
-                <p style="font-size: 13px; color: #666; margin: 0;">Phone from customer</p>
-            </div>
-            <div class="card" style="flex: 1; min-width: 160px; border-radius: 8px; padding: 16px 20px; border-left: 3px solid #FFA200;">
-                <p style="font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 10px; font-weight: 700; color: #FFA200; text-transform: uppercase; letter-spacing: 1.5px; margin: 0 0 4px 0;">Delivery</p>
-                <p style="font-size: 13px; color: #666; margin: 0;">Phone from contact</p>
-            </div>
-        </div>
+        <table style="width: 100%; border-collapse: separate; border-spacing: 8px;">
+            <tr>
+                <td style="border: 1px solid #ddd; border-left: 3px solid #FFA200; border-radius: 8px; padding: 16px 20px; vertical-align: top;">
+                    <b style="font-size: 10px; color: #FFA200; text-transform: uppercase; letter-spacing: 1.5px;">Partner</b>
+                    <p style="font-size: 13px; color: #666; margin: 4px 0 0 0;">Auto-filled from contact</p>
+                </td>
+                <td style="border: 1px solid #ddd; border-left: 3px solid #79CCF2; border-radius: 8px; padding: 16px 20px; vertical-align: top;">
+                    <b style="font-size: 10px; color: #79CCF2; text-transform: uppercase; letter-spacing: 1.5px;">Sale Order</b>
+                    <p style="font-size: 13px; color: #666; margin: 4px 0 0 0;">Phone from customer</p>
+                </td>
+                <td style="border: 1px solid #ddd; border-left: 3px solid #FFA200; border-radius: 8px; padding: 16px 20px; vertical-align: top;">
+                    <b style="font-size: 10px; color: #FFA200; text-transform: uppercase; letter-spacing: 1.5px;">Delivery</b>
+                    <p style="font-size: 13px; color: #666; margin: 4px 0 0 0;">Phone from contact</p>
+                </td>
+            </tr>
+        </table>
     </div>
 
     <!-- Technical Details -->
     <div style="margin-bottom: 48px;">
-        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 24px;">
-            <div style="width: 4px; height: 28px; border-left: 4px solid #FFA200; border-right: 0; border-top: 0; border-bottom: 0;"></div>
-            <h2 style="font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 24px; font-weight: 700; color: #434345; margin: 0;">Technical Details</h2>
-        </div>
+        <h2 style="font-size: 24px; font-weight: 700; color: #434345; margin: 0 0 24px 0; border-left: 4px solid #FFA200; padding-left: 12px;">Technical Details</h2>
 
-        <div class="card" style="border-radius: 8px; overflow: hidden;">
-            <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
-                <tr style="border-bottom: 1px solid #e8e8e8;">
-                    <td style="padding: 14px 24px; color: #999; width: 180px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700;">Version</td>
-                    <td style="padding: 14px 24px; color: #434345; font-weight: 600;">Odoo 19.0</td>
-                </tr>
-                <tr class="bg-light" style="border-bottom: 1px solid #e8e8e8;">
-                    <td style="padding: 14px 24px; color: #999; font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700;">Dependencies</td>
-                    <td style="padding: 14px 24px; color: #434345;">base, sms, sale_management, stock, account</td>
-                </tr>
-                <tr style="border-bottom: 1px solid #e8e8e8;">
-                    <td style="padding: 14px 24px; color: #999; font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700;">External Deps</td>
-                    <td style="padding: 14px 24px; color: #434345;">None (Python stdlib only)</td>
-                </tr>
-                <tr class="bg-light" style="border-bottom: 1px solid #e8e8e8;">
-                    <td style="padding: 14px 24px; color: #999; font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700;">License</td>
-                    <td style="padding: 14px 24px; color: #434345;">OPL-1 (Odoo Proprietary)</td>
-                </tr>
-                <tr style="border-bottom: 1px solid #e8e8e8;">
-                    <td style="padding: 14px 24px; color: #999; font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700;">Languages</td>
-                    <td style="padding: 14px 24px; color: #434345;">English, Arabic (RTL)</td>
-                </tr>
-                <tr class="bg-light" style="border-bottom: 1px solid #e8e8e8;">
-                    <td style="padding: 14px 24px; color: #999; font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700;">Provider</td>
-                    <td style="padding: 14px 24px;"><a href="https://www.kwtsms.com" target="_blank" style="color: #79CCF2; text-decoration: none; font-weight: 600;">kwtsms.com</a></td>
-                </tr>
-                <tr>
-                    <td style="padding: 14px 24px; color: #999; font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700;">Tests</td>
-                    <td style="padding: 14px 24px; color: #434345; font-weight: 600;">295 unit tests</td>
-                </tr>
-            </table>
-        </div>
+        <table style="width: 100%; border-collapse: collapse; font-size: 14px; border: 2px solid #ddd; border-radius: 8px;">
+            <tr style="border-bottom: 1px solid #e0e0e0;">
+                <td style="padding: 14px 24px; color: #999; width: 180px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700;">Version</td>
+                <td style="padding: 14px 24px; color: #434345; font-weight: 600;">Odoo 19.0</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e0e0e0;">
+                <td style="padding: 14px 24px; color: #999; font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700;">Dependencies</td>
+                <td style="padding: 14px 24px; color: #434345;">base, sms, sale_management, stock, account</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e0e0e0;">
+                <td style="padding: 14px 24px; color: #999; font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700;">External Deps</td>
+                <td style="padding: 14px 24px; color: #434345;">None (Python stdlib only)</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e0e0e0;">
+                <td style="padding: 14px 24px; color: #999; font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700;">License</td>
+                <td style="padding: 14px 24px; color: #434345;">OPL-1 (Odoo Proprietary)</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e0e0e0;">
+                <td style="padding: 14px 24px; color: #999; font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700;">Languages</td>
+                <td style="padding: 14px 24px; color: #434345;">English, Arabic (RTL)</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #e0e0e0;">
+                <td style="padding: 14px 24px; color: #999; font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700;">Provider</td>
+                <td style="padding: 14px 24px;"><a href="https://www.kwtsms.com" target="_blank" style="color: #79CCF2; text-decoration: none; font-weight: 600;">kwtsms.com</a></td>
+            </tr>
+            <tr>
+                <td style="padding: 14px 24px; color: #999; font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700;">Tests</td>
+                <td style="padding: 14px 24px; color: #434345; font-weight: 600;">295 unit tests</td>
+            </tr>
+        </table>
     </div>
 
     <!-- Requirements -->
     <div style="margin-bottom: 48px;">
-        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
-            <div style="width: 4px; height: 28px; border-left: 4px solid #FFA200; border-right: 0; border-top: 0; border-bottom: 0;"></div>
-            <h2 style="font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 24px; font-weight: 700; color: #434345; margin: 0;">Requirements</h2>
-        </div>
-        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
-            <div class="card" style="display: flex; align-items: center; gap: 12px; border-radius: 8px; padding: 16px 20px;">
-                <div style="width: 8px; height: 8px; border: 4px solid #FFA200; border-radius: 50%;"></div>
-                <span style="font-size: 14px; color: #555;"><a href="https://www.kwtsms.com" target="_blank" style="color: #79CCF2; text-decoration: none; font-weight: 600;">kwtSMS.com</a> account with API credentials</span>
-            </div>
-            <div class="card" style="display: flex; align-items: center; gap: 12px; border-radius: 8px; padding: 16px 20px;">
-                <div style="width: 8px; height: 8px; border: 4px solid #79CCF2; border-radius: 50%;"></div>
-                <span style="font-size: 14px; color: #555;">At least one registered Sender ID</span>
-            </div>
-            <div class="card" style="display: flex; align-items: center; gap: 12px; border-radius: 8px; padding: 16px 20px;">
-                <div style="width: 8px; height: 8px; border: 4px solid #FFA200; border-radius: 50%;"></div>
-                <span style="font-size: 14px; color: #555;">Odoo 19 Community or Enterprise</span>
-            </div>
-            <div class="card" style="display: flex; align-items: center; gap: 12px; border-radius: 8px; padding: 16px 20px;">
-                <div style="width: 8px; height: 8px; border: 4px solid #79CCF2; border-radius: 50%;"></div>
-                <span style="font-size: 14px; color: #555;">SMS module installed (standard Odoo)</span>
-            </div>
-        </div>
+        <h2 style="font-size: 24px; font-weight: 700; color: #434345; margin: 0 0 20px 0; border-left: 4px solid #FFA200; padding-left: 12px;">Requirements</h2>
+
+        <table style="width: 100%; border-collapse: separate; border-spacing: 8px;">
+            <tr>
+                <td style="border: 2px solid #ddd; border-radius: 8px; padding: 16px 20px; vertical-align: middle;">
+                    <span style="color: #FFA200; font-weight: 700;">&#9679;</span>
+                    <a href="https://www.kwtsms.com" target="_blank" style="color: #79CCF2; text-decoration: none; font-weight: 600;">kwtSMS.com</a> account with API credentials
+                </td>
+                <td style="border: 2px solid #ddd; border-radius: 8px; padding: 16px 20px; vertical-align: middle;">
+                    <span style="color: #79CCF2; font-weight: 700;">&#9679;</span>
+                    At least one registered Sender ID
+                </td>
+            </tr>
+            <tr>
+                <td style="border: 2px solid #ddd; border-radius: 8px; padding: 16px 20px; vertical-align: middle;">
+                    <span style="color: #FFA200; font-weight: 700;">&#9679;</span>
+                    Odoo 19 Community or Enterprise
+                </td>
+                <td style="border: 2px solid #ddd; border-radius: 8px; padding: 16px 20px; vertical-align: middle;">
+                    <span style="color: #79CCF2; font-weight: 700;">&#9679;</span>
+                    SMS module installed (standard Odoo)
+                </td>
+            </tr>
+        </table>
     </div>
 
     <!-- Screenshots -->
     <div style="margin-bottom: 48px;">
-        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 28px;">
-            <div style="width: 4px; height: 28px; border-left: 4px solid #FFA200; border-right: 0; border-top: 0; border-bottom: 0;"></div>
-            <h2 style="font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 24px; font-weight: 700; color: #434345; margin: 0;">Screenshots</h2>
-        </div>
+        <h2 style="font-size: 24px; font-weight: 700; color: #434345; margin: 0 0 28px 0; border-left: 4px solid #FFA200; padding-left: 12px;">Screenshots</h2>
 
-        <p style="font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 700; color: #434345; margin: 0 0 12px 8px;">Dashboard</p>
-        <div class="card" style="margin-bottom: 32px; border-radius: 8px; overflow: hidden;">
+        <p style="font-size: 14px; font-weight: 700; color: #434345; margin: 0 0 12px 8px;">Dashboard</p>
+        <div style="margin-bottom: 32px; border: 2px solid #ddd; border-radius: 8px; overflow: hidden;">
             <img src="screenshot_dashboard.png" alt="kwtSMS Dashboard" style="width: 100%; display: block;"/>
         </div>
 
-        <p style="font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 700; color: #434345; margin: 0 0 12px 8px;">Gateway Configuration</p>
-        <div class="card" style="margin-bottom: 32px; border-radius: 8px; overflow: hidden;">
+        <p style="font-size: 14px; font-weight: 700; color: #434345; margin: 0 0 12px 8px;">Gateway Configuration</p>
+        <div style="margin-bottom: 32px; border: 2px solid #ddd; border-radius: 8px; overflow: hidden;">
             <img src="screenshot_gateway.png" alt="kwtSMS Gateway settings" style="width: 100%; display: block;"/>
         </div>
 
-        <p style="font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 700; color: #434345; margin: 0 0 12px 8px;">SMS Templates</p>
-        <div class="card" style="margin-bottom: 32px; border-radius: 8px; overflow: hidden;">
+        <p style="font-size: 14px; font-weight: 700; color: #434345; margin: 0 0 12px 8px;">SMS Templates</p>
+        <div style="margin-bottom: 32px; border: 2px solid #ddd; border-radius: 8px; overflow: hidden;">
             <img src="screenshot_templates.png" alt="kwtSMS Templates" style="width: 100%; display: block;"/>
         </div>
 
-        <p style="font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 700; color: #434345; margin: 0 0 12px 8px;">SMS Audit Log</p>
-        <div class="card" style="margin-bottom: 12px; border-radius: 8px; overflow: hidden;">
+        <p style="font-size: 14px; font-weight: 700; color: #434345; margin: 0 0 12px 8px;">SMS Audit Log</p>
+        <div style="margin-bottom: 12px; border: 2px solid #ddd; border-radius: 8px; overflow: hidden;">
             <img src="screenshot_logs.png" alt="kwtSMS Logs" style="width: 100%; display: block;"/>
         </div>
     </div>
 
     <!-- Support -->
-    <div class="oe_dark" style="border-radius: 8px; padding: 36px 40px; text-align: center; border: 1px solid #ddd;">
-        <h2 style="font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 22px; font-weight: 700; color: #434345; margin: 0 0 6px 0;">Need Help?</h2>
+    <div style="border: 2px solid #ddd; border-radius: 8px; padding: 36px 40px; text-align: center; border-bottom: 4px solid #FFA200;">
+        <h2 style="font-size: 22px; font-weight: 700; color: #434345; margin: 0 0 6px 0;">Need Help?</h2>
         <p style="font-size: 14px; color: #888; margin: 0 0 24px 0;">
             Installation support, configuration help, or custom development
         </p>
         <div style="display: inline-flex; gap: 36px; flex-wrap: wrap; justify-content: center; font-size: 14px;">
             <span>
-                <span style="font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: #FFA200; font-weight: 700; display: block; margin-bottom: 4px;">Support</span>
+                <b style="font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: #FFA200; display: block; margin-bottom: 4px;">Support</b>
                 <a href="https://www.kwtsms.com/support.html" target="_blank" style="color: #555; text-decoration: none;">kwtsms.com/support</a>
             </span>
             <span>
-                <span style="font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: #79CCF2; font-weight: 700; display: block; margin-bottom: 4px;">Contact</span>
+                <b style="font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: #79CCF2; display: block; margin-bottom: 4px;">Contact</b>
                 <a href="https://www.kwtsms.com/#contact" target="_blank" style="color: #555; text-decoration: none;">kwtsms.com/contact</a>
             </span>
         </div>
