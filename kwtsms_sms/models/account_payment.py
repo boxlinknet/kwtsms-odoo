@@ -12,6 +12,7 @@ class AccountPayment(models.Model):
 
     _inherit = ['account.payment', 'kwtsms.notification.mixin']
     _name = 'account.payment'
+    _description = 'Payments'
 
     def action_post(self):
         """Send SMS after inbound payment is posted."""

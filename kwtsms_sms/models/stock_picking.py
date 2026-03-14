@@ -12,6 +12,7 @@ class StockPicking(models.Model):
 
     _inherit = ['stock.picking', 'kwtsms.notification.mixin']
     _name = 'stock.picking'
+    _description = 'Transfer'
 
     def _action_done(self):
         """Send SMS after delivery completion.

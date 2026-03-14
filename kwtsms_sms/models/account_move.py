@@ -12,6 +12,7 @@ class AccountMove(models.Model):
 
     _inherit = ['account.move', 'kwtsms.notification.mixin']
     _name = 'account.move'
+    _description = 'Journal Entry'
 
     def action_post(self):
         """Send SMS after customer invoice is posted."""

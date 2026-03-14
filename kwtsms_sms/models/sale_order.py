@@ -12,6 +12,7 @@ class SaleOrder(models.Model):
 
     _inherit = ['sale.order', 'kwtsms.notification.mixin']
     _name = 'sale.order'
+    _description = 'Sales Order'
 
     def action_confirm(self):
         """Send SMS after order confirmation."""
