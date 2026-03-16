@@ -36,7 +36,7 @@ class KwtSmsTestWizard(models.TransientModel):
         api_client = KwtSmsApi(self.env)
 
         # Force test mode ON regardless of global setting
-        response = api_client.send(self.phone, self.message, test_mode=True)
+        response = api_client.send(self.phone, self.message, test_mode=True, recipient_type='admin')
 
         if response.get('result') == 'OK':
             live_warning = ''

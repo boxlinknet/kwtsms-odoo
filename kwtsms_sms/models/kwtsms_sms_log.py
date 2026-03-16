@@ -73,6 +73,10 @@ class KwtSmsLog(models.Model):
     res_id = fields.Integer(
         string='Related Record ID',
     )
+    recipient_type = fields.Selection([
+        ('customer', 'Customer'),
+        ('admin', 'Admin'),
+    ], string='Recipient Type', default='customer', index=True)
     company_id = fields.Many2one(
         'res.company',
         string='Company',

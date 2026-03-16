@@ -14,6 +14,7 @@
                 <field name="phone_number"/>
                 <field name="sender_id"/>
                 <field name="status"/>
+                <field name="recipient_type" optional="show"/>
                 <field name="error_description" string="Error" optional="show"/>
                 <field name="msg_id"/>
                 <field name="points_charged"/>
@@ -46,6 +47,7 @@
                             <field name="points_charged"/>
                             <field name="balance_after"/>
                             <field name="test_mode"/>
+                            <field name="recipient_type"/>
                             <field name="create_date"/>
                         </group>
                     </group>
@@ -92,6 +94,11 @@
                 <filter string="Test" name="filter_test"
                         domain="[('status', '=', 'test')]"/>
                 <separator/>
+                <filter string="Customer" name="filter_customer"
+                        domain="[('recipient_type', '=', 'customer')]"/>
+                <filter string="Admin" name="filter_admin"
+                        domain="[('recipient_type', '=', 'admin')]"/>
+                <separator/>
                 <filter string="Today" name="filter_today"
                         domain="[('create_date', '>=', context_today().strftime('%%Y-%%m-%%d'))]"/>
                 <filter string="This Week" name="filter_week"
@@ -106,6 +113,8 @@
                             context="{'group_by': 'create_date:day'}"/>
                     <filter string="Error Code" name="group_error"
                             context="{'group_by': 'error_code'}"/>
+                    <filter string="Recipient Type" name="group_recipient_type"
+                            context="{'group_by': 'recipient_type'}"/>
                 </group>
             </search>
         </field>

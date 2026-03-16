@@ -559,7 +559,7 @@ class KwtSmsGatewayConfig(models.Model):
         from odoo.addons.kwtsms_sms.tools.kwtsms_api import KwtSmsApi
         api_client = KwtSmsApi(self.env)
 
-        response = api_client.send(phone, message)
+        response = api_client.send(phone, message, recipient_type='admin')
 
         if response.get('result') == 'OK':
             if api_client._test_mode:

@@ -110,7 +110,7 @@ class KwtSmsApi(SmsApiBase):
                     'code': 'ERR_NO_BALANCE',
                     'description': (
                         'Insufficient SMS balance (%d credits). '
-                        'Please top up your kwtSMS account.'
+                        'Recharge at kwtsms.com'
                     ) % balance,
                 }
         except Exception as e:
@@ -122,7 +122,8 @@ class KwtSmsApi(SmsApiBase):
     # ═══════════════════════════════════════
 
     def send(self, phones, message, sender_id=None, test_mode=None,
-             template_id=None, res_model=None, res_id=None):
+             template_id=None, res_model=None, res_id=None,
+             recipient_type='customer'):
         """Send SMS to one or more phone numbers.
 
         Single entry point for ALL SMS sending. Checks gateway status,
@@ -139,6 +140,7 @@ class KwtSmsApi(SmsApiBase):
             template_id: Template record ID for logging.
             res_model: Related model name for logging.
             res_id: Related record ID for logging.
+            recipient_type: 'customer' (default) or 'admin'.
 
         Returns:
             dict: Result with 'result' ('OK'/'ERROR'/'PARTIAL'),
@@ -276,6 +278,7 @@ class KwtSmsApi(SmsApiBase):
             template_id=template_id,
             res_model=res_model,
             res_id=res_id,
+            recipient_type=recipient_type,
         )
 
         return result
@@ -660,7 +663,8 @@ class KwtSmsApi(SmsApiBase):
 
     def _log_send(self, numbers, message, response, status,
                   error_code=None, error_description=None,
-                  template_id=None, res_model=None, res_id=None):
+                  template_id=None, res_model=None, res_id=None,
+                  recipient_type='customer'):
         """Log an SMS send attempt to kwtsms.sms.log.
 
         Args:
@@ -673,6 +677,7 @@ class KwtSmsApi(SmsApiBase):
             template_id: Template record ID if used.
             res_model: Related model name.
             res_id: Related record ID.
+            recipient_type: 'customer' or 'admin'.
         """
         try:
             # Strip password from logged response
@@ -694,6 +699,7 @@ class KwtSmsApi(SmsApiBase):
                 'test_mode': self._test_mode,
                 'res_model': res_model or '',
                 'res_id': res_id or 0,
+                'recipient_type': recipient_type,
                 'company_id': self.env.company.id,
             })
         except Exception as e:
