@@ -8,3 +8,8 @@ from . import sale_order
 from . import stock_picking
 from . import account_move
 from . import account_payment
+
+try:
+    from . import crm_lead
+except ImportError:
+    pass  # crm module not installed, CRM hooks disabled
