@@ -29,6 +29,15 @@ class KwtSmsTemplate(models.Model):
         ('delivery_done', 'Delivery Completed'),
         ('invoice_posted', 'Invoice Posted'),
         ('payment_received', 'Payment Received'),
+        ('admin_new_quotation', 'Admin: New Quotation'),
+        ('admin_order_cancelled', 'Admin: Order Cancelled'),
+        ('admin_large_order', 'Admin: Large Order Alert'),
+        ('admin_low_stock', 'Admin: Low Stock Alert'),
+        ('admin_incoming_shipment', 'Admin: Incoming Shipment'),
+        ('admin_payment_received', 'Admin: Payment Received'),
+        ('admin_invoice_overdue', 'Admin: Invoice Overdue'),
+        ('admin_new_lead', 'Admin: New Lead Assigned'),
+        ('admin_lead_stage_changed', 'Admin: Lead Stage Changed'),
         ('custom', 'Custom'),
     ], string='Event Type', required=True, default='custom')
     lang = fields.Selection([
@@ -41,7 +50,10 @@ class KwtSmsTemplate(models.Model):
         translate=True,
         help='Use placeholders: {order_name}, {customer_name}, {amount}, '
              '{company_name}, {picking_name}, {tracking_ref}, '
-             '{invoice_name}, {payment_ref}, {amount_paid}',
+             '{invoice_name}, {payment_ref}, {amount_paid}, '
+             '{salesperson}, {supplier_name}, {product_count}, {count}, '
+             '{details}, {total_amount}, {lead_name}, {contact_name}, '
+             '{old_stage}, {new_stage}',
     )
     active = fields.Boolean(
         string='Active',
@@ -167,6 +179,32 @@ class KwtSmsTemplate(models.Model):
         # Remove label patterns like "Tracking: " when value was empty
         result = re.sub(r'\S+:\s*$', '', result, flags=re.MULTILINE)
         # Collapse multiple spaces
+        result = re.sub(r'  +', ' ', result)
+        return result.strip()
+
+    def render_from_dict(self, context_data):
+        """Render template by replacing placeholders from a dict.
+
+        Used by admin notifications where values come from aggregated
+        data (cron summaries) or explicitly built dicts rather than
+        a single record's fields.
+
+        Args:
+            context_data: Dict mapping placeholder names to values.
+
+        Returns:
+            str: Rendered message text.
+        """
+        self.ensure_one()
+        if not self.body:
+            return ''
+
+        result = self.body
+        for key, val in context_data.items():
+            result = result.replace('{%s}' % key, str(val))
+
+        # Clean up unreplaced placeholders
+        result = re.sub(r'\{\w+\}', '', result)
         result = re.sub(r'  +', ' ', result)
         return result.strip()
 
