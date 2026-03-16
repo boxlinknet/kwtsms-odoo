@@ -22,5 +22,27 @@
             <field name="interval_number">6</field>
             <field name="interval_type">hours</field>
         </record>
+
+        <!-- Admin: Low Stock Alert (daily) -->
+        <record id="cron_kwtsms_admin_low_stock" model="ir.cron">
+            <field name="name">kwtSMS: Low Stock Alert</field>
+            <field name="model_id" ref="model_kwtsms_gateway_config"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_admin_low_stock_alert()</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+        </record>
+
+        <!-- Admin: Overdue Invoices (daily) -->
+        <record id="cron_kwtsms_admin_overdue_invoices" model="ir.cron">
+            <field name="name">kwtSMS: Overdue Invoice Alert</field>
+            <field name="model_id" ref="model_kwtsms_gateway_config"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_admin_overdue_invoices()</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+        </record>
     </data>
 </odoo>

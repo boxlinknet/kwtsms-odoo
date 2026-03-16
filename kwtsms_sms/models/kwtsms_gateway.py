@@ -882,6 +882,173 @@ class KwtSmsGatewayConfig(models.Model):
     # Cron
     # ═══════════════════════════════════════
 
+    def _build_truncated_details(self, items, template_body, context_base):
+        """Build a details string truncated to fit within 7 SMS pages.
+
+        Args:
+            items: List of detail line strings.
+            template_body: Template body pattern for size estimation.
+            context_base: Base context dict (without 'details' key).
+
+        Returns:
+            str: Truncated details string.
+        """
+        from odoo.addons.kwtsms_sms.tools.phone_utils import count_sms_parts
+
+        details_lines = []
+        remaining = len(items)
+
+        for item in items:
+            test_details = ', '.join(details_lines + [item])
+            test_context = dict(context_base, details=test_details)
+            test_msg = template_body
+            for key, val in test_context.items():
+                test_msg = test_msg.replace('{%s}' % key, str(val))
+            _, pages, _ = count_sms_parts(test_msg)
+            if pages > 7 and details_lines:
+                left = remaining
+                details_lines.append('... and %d more' % left)
+                break
+            details_lines.append(item)
+            remaining -= 1
+
+        return ', '.join(details_lines)
+
+    def _cron_admin_low_stock_alert(self):
+        """Daily cron: send admin SMS summary of products below reorder level."""
+        ICP = self.env['ir.config_parameter'].sudo()
+        if ICP.get_param('kwtsms.enabled', 'False') != 'True':
+            return
+        if ICP.get_param('kwtsms.auto_admin_low_stock', 'False') != 'True':
+            return
+
+        Orderpoint = self.env['stock.warehouse.orderpoint'].sudo()
+        orderpoints = Orderpoint.search([])
+
+        low_stock = []
+        for op in orderpoints:
+            if op.product_id.qty_available < op.product_min_qty:
+                low_stock.append({
+                    'name': op.product_id.display_name,
+                    'qty': op.product_id.qty_available,
+                    'min': op.product_min_qty,
+                })
+
+        if not low_stock:
+            return
+
+        company_name = self.env.company.name or ''
+
+        # Get template to use its body for truncation estimation
+        company_lang = self.env.company.partner_id.lang or ''
+        lang = 'ar' if company_lang.startswith('ar') else 'en'
+        template = self.env['kwtsms.sms.template'].get_template_for_event(
+            'admin_low_stock', lang,
+        )
+        if not template:
+            return
+
+        details = self._build_truncated_details(
+            items=['%s: %.0f (min %.0f)' % (item['name'], item['qty'], item['min']) for item in low_stock],
+            template_body=template.body,
+            context_base={'company_name': company_name, 'count': str(len(low_stock))},
+        )
+
+        context_data = {
+            'company_name': company_name,
+            'count': str(len(low_stock)),
+            'details': details,
+        }
+
+        phone = (
+            ICP.get_param('kwtsms.admin_phone_inventory', '')
+            or ICP.get_param('kwtsms.admin_phone', '')
+        )
+        if not phone:
+            _logger.info('kwtSMS: No admin phone for low stock alert, skipping')
+            return
+
+        message = template.render_from_dict(context_data)
+
+        from odoo.addons.kwtsms_sms.tools.kwtsms_api import KwtSmsApi
+        api = KwtSmsApi(self.env)
+        api.send(
+            phone, message,
+            template_id=template.id,
+            res_model='stock.warehouse.orderpoint',
+            res_id=0,
+            recipient_type='admin',
+        )
+
+    def _cron_admin_overdue_invoices(self):
+        """Daily cron: send admin SMS summary of overdue customer invoices."""
+        ICP = self.env['ir.config_parameter'].sudo()
+        if ICP.get_param('kwtsms.enabled', 'False') != 'True':
+            return
+        if ICP.get_param('kwtsms.auto_admin_invoice_overdue', 'False') != 'True':
+            return
+
+        days = int(ICP.get_param('kwtsms.overdue_invoice_days', '30'))
+        cutoff = fields.Date.today() - timedelta(days=days)
+
+        invoices = self.env['account.move'].sudo().search([
+            ('move_type', '=', 'out_invoice'),
+            ('payment_state', 'not in', ['paid', 'reversed', 'in_payment']),
+            ('invoice_date_due', '<', cutoff),
+        ])
+
+        if not invoices:
+            return
+
+        company_name = self.env.company.name or ''
+        total = sum(inv.amount_residual for inv in invoices)
+        currency = invoices[0].currency_id.symbol if invoices[0].currency_id else ''
+
+        company_lang = self.env.company.partner_id.lang or ''
+        lang = 'ar' if company_lang.startswith('ar') else 'en'
+        template = self.env['kwtsms.sms.template'].get_template_for_event(
+            'admin_invoice_overdue', lang,
+        )
+        if not template:
+            return
+
+        details = self._build_truncated_details(
+            items=['%s: %s %s' % (inv.name, inv.amount_residual, currency) for inv in invoices],
+            template_body=template.body,
+            context_base={
+                'company_name': company_name,
+                'count': str(len(invoices)),
+                'total_amount': '%s %s' % (total, currency),
+            },
+        )
+
+        context_data = {
+            'company_name': company_name,
+            'count': str(len(invoices)),
+            'total_amount': '%s %s' % (total, currency),
+            'details': details,
+        }
+
+        phone = (
+            ICP.get_param('kwtsms.admin_phone_accounting', '')
+            or ICP.get_param('kwtsms.admin_phone', '')
+        )
+        if not phone:
+            _logger.info('kwtSMS: No admin phone for overdue invoices, skipping')
+            return
+
+        message = template.render_from_dict(context_data)
+
+        from odoo.addons.kwtsms_sms.tools.kwtsms_api import KwtSmsApi
+        api = KwtSmsApi(self.env)
+        api.send(
+            phone, message,
+            template_id=template.id,
+            res_model='account.move',
+            res_id=0,
+            recipient_type='admin',
+        )
+
     def _cron_refresh_all(self):
         """Cron job: refresh balance, sender IDs, and coverage for connected companies.
 
