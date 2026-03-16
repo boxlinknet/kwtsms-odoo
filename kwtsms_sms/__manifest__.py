@@ -1,6 +1,6 @@
 {
     'name': 'kwtSMS Gateway',
-    'version': '19.0.2.4.0',
+    'version': '19.0.3.0.0',
     'summary': 'Send SMS via kwtSMS gateway with business event notifications',
     'description': """
 kwtSMS Gateway for Odoo

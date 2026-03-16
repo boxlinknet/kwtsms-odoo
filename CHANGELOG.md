@@ -8,6 +8,29 @@ with Odoo version prefix (e.g., 19.0.1.0.0).
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-03-16
+
+### Added
+- **Phase 3: Admin SMS notifications** with 9 events across Sales, Inventory, Accounting, and CRM
+- Admin notification mixin for phone resolution (per-app override > global admin phone)
+- 3 sales admin hooks: new quotation created, order cancelled (admin), large order threshold alert
+- 1 inventory admin hook: incoming shipment received
+- 1 accounting admin hook: payment received (admin)
+- 2 CRM admin hooks: new lead assigned, lead stage changed (soft dependency, optional)
+- 2 daily cron jobs: low stock summary alert, overdue invoice summary alert
+- 18 default admin templates (9 events x English + Arabic)
+- Admin phone configuration: global default + per-app overrides (Sales, Inventory, Accounting, CRM)
+- Large order threshold setting (default 1000 KWD)
+- Overdue invoice days setting (default 30 days)
+- CRM toggles with "not installed" note when crm module is absent
+- `render_from_dict()` method on SMS templates for dict-based rendering
+- `recipient_type` filter (customer/admin) on SMS log views
+
+### Changed
+- Gateway page: SMS Notifications section split into Customer and Admin subsections
+- SMS templates: 9 new admin event types added to selection field
+- Module version bumped to 19.0.3.0.0
+
 ## [0.2.2] - 2026-03-13
 
 ### Added
