@@ -27,8 +27,7 @@ class KwtSmsNotificationMixin(models.AbstractModel):
         self.ensure_one()
         ICP = self.env['ir.config_parameter'].sudo()
 
-        if ICP.get_param('kwtsms.enabled', 'False') != 'True':
-            return
+        # Feature toggle check (send() checks gateway enabled separately)
         if ICP.get_param(config_key, 'False') != 'True':
             return
 
@@ -51,19 +50,8 @@ class KwtSmsNotificationMixin(models.AbstractModel):
 
         from odoo.addons.kwtsms_sms.tools.kwtsms_api import KwtSmsApi
         api = KwtSmsApi(self.env)
-        response = api.send(phone, message)
-
-        status = 'success' if response.get('result') == 'OK' else 'error'
-        if api._test_mode and status == 'success':
-            status = 'test'
-
-        api._log_send(
-            numbers=phone,
-            message=message,
-            response=response,
-            status=status,
-            error_code=response.get('code') if status == 'error' else None,
-            error_description=response.get('description') if status == 'error' else None,
+        api.send(
+            phone, message,
             template_id=template.id,
             res_model=self._name,
             res_id=self.id,

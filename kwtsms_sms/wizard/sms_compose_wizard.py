@@ -107,10 +107,6 @@ class KwtSmsComposeWizard(models.TransientModel):
         """Send the SMS message to one or more phone numbers."""
         self.ensure_one()
 
-        ICP = self.env['ir.config_parameter'].sudo()
-        if ICP.get_param('kwtsms.enabled', 'True') != 'True':
-            raise UserError(_('SMS gateway is disabled. Enable it in kwtSMS Gateway settings.'))
-
         if not self.phone:
             raise UserError(_('Phone number is required.'))
         if not self.message:
@@ -122,24 +118,18 @@ class KwtSmsComposeWizard(models.TransientModel):
         # Split by commas or newlines, strip whitespace
         phones = [p.strip() for p in re.split(r'[,\n\r]+', self.phone) if p.strip()]
 
-        response = api.send(phones, self.message)
-
-        valid_count = response.get('valid_count', 0)
-        invalid_count = response.get('invalid_count', 0)
-        duplicates = response.get('duplicates_removed', 0)
-        numbers_sent = response.get('numbers_sent', ','.join(phones))
+        response = api.send(
+            phones, self.message,
+            template_id=self.template_id.id if self.template_id else None,
+            res_model=self.res_model,
+            res_id=self.res_id,
+        )
 
         if response.get('result') in ('OK', 'PARTIAL'):
-            status = 'test' if api._test_mode else 'success'
-            api._log_send(
-                numbers=numbers_sent,
-                message=self.message,
-                response=response,
-                status=status,
-                template_id=self.template_id.id if self.template_id else None,
-                res_model=self.res_model,
-                res_id=self.res_id,
-            )
+            valid_count = response.get('valid_count', 0)
+            invalid_count = response.get('invalid_count', 0)
+            duplicates = response.get('duplicates_removed', 0)
+            numbers_sent = response.get('numbers_sent', ','.join(phones))
 
             if len(phones) == 1 and valid_count == 1:
                 msg = _('Message sent to %s') % numbers_sent
@@ -172,15 +162,4 @@ class KwtSmsComposeWizard(models.TransientModel):
             }
         else:
             error_msg = response.get('description', _('Unknown error'))
-            api._log_send(
-                numbers=numbers_sent,
-                message=self.message,
-                response=response,
-                status='error',
-                error_code=response.get('code'),
-                error_description=error_msg,
-                template_id=self.template_id.id if self.template_id else None,
-                res_model=self.res_model,
-                res_id=self.res_id,
-            )
             raise UserError(_('SMS sending failed: %s') % error_msg)

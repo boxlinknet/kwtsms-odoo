@@ -24,40 +24,23 @@ class KwtSmsTestWizard(models.TransientModel):
     )
 
     def action_send(self):
-        """Send test SMS through the kwtSMS gateway."""
+        """Send test SMS through the kwtSMS gateway (always in test mode)."""
         self.ensure_one()
-
-        ICP = self.env['ir.config_parameter'].sudo()
-        if ICP.get_param('kwtsms.enabled', 'True') != 'True':
-            raise UserError(_('SMS gateway is disabled. Enable it in kwtSMS Gateway settings.'))
 
         if not self.phone:
             raise UserError(_('Phone number is required.'))
         if not self.message:
             raise UserError(_('Message is required.'))
-        username = ICP.get_param('kwtsms.api_username', '')
-        password = ICP.get_param('kwtsms.api_password', '')
-        if not username or not password:
-            raise UserError(_('Please enter API credentials and login first.'))
 
         from odoo.addons.kwtsms_sms.tools.kwtsms_api import KwtSmsApi
         api_client = KwtSmsApi(self.env)
 
-        # Force test mode ON for the test wizard, regardless of system setting
-        system_test_mode = api_client._test_mode
-        api_client._test_mode = True
-
-        response = api_client.send(self.phone, self.message)
+        # Force test mode ON regardless of global setting
+        response = api_client.send(self.phone, self.message, test_mode=True)
 
         if response.get('result') == 'OK':
-            api_client._log_send(
-                numbers=self.phone,
-                message=self.message,
-                response=response,
-                status='test',
-            )
             live_warning = ''
-            if not system_test_mode:
+            if not api_client._test_mode:
                 live_warning = _(' WARNING: System test mode is OFF.')
             return {
                 'type': 'ir.actions.client',
@@ -71,12 +54,4 @@ class KwtSmsTestWizard(models.TransientModel):
             }
         else:
             error_msg = response.get('description', _('Unknown error'))
-            api_client._log_send(
-                numbers=self.phone,
-                message=self.message,
-                response=response,
-                status='error',
-                error_code=response.get('code'),
-                error_description=error_msg,
-            )
             raise UserError(_('Test SMS failed: %s') % error_msg)

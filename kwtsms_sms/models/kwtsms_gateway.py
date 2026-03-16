@@ -551,19 +551,10 @@ class KwtSmsGatewayConfig(models.Model):
         if not self.env.user.has_group('base.group_system'):
             return {'success': False, 'message': _('Only administrators can send test SMS.')}
 
-        ICP = self.env['ir.config_parameter'].sudo()
-        if ICP.get_param('kwtsms.enabled', 'True') != 'True':
-            return {'success': False, 'message': _('SMS gateway is disabled. Enable it in kwtSMS Gateway settings.')}
-
         if not phone:
             return {'success': False, 'message': _('Please enter a phone number.')}
         if not message:
             return {'success': False, 'message': _('Please enter a message.')}
-
-        username = ICP.get_param('kwtsms.api_username', '')
-        password = ICP.get_param('kwtsms.api_password', '')
-        if not username or not password:
-            return {'success': False, 'message': _('Please enter API credentials and login first.')}
 
         from odoo.addons.kwtsms_sms.tools.kwtsms_api import KwtSmsApi
         api_client = KwtSmsApi(self.env)
@@ -571,31 +562,13 @@ class KwtSmsGatewayConfig(models.Model):
         response = api_client.send(phone, message)
 
         if response.get('result') == 'OK':
-            log_status = 'test' if api_client._test_mode else 'success'
-            api_client._log_send(
-                numbers=phone,
-                message=message,
-                response=response,
-                status=log_status,
-            )
             if api_client._test_mode:
                 msg = _('Test SMS sent to %s (test mode, not delivered).') % phone
             else:
                 msg = _('SMS sent to %s successfully.') % phone
-            return {
-                'success': True,
-                'message': msg,
-            }
+            return {'success': True, 'message': msg}
         else:
             error_msg = response.get('description', _('Unknown error'))
-            api_client._log_send(
-                numbers=phone,
-                message=message,
-                response=response,
-                status='error',
-                error_code=response.get('code'),
-                error_description=error_msg,
-            )
             return {'success': False, 'message': _('Test SMS failed: %s') % error_msg}
 
     # ═══════════════════════════════════════
