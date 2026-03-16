@@ -135,6 +135,98 @@ class KwtSmsGatewayConfig(models.Model):
         inverse='_inverse_cfg_auto_payment_received',
     )
 
+    # Admin notification phone fields
+    cfg_admin_phone = fields.Char(
+        string='Admin Phone (General)',
+        compute='_compute_cfg_admin_phones',
+        inverse='_inverse_cfg_admin_phone',
+    )
+    cfg_admin_phone_sales = fields.Char(
+        string='Admin Phone (Sales)',
+        compute='_compute_cfg_admin_phones',
+        inverse='_inverse_cfg_admin_phone_sales',
+    )
+    cfg_admin_phone_inventory = fields.Char(
+        string='Admin Phone (Inventory)',
+        compute='_compute_cfg_admin_phones',
+        inverse='_inverse_cfg_admin_phone_inventory',
+    )
+    cfg_admin_phone_accounting = fields.Char(
+        string='Admin Phone (Accounting)',
+        compute='_compute_cfg_admin_phones',
+        inverse='_inverse_cfg_admin_phone_accounting',
+    )
+    cfg_admin_phone_crm = fields.Char(
+        string='Admin Phone (CRM)',
+        compute='_compute_cfg_admin_phones',
+        inverse='_inverse_cfg_admin_phone_crm',
+    )
+
+    # Admin notification toggles
+    cfg_auto_admin_new_quotation = fields.Boolean(
+        string='SMS on New Quotation',
+        compute='_compute_cfg_admin_toggles',
+        inverse='_inverse_cfg_auto_admin_new_quotation',
+    )
+    cfg_auto_admin_order_cancelled = fields.Boolean(
+        string='SMS on Order Cancelled',
+        compute='_compute_cfg_admin_toggles',
+        inverse='_inverse_cfg_auto_admin_order_cancelled',
+    )
+    cfg_auto_admin_large_order = fields.Boolean(
+        string='SMS on Large Order',
+        compute='_compute_cfg_admin_toggles',
+        inverse='_inverse_cfg_auto_admin_large_order',
+    )
+    cfg_auto_admin_low_stock = fields.Boolean(
+        string='SMS on Low Stock',
+        compute='_compute_cfg_admin_toggles',
+        inverse='_inverse_cfg_auto_admin_low_stock',
+    )
+    cfg_auto_admin_incoming_shipment = fields.Boolean(
+        string='SMS on Incoming Shipment',
+        compute='_compute_cfg_admin_toggles',
+        inverse='_inverse_cfg_auto_admin_incoming_shipment',
+    )
+    cfg_auto_admin_payment_received = fields.Boolean(
+        string='SMS on Payment Received (Admin)',
+        compute='_compute_cfg_admin_toggles',
+        inverse='_inverse_cfg_auto_admin_payment_received',
+    )
+    cfg_auto_admin_invoice_overdue = fields.Boolean(
+        string='SMS on Invoice Overdue',
+        compute='_compute_cfg_admin_toggles',
+        inverse='_inverse_cfg_auto_admin_invoice_overdue',
+    )
+    cfg_auto_admin_new_lead = fields.Boolean(
+        string='SMS on New Lead',
+        compute='_compute_cfg_admin_toggles',
+        inverse='_inverse_cfg_auto_admin_new_lead',
+    )
+    cfg_auto_admin_lead_stage_changed = fields.Boolean(
+        string='SMS on Lead Stage Changed',
+        compute='_compute_cfg_admin_toggles',
+        inverse='_inverse_cfg_auto_admin_lead_stage_changed',
+    )
+
+    # Admin notification threshold fields
+    cfg_large_order_threshold = fields.Float(
+        string='Large Order Threshold',
+        compute='_compute_cfg_admin_thresholds',
+        inverse='_inverse_cfg_large_order_threshold',
+    )
+    cfg_overdue_invoice_days = fields.Integer(
+        string='Overdue Invoice Days',
+        compute='_compute_cfg_admin_thresholds',
+        inverse='_inverse_cfg_overdue_invoice_days',
+    )
+
+    # CRM module availability
+    has_crm_module = fields.Boolean(
+        string='CRM Module Installed',
+        compute='_compute_has_crm_module',
+    )
+
     # ═══════════════════════════════════════
     # Compute methods for config proxy fields
     # ═══════════════════════════════════════
@@ -162,6 +254,41 @@ class KwtSmsGatewayConfig(models.Model):
             record.cfg_auto_order_cancel = ICP.get_param('kwtsms.auto_order_cancel', 'False') == 'True'
             record.cfg_auto_invoice_posted = ICP.get_param('kwtsms.auto_invoice_posted', 'False') == 'True'
             record.cfg_auto_payment_received = ICP.get_param('kwtsms.auto_payment_received', 'False') == 'True'
+
+    def _compute_cfg_admin_phones(self):
+        ICP = self.env['ir.config_parameter'].sudo()
+        for record in self:
+            record.cfg_admin_phone = ICP.get_param('kwtsms.admin_phone', '')
+            record.cfg_admin_phone_sales = ICP.get_param('kwtsms.admin_phone_sales', '')
+            record.cfg_admin_phone_inventory = ICP.get_param('kwtsms.admin_phone_inventory', '')
+            record.cfg_admin_phone_accounting = ICP.get_param('kwtsms.admin_phone_accounting', '')
+            record.cfg_admin_phone_crm = ICP.get_param('kwtsms.admin_phone_crm', '')
+
+    def _compute_cfg_admin_toggles(self):
+        ICP = self.env['ir.config_parameter'].sudo()
+        for record in self:
+            record.cfg_auto_admin_new_quotation = ICP.get_param('kwtsms.auto_admin_new_quotation', 'False') == 'True'
+            record.cfg_auto_admin_order_cancelled = ICP.get_param('kwtsms.auto_admin_order_cancelled', 'False') == 'True'
+            record.cfg_auto_admin_large_order = ICP.get_param('kwtsms.auto_admin_large_order', 'False') == 'True'
+            record.cfg_auto_admin_low_stock = ICP.get_param('kwtsms.auto_admin_low_stock', 'False') == 'True'
+            record.cfg_auto_admin_incoming_shipment = ICP.get_param('kwtsms.auto_admin_incoming_shipment', 'False') == 'True'
+            record.cfg_auto_admin_payment_received = ICP.get_param('kwtsms.auto_admin_payment_received', 'False') == 'True'
+            record.cfg_auto_admin_invoice_overdue = ICP.get_param('kwtsms.auto_admin_invoice_overdue', 'False') == 'True'
+            record.cfg_auto_admin_new_lead = ICP.get_param('kwtsms.auto_admin_new_lead', 'False') == 'True'
+            record.cfg_auto_admin_lead_stage_changed = ICP.get_param('kwtsms.auto_admin_lead_stage_changed', 'False') == 'True'
+
+    def _compute_cfg_admin_thresholds(self):
+        ICP = self.env['ir.config_parameter'].sudo()
+        for record in self:
+            record.cfg_large_order_threshold = float(ICP.get_param('kwtsms.large_order_threshold', '1000'))
+            record.cfg_overdue_invoice_days = int(ICP.get_param('kwtsms.overdue_invoice_days', '30'))
+
+    def _compute_has_crm_module(self):
+        installed = bool(self.env['ir.module.module'].sudo().search([
+            ('name', '=', 'crm'), ('state', '=', 'installed'),
+        ], limit=1))
+        for record in self:
+            record.has_crm_module = installed
 
     # ═══════════════════════════════════════
     # Inverse methods (write back to ir.config_parameter)
@@ -226,6 +353,86 @@ class KwtSmsGatewayConfig(models.Model):
         ICP = self.env['ir.config_parameter'].sudo()
         for record in self:
             ICP.set_param('kwtsms.auto_payment_received', 'True' if record.cfg_auto_payment_received else 'False')
+
+    def _inverse_cfg_admin_phone(self):
+        ICP = self.env['ir.config_parameter'].sudo()
+        for record in self:
+            ICP.set_param('kwtsms.admin_phone', record.cfg_admin_phone or '')
+
+    def _inverse_cfg_admin_phone_sales(self):
+        ICP = self.env['ir.config_parameter'].sudo()
+        for record in self:
+            ICP.set_param('kwtsms.admin_phone_sales', record.cfg_admin_phone_sales or '')
+
+    def _inverse_cfg_admin_phone_inventory(self):
+        ICP = self.env['ir.config_parameter'].sudo()
+        for record in self:
+            ICP.set_param('kwtsms.admin_phone_inventory', record.cfg_admin_phone_inventory or '')
+
+    def _inverse_cfg_admin_phone_accounting(self):
+        ICP = self.env['ir.config_parameter'].sudo()
+        for record in self:
+            ICP.set_param('kwtsms.admin_phone_accounting', record.cfg_admin_phone_accounting or '')
+
+    def _inverse_cfg_admin_phone_crm(self):
+        ICP = self.env['ir.config_parameter'].sudo()
+        for record in self:
+            ICP.set_param('kwtsms.admin_phone_crm', record.cfg_admin_phone_crm or '')
+
+    def _inverse_cfg_auto_admin_new_quotation(self):
+        ICP = self.env['ir.config_parameter'].sudo()
+        for record in self:
+            ICP.set_param('kwtsms.auto_admin_new_quotation', 'True' if record.cfg_auto_admin_new_quotation else 'False')
+
+    def _inverse_cfg_auto_admin_order_cancelled(self):
+        ICP = self.env['ir.config_parameter'].sudo()
+        for record in self:
+            ICP.set_param('kwtsms.auto_admin_order_cancelled', 'True' if record.cfg_auto_admin_order_cancelled else 'False')
+
+    def _inverse_cfg_auto_admin_large_order(self):
+        ICP = self.env['ir.config_parameter'].sudo()
+        for record in self:
+            ICP.set_param('kwtsms.auto_admin_large_order', 'True' if record.cfg_auto_admin_large_order else 'False')
+
+    def _inverse_cfg_auto_admin_low_stock(self):
+        ICP = self.env['ir.config_parameter'].sudo()
+        for record in self:
+            ICP.set_param('kwtsms.auto_admin_low_stock', 'True' if record.cfg_auto_admin_low_stock else 'False')
+
+    def _inverse_cfg_auto_admin_incoming_shipment(self):
+        ICP = self.env['ir.config_parameter'].sudo()
+        for record in self:
+            ICP.set_param('kwtsms.auto_admin_incoming_shipment', 'True' if record.cfg_auto_admin_incoming_shipment else 'False')
+
+    def _inverse_cfg_auto_admin_payment_received(self):
+        ICP = self.env['ir.config_parameter'].sudo()
+        for record in self:
+            ICP.set_param('kwtsms.auto_admin_payment_received', 'True' if record.cfg_auto_admin_payment_received else 'False')
+
+    def _inverse_cfg_auto_admin_invoice_overdue(self):
+        ICP = self.env['ir.config_parameter'].sudo()
+        for record in self:
+            ICP.set_param('kwtsms.auto_admin_invoice_overdue', 'True' if record.cfg_auto_admin_invoice_overdue else 'False')
+
+    def _inverse_cfg_auto_admin_new_lead(self):
+        ICP = self.env['ir.config_parameter'].sudo()
+        for record in self:
+            ICP.set_param('kwtsms.auto_admin_new_lead', 'True' if record.cfg_auto_admin_new_lead else 'False')
+
+    def _inverse_cfg_auto_admin_lead_stage_changed(self):
+        ICP = self.env['ir.config_parameter'].sudo()
+        for record in self:
+            ICP.set_param('kwtsms.auto_admin_lead_stage_changed', 'True' if record.cfg_auto_admin_lead_stage_changed else 'False')
+
+    def _inverse_cfg_large_order_threshold(self):
+        ICP = self.env['ir.config_parameter'].sudo()
+        for record in self:
+            ICP.set_param('kwtsms.large_order_threshold', str(record.cfg_large_order_threshold or 1000))
+
+    def _inverse_cfg_overdue_invoice_days(self):
+        ICP = self.env['ir.config_parameter'].sudo()
+        for record in self:
+            ICP.set_param('kwtsms.overdue_invoice_days', str(record.cfg_overdue_invoice_days or 30))
 
     # ═══════════════════════════════════════
     # Selection builders
