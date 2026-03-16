@@ -113,6 +113,188 @@ Dear {customer_name}, we received your payment of {amount_paid} ({payment_ref}).
             <field name="is_system" eval="True"/>
         </record>
 
+        <!-- Admin Notification Templates -->
+
+        <!-- Admin: New Quotation - English -->
+        <record id="template_admin_new_quotation_en" model="kwtsms.sms.template" context="{'install_mode': True}">
+            <field name="name">Admin: New Quotation (English)</field>
+            <field name="event_type">admin_new_quotation</field>
+            <field name="lang">en</field>
+            <field name="body">{company_name}: New quotation {order_name} by {salesperson} for {customer_name}, {amount}</field>
+            <field name="active" eval="True"/>
+            <field name="is_system" eval="True"/>
+        </record>
+
+        <!-- Admin: New Quotation - Arabic -->
+        <record id="template_admin_new_quotation_ar" model="kwtsms.sms.template" context="{'install_mode': True}">
+            <field name="name">Admin: New Quotation (Arabic)</field>
+            <field name="event_type">admin_new_quotation</field>
+            <field name="lang">ar</field>
+            <field name="body">{company_name}: عرض سعر جديد {order_name} من {salesperson} للعميل {customer_name}، {amount}</field>
+            <field name="active" eval="True"/>
+            <field name="is_system" eval="True"/>
+        </record>
+
+        <!-- Admin: Order Cancelled - English -->
+        <record id="template_admin_order_cancelled_en" model="kwtsms.sms.template" context="{'install_mode': True}">
+            <field name="name">Admin: Order Cancelled (English)</field>
+            <field name="event_type">admin_order_cancelled</field>
+            <field name="lang">en</field>
+            <field name="body">{company_name}: Order {order_name} cancelled. Customer: {customer_name}, amount: {amount}</field>
+            <field name="active" eval="True"/>
+            <field name="is_system" eval="True"/>
+        </record>
+
+        <!-- Admin: Order Cancelled - Arabic -->
+        <record id="template_admin_order_cancelled_ar" model="kwtsms.sms.template" context="{'install_mode': True}">
+            <field name="name">Admin: Order Cancelled (Arabic)</field>
+            <field name="event_type">admin_order_cancelled</field>
+            <field name="lang">ar</field>
+            <field name="body">{company_name}: تم إلغاء الطلب {order_name}. العميل: {customer_name}، المبلغ: {amount}</field>
+            <field name="active" eval="True"/>
+            <field name="is_system" eval="True"/>
+        </record>
+
+        <!-- Admin: Large Order - English -->
+        <record id="template_admin_large_order_en" model="kwtsms.sms.template" context="{'install_mode': True}">
+            <field name="name">Admin: Large Order (English)</field>
+            <field name="event_type">admin_large_order</field>
+            <field name="lang">en</field>
+            <field name="body">{company_name}: Large order alert! {order_name} for {amount} from {customer_name}</field>
+            <field name="active" eval="True"/>
+            <field name="is_system" eval="True"/>
+        </record>
+
+        <!-- Admin: Large Order - Arabic -->
+        <record id="template_admin_large_order_ar" model="kwtsms.sms.template" context="{'install_mode': True}">
+            <field name="name">Admin: Large Order (Arabic)</field>
+            <field name="event_type">admin_large_order</field>
+            <field name="lang">ar</field>
+            <field name="body">{company_name}: تنبيه طلب كبير! {order_name} بمبلغ {amount} من {customer_name}</field>
+            <field name="active" eval="True"/>
+            <field name="is_system" eval="True"/>
+        </record>
+
+        <!-- Admin: Low Stock - English -->
+        <record id="template_admin_low_stock_en" model="kwtsms.sms.template" context="{'install_mode': True}">
+            <field name="name">Admin: Low Stock (English)</field>
+            <field name="event_type">admin_low_stock</field>
+            <field name="lang">en</field>
+            <field name="body">{company_name}: {count} product(s) below reorder level. {details}</field>
+            <field name="active" eval="True"/>
+            <field name="is_system" eval="True"/>
+        </record>
+
+        <!-- Admin: Low Stock - Arabic -->
+        <record id="template_admin_low_stock_ar" model="kwtsms.sms.template" context="{'install_mode': True}">
+            <field name="name">Admin: Low Stock (Arabic)</field>
+            <field name="event_type">admin_low_stock</field>
+            <field name="lang">ar</field>
+            <field name="body">{company_name}: {count} منتج(ات) أقل من مستوى إعادة الطلب. {details}</field>
+            <field name="active" eval="True"/>
+            <field name="is_system" eval="True"/>
+        </record>
+
+        <!-- Admin: Incoming Shipment - English -->
+        <record id="template_admin_incoming_shipment_en" model="kwtsms.sms.template" context="{'install_mode': True}">
+            <field name="name">Admin: Incoming Shipment (English)</field>
+            <field name="event_type">admin_incoming_shipment</field>
+            <field name="lang">en</field>
+            <field name="body">{company_name}: Shipment {picking_name} received from {supplier_name}, {product_count} product(s)</field>
+            <field name="active" eval="True"/>
+            <field name="is_system" eval="True"/>
+        </record>
+
+        <!-- Admin: Incoming Shipment - Arabic -->
+        <record id="template_admin_incoming_shipment_ar" model="kwtsms.sms.template" context="{'install_mode': True}">
+            <field name="name">Admin: Incoming Shipment (Arabic)</field>
+            <field name="event_type">admin_incoming_shipment</field>
+            <field name="lang">ar</field>
+            <field name="body">{company_name}: تم استلام الشحنة {picking_name} من {supplier_name}، {product_count} منتج(ات)</field>
+            <field name="active" eval="True"/>
+            <field name="is_system" eval="True"/>
+        </record>
+
+        <!-- Admin: Payment Received - English -->
+        <record id="template_admin_payment_received_en" model="kwtsms.sms.template" context="{'install_mode': True}">
+            <field name="name">Admin: Payment Received (English)</field>
+            <field name="event_type">admin_payment_received</field>
+            <field name="lang">en</field>
+            <field name="body">{company_name}: Payment {amount} received from {customer_name} for {invoice_name}</field>
+            <field name="active" eval="True"/>
+            <field name="is_system" eval="True"/>
+        </record>
+
+        <!-- Admin: Payment Received - Arabic -->
+        <record id="template_admin_payment_received_ar" model="kwtsms.sms.template" context="{'install_mode': True}">
+            <field name="name">Admin: Payment Received (Arabic)</field>
+            <field name="event_type">admin_payment_received</field>
+            <field name="lang">ar</field>
+            <field name="body">{company_name}: تم استلام دفعة {amount} من {customer_name} للفاتورة {invoice_name}</field>
+            <field name="active" eval="True"/>
+            <field name="is_system" eval="True"/>
+        </record>
+
+        <!-- Admin: Invoice Overdue - English -->
+        <record id="template_admin_invoice_overdue_en" model="kwtsms.sms.template" context="{'install_mode': True}">
+            <field name="name">Admin: Invoice Overdue (English)</field>
+            <field name="event_type">admin_invoice_overdue</field>
+            <field name="lang">en</field>
+            <field name="body">{company_name}: {count} overdue invoice(s) totaling {total_amount}. {details}</field>
+            <field name="active" eval="True"/>
+            <field name="is_system" eval="True"/>
+        </record>
+
+        <!-- Admin: Invoice Overdue - Arabic -->
+        <record id="template_admin_invoice_overdue_ar" model="kwtsms.sms.template" context="{'install_mode': True}">
+            <field name="name">Admin: Invoice Overdue (Arabic)</field>
+            <field name="event_type">admin_invoice_overdue</field>
+            <field name="lang">ar</field>
+            <field name="body">{company_name}: {count} فاتورة(فواتير) متأخرة بإجمالي {total_amount}. {details}</field>
+            <field name="active" eval="True"/>
+            <field name="is_system" eval="True"/>
+        </record>
+
+        <!-- Admin: New Lead - English -->
+        <record id="template_admin_new_lead_en" model="kwtsms.sms.template" context="{'install_mode': True}">
+            <field name="name">Admin: New Lead (English)</field>
+            <field name="event_type">admin_new_lead</field>
+            <field name="lang">en</field>
+            <field name="body">{company_name}: New lead "{lead_name}" assigned to {salesperson}. Contact: {contact_name}</field>
+            <field name="active" eval="True"/>
+            <field name="is_system" eval="True"/>
+        </record>
+
+        <!-- Admin: New Lead - Arabic -->
+        <record id="template_admin_new_lead_ar" model="kwtsms.sms.template" context="{'install_mode': True}">
+            <field name="name">Admin: New Lead (Arabic)</field>
+            <field name="event_type">admin_new_lead</field>
+            <field name="lang">ar</field>
+            <field name="body">{company_name}: فرصة جديدة "{lead_name}" مخصصة لـ {salesperson}. جهة الاتصال: {contact_name}</field>
+            <field name="active" eval="True"/>
+            <field name="is_system" eval="True"/>
+        </record>
+
+        <!-- Admin: Lead Stage Changed - English -->
+        <record id="template_admin_lead_stage_changed_en" model="kwtsms.sms.template" context="{'install_mode': True}">
+            <field name="name">Admin: Lead Stage Changed (English)</field>
+            <field name="event_type">admin_lead_stage_changed</field>
+            <field name="lang">en</field>
+            <field name="body">{company_name}: Lead "{lead_name}" moved from {old_stage} to {new_stage}</field>
+            <field name="active" eval="True"/>
+            <field name="is_system" eval="True"/>
+        </record>
+
+        <!-- Admin: Lead Stage Changed - Arabic -->
+        <record id="template_admin_lead_stage_changed_ar" model="kwtsms.sms.template" context="{'install_mode': True}">
+            <field name="name">Admin: Lead Stage Changed (Arabic)</field>
+            <field name="event_type">admin_lead_stage_changed</field>
+            <field name="lang">ar</field>
+            <field name="body">{company_name}: الفرصة "{lead_name}" انتقلت من {old_stage} إلى {new_stage}</field>
+            <field name="active" eval="True"/>
+            <field name="is_system" eval="True"/>
+        </record>
+
         <!-- Default system parameters -->
         <record id="default_param_enabled" model="ir.config_parameter">
             <field name="key">kwtsms.enabled</field>
