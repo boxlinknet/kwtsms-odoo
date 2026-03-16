@@ -10,7 +10,7 @@ from datetime import timedelta
 from odoo import fields
 from odoo.addons.sms.tools.sms_api import SmsApiBase
 
-from .phone_utils import clean_message, normalize_phone, prepare_phone
+from .phone_utils import clean_message, count_sms_parts, normalize_phone, prepare_phone
 
 _logger = logging.getLogger(__name__)
 
@@ -18,6 +18,7 @@ API_BASE_URL = 'https://www.kwtsms.com/API'
 API_TIMEOUT = 30
 BATCH_SIZE = 200
 BATCH_DELAY = 0.5
+MAX_SMS_PAGES = 7
 
 # Map kwtSMS error codes to Odoo SMS failure types
 KWTSMS_ERROR_MAP = {
@@ -167,6 +168,20 @@ class KwtSmsApi(SmsApiBase):
                 'result': 'ERROR',
                 'code': 'ERR_VALIDATION',
                 'description': 'Message is empty after cleaning.',
+            }
+
+        # Check message length (max 7 SMS pages)
+        _, pages, is_unicode = count_sms_parts(cleaned)
+        if pages > MAX_SMS_PAGES:
+            encoding = 'Unicode' if is_unicode else 'GSM'
+            max_chars = 469 if is_unicode else 1071  # 7*67 or 7*153
+            return {
+                'result': 'ERROR',
+                'code': 'ERR_MSG_TOO_LONG',
+                'description': (
+                    'Message too long (%d pages, max %d). '
+                    '%s encoding allows up to %d characters.'
+                ) % (pages, MAX_SMS_PAGES, encoding, max_chars),
             }
 
         # 4. Validate, normalize, deduplicate phones

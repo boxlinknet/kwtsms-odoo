@@ -447,7 +447,4 @@ def count_sms_parts(message):
         else:
             page_count = (char_count + 152) // 153  # ceil division
 
-    # kwtSMS max 7 pages
-    page_count = min(page_count, 7)
-
     return (char_count, page_count, unicode_msg)
