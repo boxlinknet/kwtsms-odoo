@@ -28,35 +28,6 @@
                             </div>
                         </div>
 
-                        <!-- Template Placeholders -->
-                        <div class="kwtsms_help_section">
-                            <div class="kwtsms_help_section_title">
-                                <i class="fa fa-file-text-o" title="Templates"/> Template Placeholders
-                            </div>
-                            <div class="kwtsms_help_section_body">
-                                <p>Use these placeholders in SMS templates. They are replaced with real values when the message is sent:</p>
-                                <table class="kwtsms_help_table">
-                                    <thead>
-                                        <tr>
-                                            <th>Placeholder</th>
-                                            <th>Description</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr><td><code>{customer_name}</code></td><td>Customer's display name</td></tr>
-                                        <tr><td><code>{order_name}</code></td><td>Sale order reference (e.g. SO001)</td></tr>
-                                        <tr><td><code>{amount}</code></td><td>Order/invoice total with currency</td></tr>
-                                        <tr><td><code>{company_name}</code></td><td>Your company name</td></tr>
-                                        <tr><td><code>{picking_name}</code></td><td>Delivery order reference</td></tr>
-                                        <tr><td><code>{tracking_ref}</code></td><td>Carrier tracking number</td></tr>
-                                        <tr><td><code>{invoice_name}</code></td><td>Invoice reference</td></tr>
-                                        <tr><td><code>{payment_ref}</code></td><td>Payment reference</td></tr>
-                                        <tr><td><code>{amount_paid}</code></td><td>Payment amount with currency</td></tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
                         <!-- Resources -->
                         <div class="kwtsms_help_section">
                             <div class="kwtsms_help_section_title">
