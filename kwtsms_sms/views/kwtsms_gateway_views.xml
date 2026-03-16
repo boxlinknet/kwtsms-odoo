@@ -121,6 +121,8 @@
                                 <i class="fa fa-bell" title="Notifications"/> SMS Notifications
                             </div>
                             <div class="kwtsms_gw_section_body">
+                                <!-- Customer Notifications (existing toggles) -->
+                                <h4 class="mt-0 mb-3">Customer Notifications</h4>
                                 <group>
                                     <group string="Sales">
                                         <field name="cfg_auto_order_confirm"/>
@@ -134,6 +136,70 @@
                                     <group string="Accounting">
                                         <field name="cfg_auto_invoice_posted"/>
                                         <field name="cfg_auto_payment_received"/>
+                                    </group>
+                                    <group/>
+                                </group>
+
+                                <hr class="my-4"/>
+
+                                <!-- Admin Notifications (new) -->
+                                <h4 class="mb-3">Admin Notifications</h4>
+
+                                <group>
+                                    <field name="cfg_admin_phone"
+                                           placeholder="Global admin phone number"/>
+                                </group>
+
+                                <!-- Sales admin -->
+                                <group string="Sales">
+                                    <field name="cfg_admin_phone_sales"
+                                           placeholder="Override phone for sales alerts"/>
+                                    <field name="cfg_auto_admin_new_quotation"/>
+                                    <field name="cfg_auto_admin_order_cancelled"/>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <field name="cfg_auto_admin_large_order"/>
+                                        <label for="cfg_large_order_threshold" string="Threshold"/>
+                                        <field name="cfg_large_order_threshold"
+                                               style="max-width: 100px;"/>
+                                    </div>
+                                </group>
+
+                                <!-- Inventory admin -->
+                                <group string="Inventory">
+                                    <field name="cfg_admin_phone_inventory"
+                                           placeholder="Override phone for inventory alerts"/>
+                                    <field name="cfg_auto_admin_low_stock"/>
+                                    <field name="cfg_auto_admin_incoming_shipment"/>
+                                </group>
+
+                                <!-- Accounting admin -->
+                                <group string="Accounting">
+                                    <field name="cfg_admin_phone_accounting"
+                                           placeholder="Override phone for accounting alerts"/>
+                                    <field name="cfg_auto_admin_payment_received"/>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <field name="cfg_auto_admin_invoice_overdue"/>
+                                        <label for="cfg_overdue_invoice_days" string="Days overdue"/>
+                                        <field name="cfg_overdue_invoice_days"
+                                               style="max-width: 80px;"/>
+                                    </div>
+                                </group>
+
+                                <!-- CRM admin (disabled+note if crm not installed) -->
+                                <field name="has_crm_module" invisible="1"/>
+                                <group>
+                                    <group string="CRM">
+                                        <span invisible="has_crm_module"
+                                              class="text-muted fst-italic mb-2 d-block">
+                                            CRM module not installed
+                                        </span>
+                                        <field name="cfg_admin_phone_crm"
+                                               placeholder="Override phone for CRM alerts"
+                                               readonly="not has_crm_module"/>
+                                        <field name="cfg_auto_admin_new_lead"
+                                               readonly="not has_crm_module"/>
+                                        <field name="cfg_auto_admin_lead_stage_changed"
+                                               readonly="not has_crm_module"/>
                                     </group>
                                     <group/>
                                 </group>
