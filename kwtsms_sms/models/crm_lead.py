@@ -1,4 +1,4 @@
-"""SMS notifications for CRM lead events (optional, requires crm module)."""
+"""SMS notifications for CRM lead events."""
 
 import logging
 

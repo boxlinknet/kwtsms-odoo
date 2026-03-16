@@ -27,6 +27,7 @@ Send SMS via Kuwait's leading SMS gateway directly from Odoo. Features:
         'sale_management',
         'stock',
         'account',
+        'crm',
         'mail',
     ],
     'data': [
