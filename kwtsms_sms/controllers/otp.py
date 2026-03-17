@@ -1,7 +1,9 @@
-"""OTP verification controller for SMS-based 2FA."""
+"""OTP verification controller for SMS-based 2FA and signup."""
 
+import json
 import logging
-from datetime import timedelta
+import secrets
+from datetime import datetime, timedelta
 
 from odoo import http, fields, _
 from odoo.http import request
@@ -246,6 +248,11 @@ class KwtSmsOtpController(http.Controller):
                 methods=['GET', 'POST'], sitemap=False, csrf=True)
     def otp_verify(self, **kwargs):
         """Handle OTP verification page (GET: show form, POST: verify)."""
+        # Check for signup flow (no user_id yet)
+        signup_pending = request.session.get('kwtsms_otp_signup_pending')
+        if signup_pending:
+            return self._otp_verify_signup(kwargs)
+
         # Get pre_uid from session (set by Odoo MFA framework)
         pre_uid = request.session.get('pre_uid')
         passwordless_uid = request.session.get('kwtsms_otp_passwordless_uid')
@@ -268,6 +275,119 @@ class KwtSmsOtpController(http.Controller):
 
         # POST: verify submitted code
         return self._handle_post(uid, user, phone, otp_type, config, kwargs)
+
+    def _otp_verify_signup(self, kwargs):
+        """Handle OTP verify for signup flow (no user exists yet)."""
+        phone = request.session.get('kwtsms_otp_signup_phone', '')
+        if not phone:
+            return request.redirect('/web/signup?kwtsms_error=invalid')
+
+        config = self._get_otp_config()
+
+        if request.httprequest.method == 'GET':
+            return self._render_otp_page({
+                'message': _('Verification code sent.'),
+                'phone_masked': self._mask_phone(phone),
+                'cooldown_remaining': config['cooldown_seconds'],
+            })
+
+        # POST: verify code
+        otp_code = kwargs.get('otp_code', '').strip()
+        if not otp_code:
+            return self._render_otp_page({
+                'error': _('Please enter the verification code.'),
+                'phone_masked': self._mask_phone(phone),
+                'can_resend': True,
+            })
+
+        Token = request.env['kwtsms.otp.token'].sudo()
+        token = Token.search([
+            ('phone', '=', phone),
+            ('otp_type', '=', 'signup'),
+            ('state', '=', 'pending'),
+        ], order='create_date desc', limit=1)
+
+        if not token:
+            return self._render_otp_page({
+                'error': _('Code expired. Please request a new one.'),
+                'phone_masked': self._mask_phone(phone),
+                'can_resend': True,
+            })
+
+        # Check expiry
+        if token.expires_at and token.expires_at < fields.Datetime.now():
+            token.write({'state': 'expired'})
+            self._log_otp(
+                'expired', phone=phone, otp_type='signup',
+            )
+            return self._render_otp_page({
+                'error': _('Code expired. Please request a new one.'),
+                'phone_masked': self._mask_phone(phone),
+                'can_resend': True,
+            })
+
+        # Check lockout
+        if token.attempt_count >= config['max_attempts']:
+            lockout_until = token.create_date + timedelta(
+                minutes=config['lockout_minutes'],
+            )
+            if fields.Datetime.now() < lockout_until:
+                token.write({'state': 'locked'})
+                self._log_otp(
+                    'locked_out', phone=phone, otp_type='signup',
+                )
+                return self._render_otp_page({
+                    'error': _(
+                        'Too many attempts. Try again in %d minutes.'
+                    ) % config['lockout_minutes'],
+                    'phone_masked': self._mask_phone(phone),
+                })
+            else:
+                token.write({'state': 'locked'})
+                self._log_otp(
+                    'expired', phone=phone, otp_type='signup',
+                )
+                return self._render_otp_page({
+                    'error': _('Code expired. Please request a new one.'),
+                    'phone_masked': self._mask_phone(phone),
+                    'can_resend': True,
+                })
+
+        # Verify OTP
+        if verify_otp(otp_code, token.otp_hash):
+            token.write({'state': 'verified'})
+            self._log_otp(
+                'verify_ok', phone=phone, otp_type='signup',
+            )
+
+            # Store proof in session
+            proof = json.dumps({
+                'phone': phone,
+                'verified_at': datetime.utcnow().isoformat(),
+                'nonce': secrets.token_hex(16),
+            })
+            request.session['kwtsms_otp_verified_phone'] = proof
+
+            # Clean up signup pending state
+            request.session.pop('kwtsms_otp_signup_pending', None)
+            request.session.pop('kwtsms_otp_signup_phone', None)
+
+            # Redirect back to signup to complete form submission
+            return request.redirect('/web/signup')
+
+        # Wrong code
+        token.write({'attempt_count': token.attempt_count + 1})
+        remaining = config['max_attempts'] - token.attempt_count - 1
+        self._log_otp(
+            'verify_failed', phone=phone, otp_type='signup',
+        )
+        return self._render_otp_page({
+            'error': _(
+                'Invalid code. %d attempt(s) remaining.'
+            ) % max(remaining, 0),
+            'phone_masked': self._mask_phone(phone),
+            'can_resend': True,
+        })
 
     def _handle_get(self, uid, user, phone, otp_type, config):
         """Handle GET request: check trust, send OTP, show form."""
@@ -476,6 +596,11 @@ class KwtSmsOtpController(http.Controller):
                 methods=['POST'], sitemap=False, csrf=True)
     def otp_resend(self, **kwargs):
         """Resend OTP code (invalidates previous, respects cooldown)."""
+        # Handle signup flow resend (no user exists yet)
+        signup_pending = request.session.get('kwtsms_otp_signup_pending')
+        if signup_pending:
+            return self._otp_resend_signup()
+
         pre_uid = request.session.get('pre_uid')
         passwordless_uid = request.session.get('kwtsms_otp_passwordless_uid')
         uid = pre_uid or passwordless_uid
@@ -507,4 +632,108 @@ class KwtSmsOtpController(http.Controller):
         # Generate and send new OTP (invalidates previous)
         self._create_and_send_otp(phone, otp_type, uid, config)
         self._log_otp('resend', phone=phone, user_id=uid, otp_type=otp_type)
+        return request.redirect('/kwtsms/otp/verify')
+
+    def _otp_resend_signup(self):
+        """Resend OTP for signup flow."""
+        phone = request.session.get('kwtsms_otp_signup_phone', '')
+        if not phone:
+            return request.redirect('/web/signup')
+
+        config = self._get_otp_config()
+
+        # Check rate limits
+        rate_error = self._check_rate_limits(phone, config)
+        if rate_error:
+            self._log_otp(
+                'resend', phone=phone, otp_type='signup',
+                error_reason='cooldown',
+            )
+            return request.redirect('/kwtsms/otp/verify')
+
+        # Generate and send new OTP (invalidates previous)
+        self._create_and_send_otp(phone, 'signup', None, config)
+        self._log_otp('resend', phone=phone, otp_type='signup')
+        return request.redirect('/kwtsms/otp/verify')
+
+
+class KwtSmsSignupController(http.Controller):
+    """Override signup to add OTP phone verification before account creation.
+
+    Inherits from AuthSignupHome via route override. When OTP signup is
+    enabled, the POST flow is: collect phone -> send OTP -> verify -> store
+    proof in session -> redirect back to signup -> super proceeds.
+    """
+
+    @http.route('/web/signup', type='http', auth='public', website=True,
+                sitemap=False, csrf=True)
+    def web_auth_signup(self, *args, **kwargs):
+        """Intercept signup to require OTP phone verification."""
+        from odoo.addons.auth_signup.controllers.main import AuthSignupHome
+        _signup_home = AuthSignupHome()
+
+        ICP = request.env['ir.config_parameter'].sudo()
+        otp_enabled = (
+            ICP.get_param('kwtsms.otp_signup', 'False') == 'True'
+            and ICP.get_param('kwtsms.enabled', 'False') == 'True'
+        )
+
+        if not otp_enabled or request.httprequest.method == 'GET':
+            # OTP disabled or GET request: use standard signup
+            return _signup_home.web_auth_signup(*args, **kwargs)
+
+        # POST: check if phone is already verified via OTP proof
+        verified = request.session.get('kwtsms_otp_verified_phone')
+        if verified:
+            # Validate proof freshness (10 minute window)
+            try:
+                proof = json.loads(verified) if isinstance(verified, str) else verified
+                verified_at = datetime.fromisoformat(proof.get('verified_at', ''))
+                if (datetime.utcnow() - verified_at).total_seconds() > 600:
+                    # Proof expired
+                    request.session.pop('kwtsms_otp_verified_phone', None)
+                    return request.redirect('/web/signup?kwtsms_error=expired')
+            except (json.JSONDecodeError, ValueError, TypeError):
+                request.session.pop('kwtsms_otp_verified_phone', None)
+                return request.redirect('/web/signup?kwtsms_error=invalid')
+
+            # Proof valid: proceed with standard signup
+            result = _signup_home.web_auth_signup(*args, **kwargs)
+            # Clear proof after use
+            request.session.pop('kwtsms_otp_verified_phone', None)
+            request.session.pop('kwtsms_otp_signup_data', None)
+            return result
+
+        # No proof yet: extract phone from form, send OTP
+        phone = kwargs.get('phone', '').strip()
+        if not phone:
+            return request.redirect('/web/signup?kwtsms_error=no_phone')
+
+        from odoo.addons.kwtsms_sms.tools.phone_utils import prepare_phone
+        default_cc = ICP.get_param('kwtsms.default_country_code', '965')
+        normalized, error = prepare_phone(phone, default_cc)
+        if error:
+            return request.redirect('/web/signup?kwtsms_error=invalid_phone')
+
+        otp_ctrl = KwtSmsOtpController()
+        config = otp_ctrl._get_otp_config()
+
+        # Check rate limits
+        rate_error = otp_ctrl._check_rate_limits(normalized, config)
+        if rate_error:
+            return request.redirect('/web/signup?kwtsms_error=rate_limit')
+
+        # Store signup form data in session for after OTP verify
+        request.session['kwtsms_otp_signup_data'] = kwargs
+        request.session['kwtsms_otp_signup_phone'] = normalized
+
+        # Generate and send OTP
+        send_error = otp_ctrl._create_and_send_otp(
+            normalized, 'signup', None, config,
+        )
+        if send_error:
+            return request.redirect('/web/signup?kwtsms_error=send_failed')
+
+        # Set session for OTP verify page
+        request.session['kwtsms_otp_signup_pending'] = True
         return request.redirect('/kwtsms/otp/verify')
