@@ -295,6 +295,26 @@ Dear {customer_name}, we received your payment of {amount_paid} ({payment_ref}).
             <field name="is_system" eval="True"/>
         </record>
 
+        <!-- OTP Templates -->
+
+        <!-- OTP: Verification Code (EN) -->
+        <record id="template_otp_verification_en" model="kwtsms.sms.template" context="{'install_mode': True}">
+            <field name="name">OTP: Verification Code</field>
+            <field name="event_type">custom</field>
+            <field name="lang">en</field>
+            <field name="body">{company_name}: Your verification code is {otp_code}. Valid for {expiry} minutes.</field>
+            <field name="is_system" eval="True"/>
+        </record>
+
+        <!-- OTP: Verification Code (AR) -->
+        <record id="template_otp_verification_ar" model="kwtsms.sms.template" context="{'install_mode': True}">
+            <field name="name">OTP: Verification Code</field>
+            <field name="event_type">custom</field>
+            <field name="lang">ar</field>
+            <field name="body">{company_name}: رمز التحقق الخاص بك هو {otp_code}. صالح لمدة {expiry} دقائق.</field>
+            <field name="is_system" eval="True"/>
+        </record>
+
         <!-- Default system parameters -->
         <record id="default_param_enabled" model="ir.config_parameter">
             <field name="key">kwtsms.enabled</field>

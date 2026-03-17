@@ -8,6 +8,38 @@ with Odoo version prefix (e.g., 19.0.1.0.0).
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-03-17
+
+### Added
+- **Phase 4: OTP / Two-Factor Authentication** with SMS-based verification
+- OTP for portal login, backend login, signup verification, and password reset
+- Passwordless phone login (enter phone, receive OTP, login without password)
+- Remember device feature (skip OTP for trusted browsers, configurable duration)
+- Native Odoo 19 MFA integration (res.users._mfa_type / _mfa_url / session.finalize)
+- OTP token model with SHA-256 hashing and constant-time verification (hmac.compare_digest)
+- Device trust model with 256-bit tokens bound to user-agent hash
+- OTP audit log with comprehensive event tracking (request, verify, fail, lockout, device events)
+- Rate limiting: per-phone cooldown (60s), per-IP daily limit (10), retry lockout (3 attempts)
+- Anti-enumeration: generic messages for phone/user lookups
+- Normalized phone field on res.partner for indexed OTP lookups
+- OTP service utilities (generation, hashing, verification)
+- New Settings page for all configuration (general, notifications, OTP)
+- OTP configuration section with mode, length, expiry, and security settings
+- Phone login form on Odoo login page with country code selector
+- Phone-based password reset option on login page
+- OTP verify page using Odoo's web.login_layout
+- 3 new cron jobs: OTP token cleanup (hourly), device cleanup (daily), OTP log cleanup (daily)
+- OTP SMS template (English + Arabic)
+- CAPTCHA support via website_recaptcha (soft dependency, runtime detection)
+
+### Changed
+- New Settings page (priority 20) holds all config, notifications, and OTP settings
+- Gateway page slimmed to: credentials, sender ID, test mode, test SMS only
+- Menu reorder: Dashboard, Settings, Gateway, Templates, Logs, Help
+- Added auth_signup to module dependencies
+- Added 'otp' to recipient_type on SMS log
+- Module version bumped to 19.0.4.0.0
+
 ## [0.3.0] - 2026-03-16
 
 ### Added
