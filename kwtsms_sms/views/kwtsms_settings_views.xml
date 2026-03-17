@@ -125,6 +125,62 @@
                             </div>
                         </div>
 
+                        <!-- Section: OTP / Two-Factor Authentication -->
+                        <div class="kwtsms_gw_section">
+                            <div class="kwtsms_gw_section_title">
+                                <i class="fa fa-lock" title="OTP"/> OTP / Two-Factor Authentication
+                            </div>
+                            <div class="kwtsms_gw_section_body">
+                                <!-- General -->
+                                <h4 class="mt-0 mb-3">General</h4>
+                                <group>
+                                    <group>
+                                        <field name="cfg_otp_mode"/>
+                                        <field name="cfg_otp_length"/>
+                                    </group>
+                                    <group>
+                                        <field name="cfg_otp_expiry_minutes"/>
+                                    </group>
+                                </group>
+
+                                <!-- Login -->
+                                <h4 class="mb-3">Login</h4>
+                                <group>
+                                    <group>
+                                        <field name="cfg_otp_portal_login"/>
+                                        <field name="cfg_otp_backend_login"/>
+                                    </group>
+                                    <group>
+                                        <field name="cfg_otp_passwordless"/>
+                                    </group>
+                                </group>
+
+                                <!-- Verification -->
+                                <h4 class="mb-3">Verification</h4>
+                                <group>
+                                    <group>
+                                        <field name="cfg_otp_signup"/>
+                                        <field name="cfg_otp_password_reset"/>
+                                    </group>
+                                    <group/>
+                                </group>
+
+                                <!-- Security -->
+                                <h4 class="mb-3">Security</h4>
+                                <group>
+                                    <group>
+                                        <field name="cfg_otp_max_attempts"/>
+                                        <field name="cfg_otp_lockout_minutes"/>
+                                        <field name="cfg_otp_cooldown_seconds"/>
+                                    </group>
+                                    <group>
+                                        <field name="cfg_otp_ip_daily_limit"/>
+                                        <field name="cfg_otp_remember_days"/>
+                                    </group>
+                                </group>
+                            </div>
+                        </div>
+
                         <field name="company_id" invisible="1"/>
                     </div>
                 </sheet>

@@ -227,6 +227,74 @@ class KwtSmsGatewayConfig(models.Model):
         compute='_compute_has_crm_module',
     )
 
+    # OTP / Two-Factor Authentication fields
+    cfg_otp_mode = fields.Selection(
+        selection=[('2fa', '2FA'), ('passwordless', 'Passwordless'), ('both', 'Both')],
+        string='OTP Mode',
+        compute='_compute_cfg_otp',
+        inverse='_inverse_cfg_otp_mode',
+    )
+    cfg_otp_length = fields.Integer(
+        string='OTP Length',
+        compute='_compute_cfg_otp',
+        inverse='_inverse_cfg_otp_length',
+    )
+    cfg_otp_expiry_minutes = fields.Integer(
+        string='OTP Expiry (minutes)',
+        compute='_compute_cfg_otp',
+        inverse='_inverse_cfg_otp_expiry_minutes',
+    )
+    cfg_otp_portal_login = fields.Boolean(
+        string='OTP for Portal Login',
+        compute='_compute_cfg_otp_toggles',
+        inverse='_inverse_cfg_otp_portal_login',
+    )
+    cfg_otp_backend_login = fields.Boolean(
+        string='OTP for Backend Login',
+        compute='_compute_cfg_otp_toggles',
+        inverse='_inverse_cfg_otp_backend_login',
+    )
+    cfg_otp_passwordless = fields.Boolean(
+        string='Passwordless Phone Login',
+        compute='_compute_cfg_otp_toggles',
+        inverse='_inverse_cfg_otp_passwordless',
+    )
+    cfg_otp_signup = fields.Boolean(
+        string='OTP for Signup',
+        compute='_compute_cfg_otp_toggles',
+        inverse='_inverse_cfg_otp_signup',
+    )
+    cfg_otp_password_reset = fields.Boolean(
+        string='OTP for Password Reset',
+        compute='_compute_cfg_otp_toggles',
+        inverse='_inverse_cfg_otp_password_reset',
+    )
+    cfg_otp_max_attempts = fields.Integer(
+        string='Max Failed Attempts',
+        compute='_compute_cfg_otp_security',
+        inverse='_inverse_cfg_otp_max_attempts',
+    )
+    cfg_otp_lockout_minutes = fields.Integer(
+        string='Lockout Duration (minutes)',
+        compute='_compute_cfg_otp_security',
+        inverse='_inverse_cfg_otp_lockout_minutes',
+    )
+    cfg_otp_cooldown_seconds = fields.Integer(
+        string='Resend Cooldown (seconds)',
+        compute='_compute_cfg_otp_security',
+        inverse='_inverse_cfg_otp_cooldown_seconds',
+    )
+    cfg_otp_ip_daily_limit = fields.Integer(
+        string='Max Requests per IP/Day',
+        compute='_compute_cfg_otp_security',
+        inverse='_inverse_cfg_otp_ip_daily_limit',
+    )
+    cfg_otp_remember_days = fields.Integer(
+        string='Remember Device (days)',
+        compute='_compute_cfg_otp_security',
+        inverse='_inverse_cfg_otp_remember_days',
+    )
+
     # ═══════════════════════════════════════
     # Compute methods for config proxy fields
     # ═══════════════════════════════════════
@@ -289,6 +357,31 @@ class KwtSmsGatewayConfig(models.Model):
         ], limit=1))
         for record in self:
             record.has_crm_module = installed
+
+    def _compute_cfg_otp(self):
+        ICP = self.env['ir.config_parameter'].sudo()
+        for record in self:
+            record.cfg_otp_mode = ICP.get_param('kwtsms.otp_mode', '2fa') or '2fa'
+            record.cfg_otp_length = int(ICP.get_param('kwtsms.otp_length', '6'))
+            record.cfg_otp_expiry_minutes = int(ICP.get_param('kwtsms.otp_expiry_minutes', '5'))
+
+    def _compute_cfg_otp_toggles(self):
+        ICP = self.env['ir.config_parameter'].sudo()
+        for record in self:
+            record.cfg_otp_portal_login = ICP.get_param('kwtsms.otp_portal_login', 'False') == 'True'
+            record.cfg_otp_backend_login = ICP.get_param('kwtsms.otp_backend_login', 'False') == 'True'
+            record.cfg_otp_passwordless = ICP.get_param('kwtsms.otp_passwordless', 'False') == 'True'
+            record.cfg_otp_signup = ICP.get_param('kwtsms.otp_signup', 'False') == 'True'
+            record.cfg_otp_password_reset = ICP.get_param('kwtsms.otp_password_reset', 'False') == 'True'
+
+    def _compute_cfg_otp_security(self):
+        ICP = self.env['ir.config_parameter'].sudo()
+        for record in self:
+            record.cfg_otp_max_attempts = int(ICP.get_param('kwtsms.otp_max_attempts', '3'))
+            record.cfg_otp_lockout_minutes = int(ICP.get_param('kwtsms.otp_lockout_minutes', '15'))
+            record.cfg_otp_cooldown_seconds = int(ICP.get_param('kwtsms.otp_cooldown_seconds', '60'))
+            record.cfg_otp_ip_daily_limit = int(ICP.get_param('kwtsms.otp_ip_daily_limit', '10'))
+            record.cfg_otp_remember_days = int(ICP.get_param('kwtsms.otp_remember_days', '30'))
 
     # ═══════════════════════════════════════
     # Inverse methods (write back to ir.config_parameter)
@@ -433,6 +526,71 @@ class KwtSmsGatewayConfig(models.Model):
         ICP = self.env['ir.config_parameter'].sudo()
         for record in self:
             ICP.set_param('kwtsms.overdue_invoice_days', str(record.cfg_overdue_invoice_days or 30))
+
+    def _inverse_cfg_otp_mode(self):
+        ICP = self.env['ir.config_parameter'].sudo()
+        for record in self:
+            ICP.set_param('kwtsms.otp_mode', record.cfg_otp_mode or '2fa')
+
+    def _inverse_cfg_otp_length(self):
+        ICP = self.env['ir.config_parameter'].sudo()
+        for record in self:
+            ICP.set_param('kwtsms.otp_length', str(record.cfg_otp_length or 6))
+
+    def _inverse_cfg_otp_expiry_minutes(self):
+        ICP = self.env['ir.config_parameter'].sudo()
+        for record in self:
+            ICP.set_param('kwtsms.otp_expiry_minutes', str(record.cfg_otp_expiry_minutes or 5))
+
+    def _inverse_cfg_otp_portal_login(self):
+        ICP = self.env['ir.config_parameter'].sudo()
+        for record in self:
+            ICP.set_param('kwtsms.otp_portal_login', 'True' if record.cfg_otp_portal_login else 'False')
+
+    def _inverse_cfg_otp_backend_login(self):
+        ICP = self.env['ir.config_parameter'].sudo()
+        for record in self:
+            ICP.set_param('kwtsms.otp_backend_login', 'True' if record.cfg_otp_backend_login else 'False')
+
+    def _inverse_cfg_otp_passwordless(self):
+        ICP = self.env['ir.config_parameter'].sudo()
+        for record in self:
+            ICP.set_param('kwtsms.otp_passwordless', 'True' if record.cfg_otp_passwordless else 'False')
+
+    def _inverse_cfg_otp_signup(self):
+        ICP = self.env['ir.config_parameter'].sudo()
+        for record in self:
+            ICP.set_param('kwtsms.otp_signup', 'True' if record.cfg_otp_signup else 'False')
+
+    def _inverse_cfg_otp_password_reset(self):
+        ICP = self.env['ir.config_parameter'].sudo()
+        for record in self:
+            ICP.set_param('kwtsms.otp_password_reset', 'True' if record.cfg_otp_password_reset else 'False')
+
+    def _inverse_cfg_otp_max_attempts(self):
+        ICP = self.env['ir.config_parameter'].sudo()
+        for record in self:
+            ICP.set_param('kwtsms.otp_max_attempts', str(record.cfg_otp_max_attempts or 3))
+
+    def _inverse_cfg_otp_lockout_minutes(self):
+        ICP = self.env['ir.config_parameter'].sudo()
+        for record in self:
+            ICP.set_param('kwtsms.otp_lockout_minutes', str(record.cfg_otp_lockout_minutes or 15))
+
+    def _inverse_cfg_otp_cooldown_seconds(self):
+        ICP = self.env['ir.config_parameter'].sudo()
+        for record in self:
+            ICP.set_param('kwtsms.otp_cooldown_seconds', str(record.cfg_otp_cooldown_seconds or 60))
+
+    def _inverse_cfg_otp_ip_daily_limit(self):
+        ICP = self.env['ir.config_parameter'].sudo()
+        for record in self:
+            ICP.set_param('kwtsms.otp_ip_daily_limit', str(record.cfg_otp_ip_daily_limit or 10))
+
+    def _inverse_cfg_otp_remember_days(self):
+        ICP = self.env['ir.config_parameter'].sudo()
+        for record in self:
+            ICP.set_param('kwtsms.otp_remember_days', str(record.cfg_otp_remember_days or 30))
 
     # ═══════════════════════════════════════
     # Selection builders
