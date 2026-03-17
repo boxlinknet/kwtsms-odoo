@@ -8,6 +8,14 @@
               web_icon="kwtsms_sms,static/description/icon.png"
               groups="kwtsms_sms.group_kwtsms_manager,base.group_system"/>
 
+    <!-- Settings (system admin only) -->
+    <menuitem id="menu_kwtsms_settings"
+              name="Settings"
+              parent="menu_kwtsms_root"
+              action="action_kwtsms_settings"
+              sequence="5"
+              groups="base.group_system"/>
+
     <!-- Gateway (system admin only) -->
     <menuitem id="menu_kwtsms_gateway"
               name="Gateway"

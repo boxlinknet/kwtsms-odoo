@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Settings Form View -->
+    <record id="view_kwtsms_settings_form" model="ir.ui.view">
+        <field name="name">kwtsms.gateway.config.settings</field>
+        <field name="model">kwtsms.gateway.config</field>
+        <field name="priority">20</field>
+        <field name="arch" type="xml">
+            <form string="Settings" create="false" delete="false" duplicate="false">
+                <sheet>
+                    <div class="kwtsms_gateway_page">
+
+                        <!-- Section: General Settings -->
+                        <div class="kwtsms_gw_section">
+                            <div class="kwtsms_gw_section_title">
+                                <i class="fa fa-cog" title="Settings"/> General Settings
+                            </div>
+                            <div class="kwtsms_gw_section_body">
+                                <group>
+                                    <group>
+                                        <field name="cfg_enabled"/>
+                                        <field name="cfg_default_country_code"/>
+                                    </group>
+                                    <group>
+                                        <label for="cfg_log_retention_days"/>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <field name="cfg_log_retention_days"
+                                                   style="max-width: 80px;"/>
+                                            <span>days</span>
+                                        </div>
+                                    </group>
+                                </group>
+                            </div>
+                        </div>
+
+                        <!-- Section: Customer Notifications -->
+                        <div class="kwtsms_gw_section">
+                            <div class="kwtsms_gw_section_title">
+                                <i class="fa fa-bell" title="Customer Notifications"/> Customer Notifications
+                            </div>
+                            <div class="kwtsms_gw_section_body">
+                                <group>
+                                    <group string="Sales">
+                                        <field name="cfg_auto_order_confirm"/>
+                                        <field name="cfg_auto_order_cancel"/>
+                                    </group>
+                                    <group string="Inventory">
+                                        <field name="cfg_auto_delivery_done"/>
+                                    </group>
+                                </group>
+                                <group>
+                                    <group string="Accounting">
+                                        <field name="cfg_auto_invoice_posted"/>
+                                        <field name="cfg_auto_payment_received"/>
+                                    </group>
+                                    <group/>
+                                </group>
+                            </div>
+                        </div>
+
+                        <!-- Section: Admin Notifications -->
+                        <div class="kwtsms_gw_section">
+                            <div class="kwtsms_gw_section_title">
+                                <i class="fa fa-bullhorn" title="Admin Notifications"/> Admin Notifications
+                            </div>
+                            <div class="kwtsms_gw_section_body">
+                                <group>
+                                    <field name="cfg_admin_phone"
+                                           placeholder="Global admin phone number"/>
+                                </group>
+
+                                <!-- Sales admin -->
+                                <group string="Sales">
+                                    <field name="cfg_admin_phone_sales"
+                                           placeholder="Override phone for sales alerts"/>
+                                    <field name="cfg_auto_admin_new_quotation"/>
+                                    <field name="cfg_auto_admin_order_cancelled"/>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <field name="cfg_auto_admin_large_order"/>
+                                        <label for="cfg_large_order_threshold" string="Threshold"/>
+                                        <field name="cfg_large_order_threshold"
+                                               style="max-width: 100px;"/>
+                                    </div>
+                                </group>
+
+                                <!-- Inventory admin -->
+                                <group string="Inventory">
+                                    <field name="cfg_admin_phone_inventory"
+                                           placeholder="Override phone for inventory alerts"/>
+                                    <field name="cfg_auto_admin_low_stock"/>
+                                    <field name="cfg_auto_admin_incoming_shipment"/>
+                                </group>
+
+                                <!-- Accounting admin -->
+                                <group string="Accounting">
+                                    <field name="cfg_admin_phone_accounting"
+                                           placeholder="Override phone for accounting alerts"/>
+                                    <field name="cfg_auto_admin_payment_received"/>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <field name="cfg_auto_admin_invoice_overdue"/>
+                                        <label for="cfg_overdue_invoice_days" string="Days overdue"/>
+                                        <field name="cfg_overdue_invoice_days"
+                                               style="max-width: 80px;"/>
+                                    </div>
+                                </group>
+
+                                <!-- CRM admin -->
+                                <field name="has_crm_module" invisible="1"/>
+                                <group>
+                                    <group string="CRM">
+                                        <span invisible="has_crm_module"
+                                              class="text-muted fst-italic mb-2 d-block">
+                                            CRM module not installed
+                                        </span>
+                                        <field name="cfg_admin_phone_crm"
+                                               placeholder="Override phone for CRM alerts"
+                                               readonly="not has_crm_module"/>
+                                        <field name="cfg_auto_admin_new_lead"
+                                               readonly="not has_crm_module"/>
+                                        <field name="cfg_auto_admin_lead_stage_changed"
+                                               readonly="not has_crm_module"/>
+                                    </group>
+                                    <group/>
+                                </group>
+                            </div>
+                        </div>
+
+                        <field name="company_id" invisible="1"/>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Server Action: Open Settings -->
+    <record id="action_kwtsms_settings" model="ir.actions.server">
+        <field name="name">Settings</field>
+        <field name="model_id" ref="model_kwtsms_gateway_config"/>
+        <field name="state">code</field>
+        <field name="code">action = model._action_open_settings()</field>
+    </record>
+</odoo>

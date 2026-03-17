@@ -802,6 +802,22 @@ class KwtSmsGatewayConfig(models.Model):
         }
 
     @api.model
+    def _action_open_settings(self):
+        """Open the settings form."""
+        config = self._get_or_create()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Settings'),
+            'res_model': 'kwtsms.gateway.config',
+            'view_mode': 'form',
+            'res_id': config.id,
+            'target': 'main',
+            'view_id': self.env.ref('kwtsms_sms.view_kwtsms_settings_form').id,
+            'context': {'kwtsms_page_title': _('Settings')},
+            'path': 'kwtsms-settings',
+        }
+
+    @api.model
     def _action_open_gateway(self):
         """Open the gateway configuration form."""
         config = self._get_or_create()
@@ -834,6 +850,15 @@ class KwtSmsGatewayConfig(models.Model):
                 'kwtsms_page_title': _('Help'),
             },
             'path': 'kwtsms-help',
+        }
+
+    def action_goto_settings(self):
+        """Navigate to Settings page via its server action."""
+        action = self.env.ref('kwtsms_sms.action_kwtsms_settings')
+        return {
+            'type': 'ir.actions.act_url',
+            'url': '/odoo/action-%d' % action.id,
+            'target': 'self',
         }
 
     def action_goto_gateway(self):

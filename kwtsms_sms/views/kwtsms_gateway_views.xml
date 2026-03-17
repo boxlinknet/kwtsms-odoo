@@ -5,7 +5,6 @@
         <field name="name">kwtsms.gateway.config.gateway</field>
         <field name="model">kwtsms.gateway.config</field>
         <field name="priority">50</field>
-        <!-- Gateway form is secondary; dashboard (priority 10) is the default -->
         <field name="arch" type="xml">
             <form string="Gateway" create="false" delete="false" duplicate="false">
                 <sheet>
@@ -52,30 +51,6 @@
                             <field name="api_error" readonly="1"/>
                         </div>
 
-                        <!-- Section: General Settings -->
-                        <div class="kwtsms_gw_section">
-                            <div class="kwtsms_gw_section_title">
-                                <i class="fa fa-cog" title="Settings"/> General Settings
-                            </div>
-                            <div class="kwtsms_gw_section_body">
-                                <group>
-                                    <group>
-                                        <field name="cfg_enabled"/>
-                                        <field name="cfg_test_mode"/>
-                                    </group>
-                                    <group>
-                                        <field name="cfg_default_country_code"/>
-                                        <label for="cfg_log_retention_days"/>
-                                        <div class="d-flex align-items-center gap-2">
-                                            <field name="cfg_log_retention_days"
-                                                   style="max-width: 80px;"/>
-                                            <span>days</span>
-                                        </div>
-                                    </group>
-                                </group>
-                            </div>
-                        </div>
-
                         <!-- Section: Gateway Credentials -->
                         <div class="kwtsms_gw_section">
                             <div class="kwtsms_gw_section_title">
@@ -91,6 +66,7 @@
                                     </group>
                                     <group>
                                         <field name="cfg_sender_id"/>
+                                        <field name="cfg_test_mode"/>
                                     </group>
                                 </group>
                                 <div class="kwtsms_gw_actions">
@@ -112,97 +88,6 @@
                                             class="btn-secondary"
                                             icon="fa-refresh"/>
                                 </div>
-                            </div>
-                        </div>
-
-                        <!-- Section: SMS Notifications -->
-                        <div class="kwtsms_gw_section">
-                            <div class="kwtsms_gw_section_title">
-                                <i class="fa fa-bell" title="Notifications"/> SMS Notifications
-                            </div>
-                            <div class="kwtsms_gw_section_body">
-                                <!-- Customer Notifications (existing toggles) -->
-                                <h4 class="mt-0 mb-3">Customer Notifications</h4>
-                                <group>
-                                    <group string="Sales">
-                                        <field name="cfg_auto_order_confirm"/>
-                                        <field name="cfg_auto_order_cancel"/>
-                                    </group>
-                                    <group string="Inventory">
-                                        <field name="cfg_auto_delivery_done"/>
-                                    </group>
-                                </group>
-                                <group>
-                                    <group string="Accounting">
-                                        <field name="cfg_auto_invoice_posted"/>
-                                        <field name="cfg_auto_payment_received"/>
-                                    </group>
-                                    <group/>
-                                </group>
-
-                                <hr class="my-4"/>
-
-                                <!-- Admin Notifications (new) -->
-                                <h4 class="mb-3">Admin Notifications</h4>
-
-                                <group>
-                                    <field name="cfg_admin_phone"
-                                           placeholder="Global admin phone number"/>
-                                </group>
-
-                                <!-- Sales admin -->
-                                <group string="Sales">
-                                    <field name="cfg_admin_phone_sales"
-                                           placeholder="Override phone for sales alerts"/>
-                                    <field name="cfg_auto_admin_new_quotation"/>
-                                    <field name="cfg_auto_admin_order_cancelled"/>
-                                    <div class="d-flex align-items-center gap-2">
-                                        <field name="cfg_auto_admin_large_order"/>
-                                        <label for="cfg_large_order_threshold" string="Threshold"/>
-                                        <field name="cfg_large_order_threshold"
-                                               style="max-width: 100px;"/>
-                                    </div>
-                                </group>
-
-                                <!-- Inventory admin -->
-                                <group string="Inventory">
-                                    <field name="cfg_admin_phone_inventory"
-                                           placeholder="Override phone for inventory alerts"/>
-                                    <field name="cfg_auto_admin_low_stock"/>
-                                    <field name="cfg_auto_admin_incoming_shipment"/>
-                                </group>
-
-                                <!-- Accounting admin -->
-                                <group string="Accounting">
-                                    <field name="cfg_admin_phone_accounting"
-                                           placeholder="Override phone for accounting alerts"/>
-                                    <field name="cfg_auto_admin_payment_received"/>
-                                    <div class="d-flex align-items-center gap-2">
-                                        <field name="cfg_auto_admin_invoice_overdue"/>
-                                        <label for="cfg_overdue_invoice_days" string="Days overdue"/>
-                                        <field name="cfg_overdue_invoice_days"
-                                               style="max-width: 80px;"/>
-                                    </div>
-                                </group>
-
-                                <!-- CRM admin (disabled+note if crm not installed) -->
-                                <field name="has_crm_module" invisible="1"/>
-                                <group>
-                                    <group string="CRM">
-                                        <span invisible="has_crm_module"
-                                              class="text-muted fst-italic mb-2 d-block">
-                                            CRM module not installed
-                                        </span>
-                                        <field name="cfg_admin_phone_crm"
-                                               placeholder="Override phone for CRM alerts"
-                                               readonly="not has_crm_module"/>
-                                        <field name="cfg_auto_admin_new_lead"
-                                               readonly="not has_crm_module"/>
-                                        <field name="cfg_auto_admin_lead_stage_changed"
-                                               readonly="not has_crm_module"/>
-                                    </group>
-                                    <group/>
-                                </group>
                             </div>
                         </div>
 
