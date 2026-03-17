@@ -58,4 +58,52 @@
             </form>
         </t>
     </template>
+
+    <!-- Extend login page to add phone login option -->
+    <template id="kwtsms_login_phone_option" inherit_id="web.login" name="kwtSMS Phone Login">
+        <xpath expr="//div[@id='oe_structure_login_bottom']" position="inside">
+            <t t-if="request.env['ir.config_parameter'].sudo().get_param('kwtsms.otp_passwordless', 'False') == 'True'">
+                <div class="text-center my-3">
+                    <span class="text-muted">or</span>
+                </div>
+                <form method="POST" action="/kwtsms/otp/phone-login" class="oe_login_form">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Login with Phone</label>
+                        <div class="input-group">
+                            <span class="input-group-text">+</span>
+                            <input type="text" name="country_code"
+                                   class="form-control" style="max-width: 80px;"
+                                   t-att-value="request.env['ir.config_parameter'].sudo().get_param('kwtsms.default_country_code', '965')"
+                                   placeholder="965"/>
+                            <input type="tel" name="phone"
+                                   class="form-control"
+                                   placeholder="Phone number"
+                                   inputmode="numeric"/>
+                        </div>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-outline-primary">
+                            Send Verification Code
+                        </button>
+                    </div>
+                    <t t-if="request.params.get('kwtsms_phone_error') == 'invalid'">
+                        <div class="alert alert-danger mt-2" role="alert">
+                            Please enter a valid phone number.
+                        </div>
+                    </t>
+                    <t t-if="request.params.get('kwtsms_phone_sent')">
+                        <div class="alert alert-info mt-2" role="alert">
+                            If this number is registered, a code has been sent.
+                        </div>
+                    </t>
+                    <t t-if="request.params.get('kwtsms_phone_error') == 'send_failed'">
+                        <div class="alert alert-danger mt-2" role="alert">
+                            Could not send code. Please try again.
+                        </div>
+                    </t>
+                </form>
+            </t>
+        </xpath>
+    </template>
 </odoo>

@@ -401,6 +401,77 @@ class KwtSmsOtpController(http.Controller):
             'can_resend': True,
         })
 
+    @http.route('/kwtsms/otp/phone-login', type='http', auth='public',
+                methods=['POST'], sitemap=False, csrf=True)
+    def otp_phone_login(self, **kwargs):
+        """Handle passwordless phone login: lookup user by phone, send OTP."""
+        ICP = request.env['ir.config_parameter'].sudo()
+        if ICP.get_param('kwtsms.otp_passwordless', 'False') != 'True':
+            return request.redirect('/web/login')
+        if ICP.get_param('kwtsms.enabled', 'False') != 'True':
+            return request.redirect('/web/login')
+
+        phone_input = kwargs.get('phone', '').strip()
+        country_code = kwargs.get('country_code', '').strip()
+        if not country_code:
+            country_code = ICP.get_param('kwtsms.default_country_code', '965')
+
+        config = self._get_otp_config()
+
+        # Validate phone format
+        from odoo.addons.kwtsms_sms.tools.phone_utils import prepare_phone
+        normalized, error = prepare_phone(phone_input, country_code)
+        if error:
+            # Clear format error - not enumeration risk
+            return request.redirect('/web/login?kwtsms_phone_error=invalid')
+
+        # Look up user by normalized phone
+        Partner = request.env['res.partner'].sudo()
+        partners = Partner.search([
+            ('kwtsms_phone_normalized', '=', normalized),
+        ])
+        users = request.env['res.users'].sudo().search([
+            ('partner_id', 'in', partners.ids),
+            ('active', '=', True),
+        ])
+
+        if len(users) > 1:
+            self._log_otp(
+                'ambiguous_phone', phone=normalized, otp_type='passwordless',
+                error_reason='multiple users match',
+            )
+            # Generic message (anti-enumeration)
+            return request.redirect('/web/login?kwtsms_phone_sent=1')
+
+        if not users:
+            self._log_otp(
+                'user_not_found', phone=normalized, otp_type='passwordless',
+            )
+            # Generic message (anti-enumeration)
+            return request.redirect('/web/login?kwtsms_phone_sent=1')
+
+        user = users[0]
+
+        # Check rate limits
+        rate_error = self._check_rate_limits(normalized, config)
+        if rate_error:
+            self._log_otp(
+                'request', phone=normalized, user_id=user.id,
+                otp_type='passwordless', error_reason='rate limited',
+            )
+            return request.redirect('/web/login?kwtsms_phone_sent=1')
+
+        # Generate and send OTP
+        send_error = self._create_and_send_otp(
+            normalized, 'passwordless', user.id, config,
+        )
+        if send_error:
+            return request.redirect('/web/login?kwtsms_phone_error=send_failed')
+
+        # Store user ID in session for verify flow
+        request.session['kwtsms_otp_passwordless_uid'] = user.id
+        return request.redirect('/kwtsms/otp/verify')
+
     @http.route('/kwtsms/otp/resend', type='http', auth='public',
                 methods=['POST'], sitemap=False, csrf=True)
     def otp_resend(self, **kwargs):
