@@ -40,5 +40,34 @@
                 ('company_id', 'in', company_ids),
             ]</field>
         </record>
+
+        <!-- OTP Token: company isolation -->
+        <record id="rule_kwtsms_otp_token_company" model="ir.rule">
+            <field name="name">kwtSMS OTP Token: Company</field>
+            <field name="model_id" ref="model_kwtsms_otp_token"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <!-- OTP Device: company isolation -->
+        <record id="rule_kwtsms_otp_device_company" model="ir.rule">
+            <field name="name">kwtSMS OTP Device: Company</field>
+            <field name="model_id" ref="model_kwtsms_otp_device"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <!-- OTP Device: users see own devices -->
+        <record id="rule_kwtsms_otp_device_own" model="ir.rule">
+            <field name="name">kwtSMS OTP Device: Own</field>
+            <field name="model_id" ref="model_kwtsms_otp_device"/>
+            <field name="domain_force">[('user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <!-- OTP Log: company isolation -->
+        <record id="rule_kwtsms_otp_log_company" model="ir.rule">
+            <field name="name">kwtSMS OTP Log: Company</field>
+            <field name="model_id" ref="model_kwtsms_otp_log"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
     </data>
 </odoo>

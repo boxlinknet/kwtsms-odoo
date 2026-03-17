@@ -76,6 +76,7 @@ class KwtSmsLog(models.Model):
     recipient_type = fields.Selection([
         ('customer', 'Customer'),
         ('admin', 'Admin'),
+        ('otp', 'OTP'),
     ], string='Recipient Type', default='customer', index=True)
     company_id = fields.Many2one(
         'res.company',

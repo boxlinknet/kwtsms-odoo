@@ -10,3 +10,7 @@ access_kwtsms_sms_template_user,kwtsms.sms.template.user,model_kwtsms_sms_templa
 access_kwtsms_sms_compose_system,kwtsms.sms.compose.system,model_kwtsms_sms_compose,base.group_system,1,1,1,1
 access_kwtsms_sms_compose_manager,kwtsms.sms.compose.manager,model_kwtsms_sms_compose,kwtsms_sms.group_kwtsms_manager,1,1,1,1
 access_kwtsms_test_sms_wizard_system,kwtsms.test.sms.wizard.system,model_kwtsms_test_sms_wizard,base.group_system,1,1,1,1
+access_kwtsms_otp_token_system,kwtsms.otp.token system,model_kwtsms_otp_token,base.group_system,1,1,1,1
+access_kwtsms_otp_device_system,kwtsms.otp.device system,model_kwtsms_otp_device,base.group_system,1,1,1,1
+access_kwtsms_otp_device_user,kwtsms.otp.device user,model_kwtsms_otp_device,base.group_user,1,0,0,1
+access_kwtsms_otp_log_system,kwtsms.otp.log system,model_kwtsms_otp_log,base.group_system,1,0,1,1
