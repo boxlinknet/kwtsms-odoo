@@ -44,6 +44,7 @@ Send SMS via Kuwait's leading SMS gateway directly from Odoo. Features:
         'views/kwtsms_dashboard_views.xml',
         'wizard/sms_compose_wizard_views.xml',
         'wizard/test_sms_wizard_views.xml',
+        'views/kwtsms_otp_templates.xml',
         'views/menu.xml',
     ],
     'assets': {

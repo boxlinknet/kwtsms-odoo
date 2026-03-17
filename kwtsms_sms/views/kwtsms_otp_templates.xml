@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="kwtsms_otp_verify_template" name="kwtSMS OTP Verify">
+        <t t-call="web.login_layout">
+            <form method="POST" action="/kwtsms/otp/verify" class="oe_login_form">
+                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+
+                <div class="mb-3 text-center">
+                    <h4>Verify Your Identity</h4>
+                    <p class="text-muted">
+                        Enter the verification code sent to your phone
+                        <t t-if="phone_masked">
+                            ending in <strong t-esc="phone_masked"/>
+                        </t>
+                    </p>
+                </div>
+
+                <div t-if="error" class="alert alert-danger mb-3" role="alert">
+                    <t t-esc="error"/>
+                </div>
+
+                <div t-if="message" class="alert alert-info mb-3" role="alert">
+                    <t t-esc="message"/>
+                </div>
+
+                <div class="mb-3">
+                    <label for="otp_code" class="form-label">Verification Code</label>
+                    <input type="text" name="otp_code" id="otp_code"
+                           class="form-control form-control-lg text-center"
+                           maxlength="8" pattern="[0-9]*" inputmode="numeric"
+                           autocomplete="one-time-code" autofocus="autofocus"
+                           placeholder="Enter code" required="required"/>
+                </div>
+
+                <div class="mb-3 d-grid">
+                    <button type="submit" class="btn btn-primary btn-lg">Verify</button>
+                </div>
+
+                <div class="text-center">
+                    <t t-if="can_resend">
+                        <form method="POST" action="/kwtsms/otp/resend" class="d-inline">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <button type="submit" class="btn btn-link">Resend Code</button>
+                        </form>
+                    </t>
+                    <t t-else="">
+                        <span class="text-muted">
+                            Resend available in <span id="cooldown_timer" t-att-data-seconds="cooldown_remaining">
+                                <t t-esc="cooldown_remaining"/>
+                            </span>s
+                        </span>
+                    </t>
+                </div>
+
+                <div class="text-center mt-3">
+                    <a href="/web/session/logout" class="btn btn-link text-muted">Cancel</a>
+                </div>
+            </form>
+        </t>
+    </template>
+</odoo>
