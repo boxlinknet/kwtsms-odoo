@@ -39,6 +39,7 @@ class KwtSmsOtpLog(models.Model):
         ('device_trusted', 'Device Trusted'),
         ('device_skip', 'Device Skip'),
         ('device_revoked', 'Device Revoked'),
+        ('password_changed', 'Password Changed'),
     ], string='Action', index=True, required=True)
     error_reason = fields.Char(string='Error Reason')
     user_agent = fields.Char(string='User Agent')

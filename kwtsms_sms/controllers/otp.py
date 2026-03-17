@@ -253,6 +253,11 @@ class KwtSmsOtpController(http.Controller):
         if signup_pending:
             return self._otp_verify_signup(kwargs)
 
+        # Check for password reset flow
+        reset_pending = request.session.get('kwtsms_otp_reset_pending')
+        if reset_pending:
+            return self._otp_verify_reset(kwargs)
+
         # Get pre_uid from session (set by Odoo MFA framework)
         pre_uid = request.session.get('pre_uid')
         passwordless_uid = request.session.get('kwtsms_otp_passwordless_uid')
@@ -380,6 +385,125 @@ class KwtSmsOtpController(http.Controller):
         remaining = config['max_attempts'] - token.attempt_count - 1
         self._log_otp(
             'verify_failed', phone=phone, otp_type='signup',
+        )
+        return self._render_otp_page({
+            'error': _(
+                'Invalid code. %d attempt(s) remaining.'
+            ) % max(remaining, 0),
+            'phone_masked': self._mask_phone(phone),
+            'can_resend': True,
+        })
+
+    def _otp_verify_reset(self, kwargs):
+        """Handle OTP verify for password reset flow."""
+        phone = request.session.get('kwtsms_otp_reset_phone', '')
+        uid = request.session.get('kwtsms_otp_reset_uid')
+        if not phone or not uid:
+            return request.redirect('/web/login')
+
+        config = self._get_otp_config()
+
+        if request.httprequest.method == 'GET':
+            return self._render_otp_page({
+                'message': _('Verification code sent.'),
+                'phone_masked': self._mask_phone(phone),
+                'cooldown_remaining': config['cooldown_seconds'],
+            })
+
+        # POST: verify code
+        otp_code = kwargs.get('otp_code', '').strip()
+        if not otp_code:
+            return self._render_otp_page({
+                'error': _('Please enter the verification code.'),
+                'phone_masked': self._mask_phone(phone),
+                'can_resend': True,
+            })
+
+        Token = request.env['kwtsms.otp.token'].sudo()
+        token = Token.search([
+            ('phone', '=', phone),
+            ('otp_type', '=', 'password_reset'),
+            ('state', '=', 'pending'),
+        ], order='create_date desc', limit=1)
+
+        if not token:
+            return self._render_otp_page({
+                'error': _('Code expired. Please request a new one.'),
+                'phone_masked': self._mask_phone(phone),
+                'can_resend': True,
+            })
+
+        # Check expiry
+        if token.expires_at and token.expires_at < fields.Datetime.now():
+            token.write({'state': 'expired'})
+            self._log_otp(
+                'expired', phone=phone, user_id=uid,
+                otp_type='password_reset',
+            )
+            return self._render_otp_page({
+                'error': _('Code expired. Please request a new one.'),
+                'phone_masked': self._mask_phone(phone),
+                'can_resend': True,
+            })
+
+        # Check lockout
+        if token.attempt_count >= config['max_attempts']:
+            lockout_until = token.create_date + timedelta(
+                minutes=config['lockout_minutes'],
+            )
+            if fields.Datetime.now() < lockout_until:
+                token.write({'state': 'locked'})
+                self._log_otp(
+                    'locked_out', phone=phone, user_id=uid,
+                    otp_type='password_reset',
+                )
+                return self._render_otp_page({
+                    'error': _(
+                        'Too many attempts. Try again in %d minutes.'
+                    ) % config['lockout_minutes'],
+                    'phone_masked': self._mask_phone(phone),
+                })
+            else:
+                token.write({'state': 'locked'})
+                self._log_otp(
+                    'expired', phone=phone, user_id=uid,
+                    otp_type='password_reset',
+                )
+                return self._render_otp_page({
+                    'error': _('Code expired. Please request a new one.'),
+                    'phone_masked': self._mask_phone(phone),
+                    'can_resend': True,
+                })
+
+        # Verify OTP
+        if verify_otp(otp_code, token.otp_hash):
+            token.write({'state': 'verified'})
+            self._log_otp(
+                'verify_ok', phone=phone, user_id=uid,
+                otp_type='password_reset',
+            )
+
+            # Store proof in session for password change
+            proof = json.dumps({
+                'user_id': uid,
+                'verified_at': datetime.utcnow().isoformat(),
+                'nonce': secrets.token_hex(16),
+            })
+            request.session['kwtsms_otp_reset_verified'] = proof
+
+            # Clean up pending state
+            request.session.pop('kwtsms_otp_reset_pending', None)
+            request.session.pop('kwtsms_otp_reset_phone', None)
+
+            # Redirect to password change form
+            return request.redirect('/kwtsms/otp/new-password')
+
+        # Wrong code
+        token.write({'attempt_count': token.attempt_count + 1})
+        remaining = config['max_attempts'] - token.attempt_count - 1
+        self._log_otp(
+            'verify_failed', phone=phone, user_id=uid,
+            otp_type='password_reset',
         )
         return self._render_otp_page({
             'error': _(
@@ -601,6 +725,11 @@ class KwtSmsOtpController(http.Controller):
         if signup_pending:
             return self._otp_resend_signup()
 
+        # Handle password reset flow resend
+        reset_pending = request.session.get('kwtsms_otp_reset_pending')
+        if reset_pending:
+            return self._otp_resend_reset()
+
         pre_uid = request.session.get('pre_uid')
         passwordless_uid = request.session.get('kwtsms_otp_passwordless_uid')
         uid = pre_uid or passwordless_uid
@@ -655,6 +784,187 @@ class KwtSmsOtpController(http.Controller):
         self._create_and_send_otp(phone, 'signup', None, config)
         self._log_otp('resend', phone=phone, otp_type='signup')
         return request.redirect('/kwtsms/otp/verify')
+
+
+    def _otp_resend_reset(self):
+        """Resend OTP for password reset flow."""
+        phone = request.session.get('kwtsms_otp_reset_phone', '')
+        uid = request.session.get('kwtsms_otp_reset_uid')
+        if not phone or not uid:
+            return request.redirect('/web/login')
+
+        config = self._get_otp_config()
+
+        # Check rate limits
+        rate_error = self._check_rate_limits(phone, config)
+        if rate_error:
+            self._log_otp(
+                'resend', phone=phone, user_id=uid,
+                otp_type='password_reset', error_reason='cooldown',
+            )
+            return request.redirect('/kwtsms/otp/verify')
+
+        # Generate and send new OTP (invalidates previous)
+        self._create_and_send_otp(phone, 'password_reset', uid, config)
+        self._log_otp(
+            'resend', phone=phone, user_id=uid,
+            otp_type='password_reset',
+        )
+        return request.redirect('/kwtsms/otp/verify')
+
+
+class KwtSmsResetController(http.Controller):
+    """Handle phone-based password reset via OTP."""
+
+    @http.route('/kwtsms/otp/reset-password', type='http', auth='public',
+                methods=['POST'], sitemap=False, csrf=True)
+    def otp_reset_password(self, **kwargs):
+        """Handle phone-based password reset: lookup user, send OTP."""
+        ICP = request.env['ir.config_parameter'].sudo()
+        if ICP.get_param('kwtsms.otp_password_reset', 'False') != 'True':
+            return request.redirect('/web/login')
+        if ICP.get_param('kwtsms.enabled', 'False') != 'True':
+            return request.redirect('/web/login')
+
+        phone_input = kwargs.get('phone', '').strip()
+        country_code = kwargs.get('country_code', '').strip()
+        if not country_code:
+            country_code = ICP.get_param('kwtsms.default_country_code', '965')
+
+        # Validate phone format
+        from odoo.addons.kwtsms_sms.tools.phone_utils import prepare_phone
+        normalized, error = prepare_phone(phone_input, country_code)
+        if error:
+            return request.redirect(
+                '/web/login?kwtsms_reset_error=invalid_phone',
+            )
+
+        otp_ctrl = KwtSmsOtpController()
+        config = otp_ctrl._get_otp_config()
+
+        # Look up user by phone (anti-enumeration: generic message regardless)
+        Partner = request.env['res.partner'].sudo()
+        partners = Partner.search([
+            ('kwtsms_phone_normalized', '=', normalized),
+        ])
+        users = request.env['res.users'].sudo().search([
+            ('partner_id', 'in', partners.ids),
+            ('active', '=', True),
+        ])
+
+        if len(users) != 1:
+            # Log but show generic message
+            action = 'ambiguous_phone' if len(users) > 1 else 'user_not_found'
+            otp_ctrl._log_otp(
+                action, phone=normalized, otp_type='password_reset',
+            )
+            return request.redirect('/web/login?kwtsms_reset_sent=1')
+
+        user = users[0]
+
+        # Rate limits
+        rate_error = otp_ctrl._check_rate_limits(normalized, config)
+        if rate_error:
+            # Show generic message (anti-enumeration)
+            return request.redirect('/web/login?kwtsms_reset_sent=1')
+
+        # Generate and send OTP
+        send_error = otp_ctrl._create_and_send_otp(
+            normalized, 'password_reset', user.id, config,
+        )
+        if send_error:
+            return request.redirect(
+                '/web/login?kwtsms_reset_error=send_failed',
+            )
+
+        # Store in session for verify flow
+        request.session['kwtsms_otp_reset_uid'] = user.id
+        request.session['kwtsms_otp_reset_phone'] = normalized
+        request.session['kwtsms_otp_reset_pending'] = True
+        return request.redirect('/kwtsms/otp/verify')
+
+    @http.route('/kwtsms/otp/new-password', type='http', auth='public',
+                methods=['GET', 'POST'], sitemap=False, csrf=True)
+    def otp_new_password(self, **kwargs):
+        """Show and handle the new password form after OTP verification."""
+        proof_raw = request.session.get('kwtsms_otp_reset_verified')
+        if not proof_raw:
+            return request.redirect('/web/login')
+
+        # Validate proof freshness (10 minute window)
+        try:
+            proof = json.loads(proof_raw) if isinstance(
+                proof_raw, str,
+            ) else proof_raw
+            verified_at = datetime.fromisoformat(proof.get('verified_at', ''))
+            if (datetime.utcnow() - verified_at).total_seconds() > 600:
+                request.session.pop('kwtsms_otp_reset_verified', None)
+                return request.redirect('/web/login?kwtsms_reset_error=expired')
+        except (json.JSONDecodeError, ValueError, TypeError):
+            request.session.pop('kwtsms_otp_reset_verified', None)
+            return request.redirect('/web/login')
+
+        uid = proof.get('user_id')
+        user = request.env['res.users'].sudo().browse(uid)
+        if not user.exists():
+            request.session.pop('kwtsms_otp_reset_verified', None)
+            return request.redirect('/web/login')
+
+        if request.httprequest.method == 'GET':
+            return request.render(
+                'kwtsms_sms.kwtsms_otp_new_password_template', {
+                    'error': None,
+                },
+            )
+
+        # POST: set new password
+        password = kwargs.get('password', '')
+        confirm_password = kwargs.get('confirm_password', '')
+
+        if not password:
+            return request.render(
+                'kwtsms_sms.kwtsms_otp_new_password_template', {
+                    'error': _('Please enter a new password.'),
+                },
+            )
+
+        if len(password) < 8:
+            return request.render(
+                'kwtsms_sms.kwtsms_otp_new_password_template', {
+                    'error': _('Password must be at least 8 characters.'),
+                },
+            )
+
+        if password != confirm_password:
+            return request.render(
+                'kwtsms_sms.kwtsms_otp_new_password_template', {
+                    'error': _('Passwords do not match.'),
+                },
+            )
+
+        # Set the new password
+        try:
+            user.write({'password': password})
+        except Exception as e:
+            _logger.error('kwtSMS OTP: Password reset failed: %s', e)
+            return request.render(
+                'kwtsms_sms.kwtsms_otp_new_password_template', {
+                    'error': _(
+                        'Could not set password. Please try again.',
+                    ),
+                },
+            )
+
+        # Log success and clean up session
+        otp_ctrl = KwtSmsOtpController()
+        otp_ctrl._log_otp(
+            'password_changed', user_id=uid,
+            otp_type='password_reset',
+        )
+        request.session.pop('kwtsms_otp_reset_verified', None)
+        request.session.pop('kwtsms_otp_reset_uid', None)
+
+        return request.redirect('/web/login?kwtsms_reset_success=1')
 
 
 class KwtSmsSignupController(http.Controller):

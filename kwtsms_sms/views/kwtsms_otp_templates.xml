@@ -59,6 +59,50 @@
         </t>
     </template>
 
+    <!-- New password form after OTP verification for password reset -->
+    <template id="kwtsms_otp_new_password_template" name="kwtSMS OTP New Password">
+        <t t-call="web.login_layout">
+            <form method="POST" action="/kwtsms/otp/new-password" class="oe_login_form">
+                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+
+                <div class="mb-3 text-center">
+                    <h4>Set New Password</h4>
+                    <p class="text-muted">
+                        Your identity has been verified. Enter a new password below.
+                    </p>
+                </div>
+
+                <div t-if="error" class="alert alert-danger mb-3" role="alert">
+                    <t t-esc="error"/>
+                </div>
+
+                <div class="mb-3">
+                    <label for="password" class="form-label">New Password</label>
+                    <input type="password" name="password" id="password"
+                           class="form-control" required="required"
+                           minlength="8" autofocus="autofocus"
+                           placeholder="Minimum 8 characters"/>
+                </div>
+
+                <div class="mb-3">
+                    <label for="confirm_password" class="form-label">Confirm Password</label>
+                    <input type="password" name="confirm_password" id="confirm_password"
+                           class="form-control" required="required"
+                           minlength="8"
+                           placeholder="Re-enter password"/>
+                </div>
+
+                <div class="mb-3 d-grid">
+                    <button type="submit" class="btn btn-primary btn-lg">Set Password</button>
+                </div>
+
+                <div class="text-center mt-3">
+                    <a href="/web/login" class="btn btn-link text-muted">Cancel</a>
+                </div>
+            </form>
+        </t>
+    </template>
+
     <!-- Extend login page to add phone login option -->
     <template id="kwtsms_login_phone_option" inherit_id="web.login" name="kwtSMS Phone Login">
         <xpath expr="//div[@id='oe_structure_login_bottom']" position="inside">
@@ -103,6 +147,57 @@
                         </div>
                     </t>
                 </form>
+            </t>
+        </xpath>
+    </template>
+    <!-- Extend login page to add phone-based password reset option -->
+    <template id="kwtsms_login_reset_phone" inherit_id="web.login" name="kwtSMS Phone Reset">
+        <xpath expr="//div[@id='oe_structure_login_bottom']" position="inside">
+            <t t-if="request.env['ir.config_parameter'].sudo().get_param('kwtsms.otp_password_reset', 'False') == 'True'">
+                <div class="text-center mt-2">
+                    <a href="#" onclick="document.getElementById('kwtsms_reset_form').classList.toggle('d-none'); return false;"
+                       class="small">Reset password via phone</a>
+                </div>
+                <form id="kwtsms_reset_form" method="POST" action="/kwtsms/otp/reset-password"
+                      class="mt-2 d-none">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    <div class="input-group mb-2">
+                        <span class="input-group-text">+</span>
+                        <input type="text" name="country_code" class="form-control"
+                               style="max-width: 80px;"
+                               t-att-value="request.env['ir.config_parameter'].sudo().get_param('kwtsms.default_country_code', '965')"/>
+                        <input type="tel" name="phone" class="form-control"
+                               placeholder="Phone number" inputmode="numeric"/>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-outline-secondary btn-sm">Send Reset Code</button>
+                    </div>
+                </form>
+                <t t-if="request.params.get('kwtsms_reset_sent')">
+                    <div class="alert alert-info mt-2 small" role="alert">
+                        If this number is registered, a code has been sent.
+                    </div>
+                </t>
+                <t t-if="request.params.get('kwtsms_reset_error') == 'invalid_phone'">
+                    <div class="alert alert-danger mt-2 small" role="alert">
+                        Please enter a valid phone number.
+                    </div>
+                </t>
+                <t t-if="request.params.get('kwtsms_reset_error') == 'send_failed'">
+                    <div class="alert alert-danger mt-2 small" role="alert">
+                        Could not send code. Please try again.
+                    </div>
+                </t>
+                <t t-if="request.params.get('kwtsms_reset_error') == 'expired'">
+                    <div class="alert alert-danger mt-2 small" role="alert">
+                        Verification expired. Please try again.
+                    </div>
+                </t>
+                <t t-if="request.params.get('kwtsms_reset_success')">
+                    <div class="alert alert-success mt-2 small" role="alert">
+                        Password reset successful. Please log in.
+                    </div>
+                </t>
             </t>
         </xpath>
     </template>
