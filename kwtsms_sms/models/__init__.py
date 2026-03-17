@@ -7,6 +7,7 @@ from . import kwtsms_otp_token
 from . import kwtsms_otp_device
 from . import kwtsms_otp_log
 from . import res_partner
+from . import res_users
 from . import res_company
 from . import sale_order
 from . import stock_picking
